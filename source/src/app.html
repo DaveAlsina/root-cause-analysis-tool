@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Uchuva RCA Workbench</title>
+<style>
+/*FONTS*/
+</style>
+<style>
+/*CSS*/
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="brand">
+      <h1 id="doc-title" title="Double-click to rename">Rejected uchuva: why?</h1>
+      <div class="fileline"><span id="file-name">uchuva-rca.json</span><span id="dirty" class="dirty" hidden>● unsaved changes</span></div>
+    </div>
+    <div class="toolbar">
+      <div class="group">
+        <details class="menu" id="menu-file"><summary class="btn">File</summary>
+          <div class="menu-list">
+            <button data-act="open">Open… <kbd>Ctrl O</kbd></button>
+            <button data-act="save">Save <kbd>Ctrl S</kbd></button>
+            <button data-act="saveas">Save as… <kbd>Ctrl Shift S</kbd></button>
+            <hr>
+            <button data-act="paste-drawio">Replace with pasted draw.io diagram…</button>
+            <button data-act="new">New empty RCA</button>
+            <hr>
+            <button data-act="bib">Load bibliography… <small>.bib, for @ citations</small></button>
+          </div>
+        </details>
+        <details class="menu" id="menu-export"><summary class="btn">Export</summary>
+          <div class="menu-list">
+            <button data-act="exp-svg">SVG picture <small>vector, for Typst</small></button>
+            <button data-act="exp-png">PNG picture <small>2× resolution</small></button>
+            <button data-act="exp-drawio">draw.io diagram <small>.drawio</small></button>
+            <hr>
+            <button data-act="exp-json">RCA file with history <small>.json</small></button>
+            <button data-act="exp-graphml">GraphML <small>networkx, Gephi, yEd</small></button>
+            <button data-act="exp-nodes">Boxes table <small>.csv</small></button>
+            <button data-act="exp-edges">Arrows table <small>.csv</small></button>
+          </div>
+        </details>
+        <button class="btn" data-act="cats">Categories</button>
+        <button class="btn" data-act="versions">Versions <span id="ver-count" class="pill"></span></button>
+      </div>
+      <div class="group">
+        <button class="btn icon" data-act="undo" id="b-undo" title="Undo (Ctrl Z)" aria-label="Undo">↶</button>
+        <button class="btn icon" data-act="redo" id="b-redo" title="Redo (Ctrl Shift Z)" aria-label="Redo">↷</button>
+      </div>
+      <div class="seg" role="group" aria-label="Layout">
+        <button id="mode-manual" aria-pressed="true" title="Your own arrangement. Drag boxes to move them.">My layout</button>
+        <button id="mode-untangle" aria-pressed="false" title="Automatic layered layout that minimises crossings">Untangle</button>
+      </div>
+      <select id="depth" class="btn" aria-label="Levels shown">
+        <option value="all">All levels</option><option value="2">2 levels</option><option value="3">3 levels</option><option value="4">4 levels</option><option value="5">5 levels</option><option value="6">6 levels</option><option value="7">7 levels</option>
+      </select>
+      <label class="search" for="q"><svg viewBox="0 0 16 16" stroke-width="1.8" aria-hidden="true"><circle cx="7" cy="7" r="5"/><path d="M11 11l4 4"/></svg>
+        <input id="q" type="search" placeholder="Search text, notes, sources" autocomplete="off" aria-label="Search"><span class="count" id="qcount"></span></label>
+      <button class="btn icon" data-act="help" title="Shortcuts and help (?)" aria-label="Help">?</button>
+    </div>
+    <div class="stats" id="stats"></div>
+  </header>
+  <main>
+    <div id="cy">
+      <div class="hint" id="hint">Double-click: new box · drag <span class="dot"></span> onto a cause: connect · Tab: add cause · <kbd>?</kbd> all shortcuts</div>
+      <div class="diffbar" id="diffbar" hidden></div>
+      <details class="viewpanel" id="viewpanel" open>
+        <summary><span>View</span><span class="xnum" id="xnum" title="Arrow crossings in what you see now">–</span></summary>
+        <div class="vp-body">
+          <div class="xline" id="xline"></div>
+          <div class="ctl"><label for="v-focus">Focus radius <output id="o-focus"></output></label><input type="range" id="v-focus" min="0" max="6" step="1"></div>
+          <label class="chk"><input type="checkbox" id="v-trace"> Highlight the chain of the selected box</label>
+          <div class="ctl"><span class="lbl">Redundant arrows <output id="o-red"></output></span>
+            <div class="seg small" role="group" aria-label="Redundant arrows"><button data-red="show">Show</button><button data-red="dashed">Dashed</button><button data-red="hide">Hide</button></div></div>
+          <div id="manual-only"><button class="btn small" data-act="tidy">Tidy overlapping boxes</button></div>
+          <fieldset id="untangle-set">
+            <legend>Untangle settings</legend>
+            <p class="note" id="untangle-note">Switch to <b>Untangle</b> to use these.</p>
+            <div class="ctl"><label for="v-effort">Effort <output id="o-effort"></output></label><input type="range" id="v-effort" min="1" max="5" step="1"></div>
+            <div class="ctl"><label for="v-place">Box placement <output id="o-place"></output></label><input type="range" id="v-place" min="0" max="2" step="1"></div>
+            <div class="ctl"><label for="v-level">Level spacing <output id="o-level"></output></label><input type="range" id="v-level" min="30" max="220" step="5"></div>
+            <div class="ctl"><label for="v-node">Box spacing <output id="o-node"></output></label><input type="range" id="v-node" min="4" max="60" step="2"></div>
+            <div class="ctl"><span class="lbl">Arrow style</span>
+              <div class="seg small" role="group" aria-label="Arrow style"><button data-route="ORTHOGONAL">Right-angled</button><button data-route="POLYLINE">Angled</button><button data-route="STRAIGHT">Straight</button></div></div>
+            <label class="chk"><input type="checkbox" id="v-order"> Respect my vertical order</label>
+            <label class="chk"><input type="checkbox" id="v-split"> Split shared causes into copies</label>
+            <label class="chk sub"><input type="checkbox" id="v-repeat"> Repeat the full branch under every copy</label>
+            <div class="row"><button class="btn small" data-act="keep">Keep these positions</button><button class="btn small" data-act="reset-view">Reset settings</button></div>
+          </fieldset>
+        </div>
+      </details>
+      <div class="legend" id="legend"></div>
+      <div class="zoom"><button id="zin" aria-label="Zoom in">+</button><button id="zout" aria-label="Zoom out">−</button><button id="zfit" aria-label="Fit to screen" title="Fit to screen">⤢</button></div>
+      <div class="handle" id="handle" hidden title="Drag onto the cause that explains this box"></div>
+      <div class="grip" id="grip-s" hidden title="Drag to rewire the start of this arrow"></div>
+      <div class="grip" id="grip-t" hidden title="Drag to rewire the end of this arrow"></div>
+      <svg class="dragline" id="dragline" hidden><defs><marker id="dl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="dl-head"/></marker></defs><line id="dl" x1="0" y1="0" x2="0" y2="0" marker-end="url(#dl-arrow)"/></svg>
+      <textarea id="inline" class="inline" hidden aria-label="Edit box text"></textarea>
+    </div>
+    <aside id="panel" aria-live="polite"></aside>
+  </main>
+</div>
+
+<div class="overlay" id="m-versions" hidden><div class="modal wide" role="dialog" aria-modal="true" aria-labelledby="mv-h">
+  <div class="mhead"><h3 id="mv-h">Versions</h3><button class="btn icon" data-close aria-label="Close">×</button></div>
+  <p class="muted">A version is a named snapshot stored inside this RCA file. Save one after each meaningful step, such as an interview or a literature pass. Restoring a version can be undone.</p>
+  <form id="ver-form" class="verform">
+    <input id="ver-name" required maxlength="80" placeholder="Version name, e.g. After interview EXP-01" aria-label="Version name">
+    <input id="ver-note" maxlength="300" placeholder="What changed (optional)" aria-label="Version note">
+    <button class="btn primary" type="submit">Save version</button>
+  </form>
+  <div id="ver-list" class="verlist"></div>
+  <div id="ver-diff" class="verdiff" hidden></div>
+</div></div>
+
+<div class="overlay" id="m-cats" hidden><div class="modal wide" role="dialog" aria-modal="true" aria-labelledby="mc-h">
+  <div class="mhead"><h3 id="mc-h">Categories</h3><button class="btn icon" data-close aria-label="Close">×</button></div>
+  <p class="muted">Build your own colour key. Give each category a meaning, and optionally a rule for what it means in the chain: an <b>intermediate cause</b> should have deeper causes, a <b>root cause</b> should end its chain. Boxes that break their rule are listed under Colour key checks. <b>+ lighter</b> and <b>+ darker</b> add shades, for example for degrees of doubt.</p>
+  <div id="cat-rows" class="catrows"></div>
+  <div class="foot"><button class="btn" id="cat-add">Add category</button><span class="grow"></span><button class="btn" data-close>Cancel</button><button class="btn primary" id="cat-save">Apply</button></div>
+</div></div>
+
+<div class="overlay" id="m-paste" hidden><div class="modal" role="dialog" aria-modal="true" aria-labelledby="mp-h">
+  <div class="mhead"><h3 id="mp-h">Replace with a draw.io diagram</h3><button class="btn icon" data-close aria-label="Close">×</button></div>
+  <p class="muted">In draw.io use <b>Extras → Edit Diagram</b> and copy everything. Raw, URL-encoded and compressed diagrams all work. This replaces the boxes and arrows in the current file; the version history stays, and Ctrl Z brings the old content back.</p>
+  <textarea id="paste-text" class="mono" placeholder="&lt;mxGraphModel&gt;… or %3CmxGraphModel%3E… or &lt;mxfile&gt;…" aria-label="draw.io XML"></textarea>
+  <p class="err" id="paste-err" hidden></p>
+  <div class="foot"><span class="grow"></span><button class="btn" data-close>Cancel</button><button class="btn primary" id="paste-go">Replace</button></div>
+</div></div>
+
+<div class="overlay" id="m-help" hidden><div class="modal" role="dialog" aria-modal="true" aria-labelledby="mh-h">
+  <div class="mhead"><h3 id="mh-h">How it works</h3><button class="btn icon" data-close aria-label="Close">×</button></div>
+  <div class="help">
+    <p>Arrows run from an effect to the cause that explains it, so each step to the right answers “why?”.</p>
+    <table>
+      <tr><th>Add a box</th><td>Double-click empty space, or select a box and press <kbd>Tab</kbd> to add a cause under it</td></tr>
+      <tr><th>Edit text</th><td>Double-click a box, or press <kbd>Enter</kbd>. Notes, sources and status are in the side panel</td></tr>
+      <tr><th>Connect</th><td>Hover a box and drag the green dot onto its cause. Drop on empty space to create the cause there</td></tr>
+      <tr><th>Rewire</th><td>Click an arrow, then drag either round end to another box. <kbd>R</kbd> reverses it</td></tr>
+      <tr><th>Delete</th><td><kbd>Del</kbd> or <kbd>Backspace</kbd>. The rest of the chain stays as it is</td></tr>
+      <tr><th>Select several</th><td><kbd>Shift</kbd>-click</td></tr>
+      <tr><th>Fold a branch</th><td><kbd>F</kbd>, or the button in the side panel</td></tr>
+      <tr><th>Undo / redo</th><td><kbd>Ctrl Z</kbd> / <kbd>Ctrl Shift Z</kbd> or <kbd>Ctrl Y</kbd></td></tr>
+      <tr><th>Open / save</th><td><kbd>Ctrl O</kbd> / <kbd>Ctrl S</kbd>. <kbd>Ctrl Shift S</kbd> saves under a new name</td></tr>
+      <tr><th>Cite a source</th><td>Load your .bib once (File → Load bibliography), then type <kbd>@</kbd> in Sources. Arrow keys and <kbd>Enter</kbd> pick a reference. The key is stored as <code>@key</code>, the same as a Typst citation</td></tr>
+      <tr><th>Search</th><td><kbd>Ctrl F</kbd>, then <kbd>Enter</kbd> jumps between matches</td></tr>
+      <tr><th>Switch layout</th><td><kbd>L</kbd></td></tr>
+    </table>
+    <p><b>Saving.</b> In Chrome and Edge, Ctrl S writes straight into the file you opened. Firefox, Zen and Brave download a fresh copy instead; replace your old file with it. Your work is also kept in this browser between sessions, so closing the tab does not lose it.</p>
+    <p><b>Outline = status.</b> Dashed amber: hypothesis. Solid green: supported by evidence. Dotted red and faded: refuted. A red glow marks boxes caught in a loop (circular reasoning).</p>
+    <p><b>Roman numerals</b> appear in Untangle when shared causes are split: the number says how many times that box appears.</p>
+  </div>
+</div></div>
+
+<input type="file" id="file-input" accept=".json,.drawio,.xml,.dio,.txt" hidden>
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script>
+/*CYTOSCAPE*/
+</script>
+<script>
+/*ELK*/
+</script>
+<script>
+/*APP*/
+</script>
+</body>
+</html>
