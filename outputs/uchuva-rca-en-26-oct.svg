@@ -1,0 +1,625 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2636" height="1898" viewBox="0 0 2636 1898" font-family="IBM Plex Sans, Helvetica, Arial, sans-serif">
+<title>Root cause analysis — Botrytis cinerea (goldenberry)</title>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<polyline points="180.3,1306.0 240.0,1306.0" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="249.0,1306.0 240.0,1310.5 240.0,1301.5" fill="#5f6e68"/>
+<polyline points="342.3,1280.3 597.4,370.3" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="599.8,361.6 601.7,371.5 593.0,369.1" fill="#5f6e68"/>
+<polyline points="421.3,1306.0 513.8,1306.0" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="522.8,1306.0 513.8,1310.5 513.8,1301.5" fill="#5f6e68"/>
+<polyline points="348.5,1331.6 590.4,1798.2" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="594.5,1806.2 586.4,1800.2 594.4,1796.1" fill="#5f6e68"/>
+<polyline points="633.1,310.3 817.4,129.6" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="823.8,123.3 820.5,132.8 814.2,126.4" fill="#5f6e68"/>
+<polyline points="648.8,310.3 795.2,220.5" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="802.9,215.8 797.6,224.3 792.9,216.7" fill="#5f6e68"/>
+<polyline points="687.1,337.6 776.3,339.3" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="785.3,339.5 776.2,343.8 776.4,334.8" fill="#5f6e68"/>
+<polyline points="646.2,361.6 802.5,463.9" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="810.1,468.8 800.1,467.7 805.0,460.1" fill="#5f6e68"/>
+<polyline points="607.4,1271.8 624.2,965.4" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="624.7,956.5 628.7,965.7 619.7,965.2" fill="#5f6e68"/>
+<polyline points="624.4,1271.8 841.3,879.3" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="845.7,871.5 845.2,881.5 837.4,877.2" fill="#5f6e68"/>
+<polyline points="666.2,1271.8 807.1,1192.5" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="815.0,1188.1 809.4,1196.5 804.9,1188.6" fill="#5f6e68"/>
+<polyline points="683.5,1819.6 765.3,1806.5" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="774.2,1805.0 766.0,1810.9 764.6,1802.0" fill="#5f6e68"/>
+<polyline points="683.5,1834.5 764.9,1837.3" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="773.9,1837.6 764.8,1841.8 765.1,1832.8" fill="#5f6e68"/>
+<polyline points="927.7,89.2 1036.9,89.2" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1045.9,89.2 1036.9,93.7 1036.9,84.7" fill="#5f6e68"/>
+<polyline points="1183.2,75.7 1290.8,54.5" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1299.7,52.8 1291.7,58.9 1290.0,50.1" fill="#5f6e68"/>
+<polyline points="1183.2,89.2 1289.6,89.2" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1298.6,89.2 1289.6,93.7 1289.6,84.7" fill="#5f6e68"/>
+<polyline points="1183.2,102.6 1286.4,122.9" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1295.3,124.7 1285.6,127.3 1287.3,118.5" fill="#5f6e68"/>
+<polyline points="1403.6,58.8 1517.7,96.9" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1526.3,99.7 1516.3,101.1 1519.2,92.6" fill="#5f6e68"/>
+<polyline points="1408.9,96.9 1515.0,111.9" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1523.9,113.2 1514.3,116.4 1515.6,107.5" fill="#5f6e68"/>
+<polyline points="1412.4,133.1 1514.9,127.9" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1523.9,127.4 1515.1,132.4 1514.6,123.4" fill="#5f6e68"/>
+<polyline points="1672.2,106.4 1748.4,88.6" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1757.1,86.6 1749.4,93.0 1747.4,84.2" fill="#5f6e68"/>
+<polyline points="1672.2,126.2 1757.6,129.1" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1766.6,129.4 1757.5,133.6 1757.8,124.6" fill="#5f6e68"/>
+<polyline points="943.2,181.7 1030.4,181.7" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1039.4,181.7 1030.4,186.2 1030.4,177.2" fill="#5f6e68"/>
+<polyline points="1172.7,181.7 1259.1,181.7" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1268.1,181.7 1259.1,186.2 1259.1,177.2" fill="#5f6e68"/>
+<polyline points="937.6,316.2 1011.8,292.1" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1020.4,289.3 1013.2,296.4 1010.4,287.8" fill="#5f6e68"/>
+<polyline points="937.6,344.5 1015.4,348.0" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1024.4,348.4 1015.2,352.5 1015.6,343.5" fill="#5f6e68"/>
+<polyline points="1187.7,352.1 1259.1,352.1" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1268.1,352.1 1259.1,356.6 1259.1,347.6" fill="#5f6e68"/>
+<polyline points="935.9,484.3 1011.7,465.2" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1020.4,463.0 1012.8,469.5 1010.6,460.8" fill="#5f6e68"/>
+<polyline points="935.9,506.5 1011.4,510.2" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1020.4,510.6 1011.2,514.7 1011.6,505.7" fill="#5f6e68"/>
+<polyline points="884.4,820.2 1068.7,627.3" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1074.9,620.8 1071.9,630.4 1065.4,624.2" fill="#5f6e68"/>
+<polyline points="927.0,871.5 1300.5,1014.1" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1308.9,1017.3 1298.9,1018.3 1302.1,1009.9" fill="#5f6e68"/>
+<polyline points="1142.8,620.8 1327.7,800.1" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1334.2,806.3 1324.6,803.3 1330.8,796.8" fill="#5f6e68"/>
+<polyline points="1188.7,583.0 1271.8,579.3" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1280.8,578.9 1272.0,583.8 1271.6,574.8" fill="#5f6e68"/>
+<polyline points="1391.4,806.3 1547.1,676.4" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1554.0,670.6 1549.9,679.9 1544.2,672.9" fill="#5f6e68"/>
+<polyline points="1411.7,806.3 1546.3,738.7" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1554.3,734.6 1548.3,742.7 1544.3,734.7" fill="#5f6e68"/>
+<polyline points="1425.8,833.3 1526.7,835.4" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1535.7,835.6 1526.6,839.9 1526.8,830.9" fill="#5f6e68"/>
+<polyline points="1407.0,857.6 1546.9,935.0" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1554.8,939.3 1544.8,938.9 1549.1,931.0" fill="#5f6e68"/>
+<polyline points="1683.4,946.3 1759.0,929.2" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1767.8,927.2 1760.0,933.5 1758.0,924.8" fill="#5f6e68"/>
+<polyline points="1683.4,967.8 1750.6,970.1" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1759.6,970.4 1750.5,974.6 1750.8,965.6" fill="#5f6e68"/>
+<polyline points="1905.4,883.7 2022.0,832.9" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="2030.2,829.3 2023.8,837.0 2020.2,828.8" fill="#5f6e68"/>
+<polyline points="1925.1,911.9 2026.8,915.3" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="2035.8,915.6 2026.7,919.8 2027.0,910.8" fill="#5f6e68"/>
+<polyline points="1927.9,973.3 1993.5,973.3" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="2002.5,973.3 1993.5,977.8 1993.5,968.8" fill="#5f6e68"/>
+<polyline points="1423.0,549.8 1536.1,506.0" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1544.5,502.7 1537.7,510.2 1534.5,501.8" fill="#5f6e68"/>
+<polyline points="1672.0,466.1 1748.3,451.6" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1757.1,449.9 1749.1,456.0 1747.5,447.2" fill="#5f6e68"/>
+<polyline points="1672.0,481.2 1748.1,484.3" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1757.1,484.7 1748.0,488.8 1748.3,479.8" fill="#5f6e68"/>
+<polyline points="1683.9,1029.0 1748.1,1029.0" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1757.1,1029.0 1748.1,1033.5 1748.1,1024.5" fill="#5f6e68"/>
+<polyline points="1908.9,1291.7 2006.5,1264.7" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="2015.1,1262.3 2007.7,1269.0 2005.3,1260.3" fill="#5f6e68"/>
+<polyline points="1917.6,1308.8 1993.5,1308.8" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="2002.5,1308.8 1993.5,1313.3 1993.5,1304.3" fill="#5f6e68"/>
+<polyline points="2171.8,1224.0 2239.0,1209.8" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="2247.8,1208.0 2239.9,1214.2 2238.0,1205.4" fill="#5f6e68"/>
+<polyline points="2171.8,1240.6 2237.4,1240.6" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="2246.4,1240.6 2237.4,1245.1 2237.4,1236.1" fill="#5f6e68"/>
+<polyline points="2171.3,1261.8 2237.7,1279.7" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="2246.4,1282.1 2236.5,1284.1 2238.9,1275.4" fill="#5f6e68"/>
+<polyline points="882.5,1136.8 934.3,1076.2" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="940.2,1069.3 937.8,1079.1 930.9,1073.2" fill="#5f6e68"/>
+<polyline points="941.2,1150.6 1071.9,1131.3" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1080.8,1130.0 1072.5,1135.7 1071.2,1126.8" fill="#5f6e68"/>
+<polyline points="941.2,1166.4 1746.6,1205.7" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1755.6,1206.1 1746.4,1210.2 1746.8,1201.2" fill="#5f6e68"/>
+<polyline points="1047.7,1041.9 1066.9,1041.6" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1075.9,1041.4 1067.0,1046.1 1066.8,1037.1" fill="#5f6e68"/>
+<polyline points="688.1,1306.0 1506.1,1306.0" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1515.1,1306.0 1506.1,1310.5 1506.1,1301.5" fill="#5f6e68"/>
+<polyline points="1665.1,1280.3 1747.2,1247.9" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1755.6,1244.6 1748.9,1252.1 1745.6,1243.7" fill="#5f6e68"/>
+<polyline points="1685.4,1307.0 1767.3,1307.9" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1776.3,1308.0 1767.3,1312.4 1767.4,1303.4" fill="#5f6e68"/>
+<polyline points="942.0,845.8 1038.1,845.8" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1047.1,845.8 1038.1,850.3 1038.1,841.3" fill="#5f6e68"/>
+<polyline points="1374.2,1051.6 1562.9,1210.5" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1569.8,1216.3 1560.0,1214.0 1565.8,1207.1" fill="#5f6e68"/>
+<polyline points="1685.4,1230.9 1746.7,1222.8" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1755.6,1221.7 1747.2,1227.3 1746.1,1218.4" fill="#5f6e68"/>
+<polyline points="1684.1,1264.7 1775.0,1289.3" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1783.7,1291.7 1773.8,1293.7 1776.2,1285.0" fill="#5f6e68"/>
+<polyline points="1409.4,1033.2 1507.6,1031.1" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1516.6,1030.9 1507.7,1035.6 1507.5,1026.6" fill="#5f6e68"/>
+<polyline points="1178.4,842.2 1286.5,836.1" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1295.5,835.6 1286.7,840.6 1286.2,831.6" fill="#5f6e68"/>
+<polyline points="1134.6,863.0 1324.8,1011.8" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1331.9,1017.3 1322.0,1015.3 1327.6,1008.2" fill="#5f6e68"/>
+<polyline points="1920.9,132.0 1993.5,132.0" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="2002.5,132.0 1993.5,136.5 1993.5,127.5" fill="#5f6e68"/>
+<polyline points="1433.1,578.1 1520.1,581.0" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1529.1,581.3 1519.9,585.5 1520.2,576.5" fill="#5f6e68"/>
+<polyline points="2154.8,803.6 2237.4,803.6" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="2246.4,803.6 2237.4,808.1 2237.4,799.1" fill="#5f6e68"/>
+<polyline points="2157.2,902.7 2238.1,882.4" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="2246.8,880.2 2239.2,886.7 2237.0,878.0" fill="#5f6e68"/>
+<polyline points="2159.1,919.1 2237.4,920.9" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="2246.4,921.1 2237.3,925.4 2237.5,916.4" fill="#5f6e68"/>
+<polyline points="1675.9,568.3 1752.0,552.0" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1760.8,550.1 1752.9,556.4 1751.1,547.6" fill="#5f6e68"/>
+<polyline points="1678.4,585.5 1770.6,587.5" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1779.6,587.7 1770.5,592.0 1770.7,583.0" fill="#5f6e68"/>
+<polyline points="1922.9,572.2 2003.1,553.1" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="2011.8,551.0 2004.1,557.4 2002.0,548.7" fill="#5f6e68"/>
+<polyline points="1922.9,589.3 1993.5,589.3" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="2002.5,589.3 1993.5,593.8 1993.5,584.8" fill="#5f6e68"/>
+<polyline points="1922.9,608.7 1995.1,628.2" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="2003.8,630.5 1994.0,632.5 1996.3,623.8" fill="#5f6e68"/>
+<polyline points="1675.0,692.6 1748.5,675.4" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1757.3,673.3 1749.5,679.7 1747.5,671.0" fill="#5f6e68"/>
+<polyline points="1675.0,711.5 1748.1,714.2" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1757.1,714.6 1748.0,718.7 1748.3,709.7" fill="#5f6e68"/>
+<polyline points="1675.0,820.3 1748.4,802.7" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1757.2,800.6 1749.5,807.1 1747.4,798.3" fill="#5f6e68"/>
+<polyline points="1675.0,839.4 1748.1,842.0" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1757.1,842.3 1748.0,846.5 1748.3,837.5" fill="#5f6e68"/>
+<polyline points="1912.6,1325.7 1996.4,1347.3" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="2005.1,1349.5 1995.3,1351.6 1997.6,1342.9" fill="#5f6e68"/>
+<polyline points="2174.4,1367.4 2237.4,1364.5" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="2246.4,1364.1 2237.6,1369.0 2237.2,1360.0" fill="#5f6e68"/>
+<polyline points="2174.4,1390.0 2244.9,1405.6" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="2253.7,1407.5 2244.0,1410.0 2245.9,1401.2" fill="#5f6e68"/>
+<polyline points="2404.0,1426.0 2485.1,1428.0" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="2494.1,1428.2 2484.9,1432.5 2485.2,1423.5" fill="#5f6e68"/>
+<polyline points="679.2,1340.1 796.9,1394.7" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="805.1,1398.5 795.0,1398.8 798.8,1390.6" fill="#5f6e68"/>
+<polyline points="939.6,1409.2 1007.5,1396.4" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1016.4,1394.7 1008.4,1400.8 1006.7,1392.0" fill="#5f6e68"/>
+<polyline points="939.6,1424.1 2244.7,1424.1" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="2253.7,1424.1 2244.7,1428.6 2244.7,1419.6" fill="#5f6e68"/>
+<polyline points="642.7,1340.1 812.0,1495.7" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="818.6,1501.8 808.9,1499.0 815.0,1492.4" fill="#5f6e68"/>
+<polyline points="924.7,1527.1 995.3,1526.8" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1004.3,1526.7 995.3,1531.3 995.3,1522.3" fill="#5f6e68"/>
+<polyline points="625.1,1340.1 844.2,1721.2" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="848.7,1729.0 840.3,1723.4 848.1,1719.0" fill="#5f6e68"/>
+<polyline points="920.9,1729.0 1506.4,1567.9" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1515.1,1565.6 1507.6,1572.3 1505.2,1563.6" fill="#5f6e68"/>
+<polyline points="943.2,1746.1 1011.4,1746.1" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1020.4,1746.1 1011.4,1750.6 1011.4,1741.6" fill="#5f6e68"/>
+<polyline points="906.1,1763.3 1014.6,1802.5" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1023.1,1805.5 1013.1,1806.7 1016.1,1798.2" fill="#5f6e68"/>
+<polyline points="1154.5,1801.5 1302.5,1696.2" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1309.8,1691.0 1305.1,1699.9 1299.9,1692.5" fill="#5f6e68"/>
+<polyline points="1443.4,1639.8 1533.9,1621.8" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1542.8,1620.0 1534.8,1626.2 1533.1,1617.4" fill="#5f6e68"/>
+<polyline points="1429.7,1622.7 1517.7,1580.8" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1525.8,1577.0 1519.6,1584.9 1515.8,1576.8" fill="#5f6e68"/>
+<polyline points="1655.8,1589.7 1752.8,1554.0" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1761.3,1550.9 1754.4,1558.2 1751.3,1549.7" fill="#5f6e68"/>
+<polyline points="1676.4,1606.8 1748.1,1606.8" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1757.1,1606.8 1748.1,1611.3 1748.1,1602.3" fill="#5f6e68"/>
+<polyline points="1190.7,1839.5 1263.1,1842.7" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1272.1,1843.1 1262.9,1847.2 1263.4,1838.2" fill="#5f6e68"/>
+<polyline points="1419.0,1691.0 1550.1,1764.1" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1557.9,1768.5 1547.9,1768.0 1552.3,1760.2" fill="#5f6e68"/>
+<polyline points="1678.0,1808.9 1751.7,1823.4" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1760.5,1825.2 1750.8,1827.9 1752.5,1819.0" fill="#5f6e68"/>
+<polyline points="1678.0,1791.5 1748.1,1789.1" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1757.1,1788.7 1748.3,1793.6 1748.0,1784.6" fill="#5f6e68"/>
+<polyline points="1435.4,1845.9 1748.1,1842.4" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1757.1,1842.3 1748.2,1846.9 1748.1,1837.9" fill="#5f6e68"/>
+<polyline points="1651.3,1624.0 1773.5,1673.7" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="1781.8,1677.1 1771.8,1677.8 1775.2,1669.5" fill="#5f6e68"/>
+<polyline points="1918.1,1695.7 2239.0,1653.0" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="2247.9,1651.8 2239.6,1657.4 2238.4,1648.5" fill="#5f6e68"/>
+<polyline points="2417.2,1645.8 2485.1,1650.1" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="2494.1,1650.7 2484.8,1654.6 2485.4,1645.6" fill="#5f6e68"/>
+<polyline points="1918.1,1708.8 1995.5,1713.3" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="2004.5,1713.8 1995.2,1717.8 1995.8,1708.8" fill="#5f6e68"/>
+<polyline points="2174.8,1722.7 2251.4,1726.3" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="2260.4,1726.7 2251.2,1730.7 2251.6,1721.8" fill="#5f6e68"/>
+<polyline points="2404.7,1730.0 2485.1,1730.0" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="2494.1,1730.0 2485.1,1734.5 2485.1,1725.5" fill="#5f6e68"/>
+<polyline points="2368.1,1606.3 2527.8,1453.0" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="2534.3,1446.8 2531.0,1456.3 2524.7,1449.8" fill="#5f6e68"/>
+<polyline points="2174.8,1691.4 2239.3,1670.5" fill="none" stroke="#5f6e68" stroke-width="1.4"/>
+<polygon points="2247.9,1667.8 2240.7,1674.8 2238.0,1666.3" fill="#5f6e68"/>
+<g><rect x="25.7" y="1281.0" width="154" height="50" rx="7" fill="#fff2cc" stroke="#d6b656" stroke-width="1.3"/>
+<text x="102.7" y="1297.5" font-size="13" fill="#1a1a1a" text-anchor="middle" dominant-baseline="central">Some goldenberry is</text>
+<text x="102.7" y="1314.5" font-size="13" fill="#1a1a1a" text-anchor="middle" dominant-baseline="central">rejected at destination</text>
+</g>
+<g><rect x="249.7" y="1281.0" width="171" height="50" rx="7" fill="#fff2cc" stroke="#d6b656" stroke-width="1.3"/>
+<text x="335.1" y="1297.5" font-size="13" fill="#1a1a1a" text-anchor="middle" dominant-baseline="central">Some pallets are infested</text>
+<text x="335.1" y="1314.5" font-size="13" fill="#1a1a1a" text-anchor="middle" dominant-baseline="central">with botrytis cinerea</text>
+</g>
+<g><rect x="527.5" y="311.0" width="159" height="50" rx="7" fill="#1ba1e2" stroke="#006eaf" stroke-width="1.3"/>
+<text x="607.0" y="327.5" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">Goldenberry is infected</text>
+<text x="607.0" y="344.5" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">with the fungus</text>
+</g>
+<g><rect x="523.5" y="1272.5" width="164" height="67" rx="7" fill="#1ba1e2" stroke="#006eaf" stroke-width="1.3"/>
+<text x="605.5" y="1289.0" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">Conditions are favorable</text>
+<text x="605.5" y="1306.0" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">for the germination and</text>
+<text x="605.5" y="1323.0" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">growth of the pathogen</text>
+</g>
+<g><rect x="532.8" y="1806.8" width="150" height="50" rx="7" fill="#1ba1e2" stroke="#006eaf" stroke-width="1.3"/>
+<text x="607.8" y="1823.3" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">Infected fruits are not</text>
+<text x="607.8" y="1840.3" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">discarded</text>
+</g>
+<g><rect x="790.1" y="55.6" width="137" height="67" rx="7" fill="#1ba1e2" stroke="#000000" stroke-width="1.3"/>
+<text x="858.6" y="72.2" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">Fungus was already</text>
+<text x="858.6" y="89.2" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">inside the fruit in a</text>
+<text x="858.6" y="106.2" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">quiescent state</text>
+</g>
+<g><rect x="774.6" y="148.2" width="168" height="67" rx="7" fill="#1ba1e2" stroke="#000000" stroke-width="1.3"/>
+<text x="858.6" y="164.7" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">Spores survived on the</text>
+<text x="858.6" y="181.7" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">fruit surface since before</text>
+<text x="858.6" y="198.7" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">harvest</text>
+</g>
+<g><rect x="785.9" y="307.5" width="151" height="67" rx="7" fill="#1ba1e2" stroke="#000000" stroke-width="1.3"/>
+<text x="861.4" y="324.0" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">Spores spread on the</text>
+<text x="861.4" y="341.0" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">fruit surface at sorting</text>
+<text x="861.4" y="358.0" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">facilities</text>
+</g>
+<g><rect x="789.3" y="469.5" width="146" height="67" rx="7" fill="#1ba1e2" stroke="#000000" stroke-width="1.3"/>
+<text x="862.3" y="486.0" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">Spores spread on the</text>
+<text x="862.3" y="503.0" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">fruit surface during</text>
+<text x="862.3" y="520.0" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">transport</text>
+</g>
+<g><rect x="548.1" y="905.8" width="156" height="50" rx="7" fill="#f5f5f5" stroke="#666666" stroke-width="1.3"/>
+<text x="626.1" y="922.3" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">travel time of ~21 days</text>
+<text x="626.1" y="939.3" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">by sea</text>
+</g>
+<g><rect x="778.3" y="820.8" width="163" height="50" rx="7" fill="#1ba1e2" stroke="#000000" stroke-width="1.3"/>
+<text x="859.8" y="837.3" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">Pathogen gets access to</text>
+<text x="859.8" y="854.3" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">sugars</text>
+</g>
+<g><rect x="780.6" y="1137.5" width="160" height="50" rx="7" fill="#1ba1e2" stroke="#000000" stroke-width="1.3"/>
+<text x="860.6" y="1154.0" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">Temperature allows the</text>
+<text x="860.6" y="1171.0" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">pathogen to develop</text>
+</g>
+<g><rect x="1515.7" y="1281.0" width="169" height="50" rx="7" fill="#1ba1e2" stroke="#006eaf" stroke-width="1.3"/>
+<text x="1600.2" y="1297.5" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">There is condensation on</text>
+<text x="1600.2" y="1314.5" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">the fruit surface</text>
+</g>
+<g><rect x="781.9" y="1399.1" width="157" height="50" rx="7" fill="#1ba1e2" stroke="#006eaf" stroke-width="1.3"/>
+<text x="860.4" y="1415.6" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">1–3 days of processing</text>
+<text x="860.4" y="1432.6" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">time</text>
+</g>
+<g><rect x="769.0" y="1502.4" width="155" height="50" rx="7" fill="#1ba1e2" stroke="#006eaf" stroke-width="1.3"/>
+<text x="846.5" y="1518.9" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">Harvesting takes place</text>
+<text x="846.5" y="1535.9" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">during rainy periods</text>
+</g>
+<g><rect x="774.6" y="1729.6" width="168" height="33" rx="7" fill="#1ba1e2" stroke="#006eaf" stroke-width="1.3"/>
+<text x="858.6" y="1746.1" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">Inadequate crop rotation</text>
+</g>
+<g><rect x="774.6" y="1776.6" width="147" height="33" rx="7" fill="#f5f5f5" stroke="#666666" stroke-width="1.3"/>
+<text x="848.1" y="1793.1" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">Spores are very small</text>
+</g>
+<g><rect x="774.6" y="1823.6" width="145" height="33" rx="7" fill="#f5f5f5" stroke="#666666" stroke-width="1.3"/>
+<text x="847.1" y="1840.1" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">damage is not visible</text>
+</g>
+<g><rect x="1046.5" y="64.2" width="136" height="50" rx="7" fill="#1ba1e2" stroke="#000000" stroke-width="1.3"/>
+<text x="1114.5" y="80.7" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">Spores reached the</text>
+<text x="1114.5" y="97.7" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">flower</text>
+</g>
+<g><rect x="1040.0" y="148.2" width="132" height="67" rx="7" fill="#1ba1e2" stroke="#000000" stroke-width="1.3"/>
+<text x="1106.0" y="164.7" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">Conditions were</text>
+<text x="1106.0" y="181.7" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">favorable for spore</text>
+<text x="1106.0" y="198.7" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">survival</text>
+</g>
+<g><rect x="1021.0" y="229.2" width="163" height="67" rx="7" fill="#f5f5f5" stroke="#666666" stroke-width="1.3"/>
+<text x="1102.5" y="245.7" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">The drying process uses</text>
+<text x="1102.5" y="262.6" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">fans that blow air over a</text>
+<text x="1102.5" y="279.6" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">batch of goldenberries</text>
+</g>
+<g><rect x="1025.0" y="310.1" width="162" height="84" rx="7" fill="#1ba1e2" stroke="#000000" stroke-width="1.3"/>
+<text x="1106.0" y="326.6" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">Inspection requires a</text>
+<text x="1106.0" y="343.6" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">manual process that</text>
+<text x="1106.0" y="360.6" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">involves touching fruits</text>
+<text x="1106.0" y="377.6" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">with and without spores</text>
+</g>
+<g><rect x="1021.0" y="408.1" width="167" height="67" rx="7" fill="#f5f5f5" stroke="#666666" stroke-width="1.3"/>
+<text x="1104.5" y="424.6" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">Transport means may</text>
+<text x="1104.5" y="441.6" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">already be contaminated</text>
+<text x="1104.5" y="458.6" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">with spores</text>
+</g>
+<g><rect x="1021.0" y="489.1" width="146" height="50" rx="7" fill="#f5f5f5" stroke="#666666" stroke-width="1.3"/>
+<text x="1094.0" y="505.6" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">Transport happens in</text>
+<text x="1094.0" y="522.6" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">contact with open air</text>
+</g>
+<g><rect x="1027.0" y="553.1" width="161" height="67" rx="7" fill="#1ba1e2" stroke="#000000" stroke-width="1.3"/>
+<text x="1107.5" y="569.6" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">Pathogen can break</text>
+<text x="1107.5" y="586.6" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">through the fruit&#39;s outer</text>
+<text x="1107.5" y="603.6" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">membrane</text>
+</g>
+<g><rect x="1298.8" y="1018.0" width="110" height="33" rx="7" fill="#1ba1e2" stroke="#000000" stroke-width="1.3"/>
+<text x="1353.8" y="1034.5" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">Fruit is too ripe</text>
+</g>
+<g><rect x="1047.7" y="829.3" width="130" height="33" rx="7" fill="#1ba1e2" stroke="#006eaf" stroke-width="1.3"/>
+<text x="1112.7" y="845.8" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">Fruits exude liquid</text>
+</g>
+<g><rect x="877.1" y="1018.7" width="170" height="50" rx="7" fill="#1ba1e2" stroke="#000000" stroke-width="1.3"/>
+<text x="962.1" y="1035.2" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">Container temperatures</text>
+<text x="962.1" y="1052.2" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">are between 2°C and 8°C</text>
+</g>
+<g><rect x="1081.4" y="1084.7" width="158" height="67" rx="7" fill="#f5f5f5" stroke="#666666" stroke-width="1.3"/>
+<text x="1160.4" y="1101.2" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">Fungi can develop at</text>
+<text x="1160.4" y="1118.2" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">temperatures as low as</text>
+<text x="1160.4" y="1135.2" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">0°C</text>
+</g>
+<g><rect x="1756.2" y="1168.4" width="172" height="84" rx="7" fill="#f5f5f5" stroke="#666666" stroke-width="1.3"/>
+<text x="1842.2" y="1184.9" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">There is uneven</text>
+<text x="1842.2" y="1201.9" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">ventilation that generates</text>
+<text x="1842.2" y="1218.9" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">favorable microclimates</text>
+<text x="1842.2" y="1235.9" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">[**]</text>
+</g>
+<g><rect x="1777.0" y="1292.3" width="140" height="33" rx="7" fill="#1ba1e2" stroke="#000000" stroke-width="1.3"/>
+<text x="1847.0" y="1308.8" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">Cold chain is broken</text>
+</g>
+<g><rect x="1017.0" y="1345.4" width="166" height="67" rx="7" fill="#f5f5f5" stroke="#666666" stroke-width="1.3"/>
+<text x="1100.0" y="1361.9" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">high utilization of sorting</text>
+<text x="1100.0" y="1378.9" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">and grading lines for</text>
+<text x="1100.0" y="1395.9" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">other fruits</text>
+</g>
+<g><rect x="2254.4" y="1399.1" width="149" height="50" rx="7" fill="#1ba1e2" stroke="#006eaf" stroke-width="1.3"/>
+<text x="2328.9" y="1415.6" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">The sorting process is</text>
+<text x="2328.9" y="1432.6" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">slow</text>
+</g>
+<g><rect x="1004.9" y="1492.9" width="163" height="67" rx="7" fill="#f5f5f5" stroke="#666666" stroke-width="1.3"/>
+<text x="1086.4" y="1509.4" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">There is strong pressure</text>
+<text x="1086.4" y="1526.4" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">for product during</text>
+<text x="1086.4" y="1543.4" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">high-demand periods</text>
+</g>
+<g><rect x="1515.7" y="1509.3" width="164" height="67" rx="7" fill="#f5f5f5" stroke="#666666" stroke-width="1.3"/>
+<text x="1597.7" y="1525.8" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">Farmers tend to</text>
+<text x="1597.7" y="1542.8" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">repeatedly grow the</text>
+<text x="1597.7" y="1559.8" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">crops they already know</text>
+</g>
+<g><rect x="1021.0" y="1704.1" width="168" height="84" rx="7" fill="#f5f5f5" stroke="#666666" stroke-width="1.3"/>
+<text x="1105.0" y="1720.6" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">Farmers&#39; knowledge of</text>
+<text x="1105.0" y="1737.6" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">how to design an</text>
+<text x="1105.0" y="1754.6" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">adequate crop rotation is</text>
+<text x="1105.0" y="1771.6" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">limited</text>
+</g>
+<g><rect x="1023.0" y="1802.1" width="167" height="67" rx="7" fill="#1ba1e2" stroke="#006eaf" stroke-width="1.3"/>
+<text x="1106.5" y="1818.6" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">Technical advice focuses</text>
+<text x="1106.5" y="1835.6" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">on short-term</text>
+<text x="1106.5" y="1852.6" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">operational aspects</text>
+</g>
+<g><rect x="1300.3" y="25.6" width="107" height="33" rx="7" fill="#1ba1e2" stroke="#000000" stroke-width="1.3"/>
+<text x="1353.8" y="42.1" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">Air conduction</text>
+</g>
+<g><rect x="1299.3" y="72.7" width="109" height="33" rx="7" fill="#1ba1e2" stroke="#000000" stroke-width="1.3"/>
+<text x="1353.8" y="89.2" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">Water droplets</text>
+</g>
+<g><rect x="1295.8" y="119.7" width="116" height="33" rx="7" fill="#1ba1e2" stroke="#000000" stroke-width="1.3"/>
+<text x="1353.8" y="136.2" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">Insect dispersal</text>
+</g>
+<g><rect x="1268.8" y="166.7" width="30" height="30" rx="7" fill="#d80073" stroke="#a50040" stroke-width="1.3"/>
+<text x="1283.8" y="181.7" font-weight="700" font-size="15" fill="#ffffff" text-anchor="middle" dominant-baseline="central">?</text>
+</g>
+<g><rect x="1268.8" y="318.6" width="153" height="67" rx="7" fill="#f5f5f5" stroke="#666666" stroke-width="1.3"/>
+<text x="1345.3" y="335.1" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">The fruit is not directly</text>
+<text x="1345.3" y="352.1" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">visible because it is</text>
+<text x="1345.3" y="369.1" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">inside a calyx</text>
+</g>
+<g><rect x="1296.1" y="807.0" width="129" height="50" rx="7" fill="#1ba1e2" stroke="#000000" stroke-width="1.3"/>
+<text x="1360.6" y="823.5" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">Fruit membrane is</text>
+<text x="1360.6" y="840.5" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">damaged</text>
+</g>
+<g><rect x="1281.5" y="550.5" width="151" height="50" rx="7" fill="#1ba1e2" stroke="#000000" stroke-width="1.3"/>
+<text x="1357.0" y="567.0" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">Fruit membrane is too</text>
+<text x="1357.0" y="584.0" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">fragile</text>
+</g>
+<g><rect x="1515.7" y="1217.0" width="169" height="50" rx="7" fill="#1ba1e2" stroke="#006eaf" stroke-width="1.3"/>
+<text x="1600.2" y="1233.5" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">High ethylene production</text>
+<text x="1600.2" y="1250.5" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">and transpiration</text>
+</g>
+<g><rect x="1517.2" y="1004.0" width="166" height="50" rx="7" fill="#1ba1e2" stroke="#000000" stroke-width="1.3"/>
+<text x="1600.2" y="1020.5" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">Overripe fruit passes the</text>
+<text x="1600.2" y="1037.5" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">selection stage</text>
+</g>
+<g><rect x="1076.5" y="1014.7" width="170" height="50" rx="7" fill="#f5f5f5" stroke="#666666" stroke-width="1.3"/>
+<text x="1161.5" y="1031.2" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">Fresh fruit cannot endure</text>
+<text x="1161.5" y="1048.2" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">lower temperatures</text>
+</g>
+<g><rect x="2015.1" y="1215.6" width="156" height="50" rx="7" fill="#1ba1e2" stroke="#000000" stroke-width="1.3"/>
+<text x="2093.1" y="1232.1" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">At port, 2–3 day queue</text>
+<text x="2093.1" y="1249.1" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">for inspection</text>
+</g>
+<g><rect x="2003.1" y="1293.8" width="30" height="30" rx="7" fill="#d80073" stroke="#a50040" stroke-width="1.3"/>
+<text x="2018.1" y="1308.8" font-weight="700" font-size="15" fill="#ffffff" text-anchor="middle" dominant-baseline="central">?</text>
+</g>
+<g><rect x="2005.8" y="1337.8" width="168" height="67" rx="7" fill="#1ba1e2" stroke="#006eaf" stroke-width="1.3"/>
+<text x="2089.8" y="1354.3" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">Before sorting, fruit is</text>
+<text x="2089.8" y="1371.3" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">sometimes stored until it</text>
+<text x="2089.8" y="1388.3" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">can be graded</text>
+</g>
+<g><rect x="2494.7" y="1413.1" width="115" height="33" rx="7" fill="#f5f5f5" stroke="#666666" stroke-width="1.3"/>
+<text x="2552.2" y="1429.6" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">manual process</text>
+</g>
+<g><rect x="1272.8" y="1623.3" width="170" height="67" rx="7" fill="#1ba1e2" stroke="#006eaf" stroke-width="1.3"/>
+<text x="1357.8" y="1639.8" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">Long-term relationships</text>
+<text x="1357.8" y="1656.8" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">with physalis growers are</text>
+<text x="1357.8" y="1673.8" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">complex</text>
+</g>
+<g><rect x="1272.8" y="1821.8" width="162" height="50" rx="7" fill="#1ba1e2" stroke="#006eaf" stroke-width="1.3"/>
+<text x="1353.8" y="1838.3" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">There are many farmers</text>
+<text x="1353.8" y="1855.3" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">to visit and support</text>
+</g>
+<g><rect x="1524.5" y="98.7" width="147" height="50" rx="7" fill="#1ba1e2" stroke="#000000" stroke-width="1.3"/>
+<text x="1598.0" y="115.2" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">nearby contaminated</text>
+<text x="1598.0" y="132.2" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">material</text>
+</g>
+<g><rect x="1515.7" y="620.0" width="138" height="50" rx="7" fill="#1ba1e2" stroke="#000000" stroke-width="1.3"/>
+<text x="1584.7" y="636.5" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">Mechanical damage</text>
+<text x="1584.7" y="653.5" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">during harvest</text>
+</g>
+<g><rect x="1536.4" y="684.0" width="138" height="50" rx="7" fill="#1ba1e2" stroke="#000000" stroke-width="1.3"/>
+<text x="1605.4" y="700.5" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">Mechanical damage</text>
+<text x="1605.4" y="717.5" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">during sorting</text>
+</g>
+<g><rect x="1536.4" y="812.0" width="138" height="50" rx="7" fill="#1ba1e2" stroke="#000000" stroke-width="1.3"/>
+<text x="1605.4" y="828.5" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">Mechanical damage</text>
+<text x="1605.4" y="845.5" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">during transport</text>
+</g>
+<g><rect x="1519.7" y="940.0" width="163" height="50" rx="7" fill="#1ba1e2" stroke="#000000" stroke-width="1.3"/>
+<text x="1601.2" y="956.5" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">In the field, the fruit fills</text>
+<text x="1601.2" y="973.5" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">with water too quickly</text>
+</g>
+<g><rect x="1542.4" y="453.5" width="129" height="50" rx="7" fill="#1ba1e2" stroke="#000000" stroke-width="1.3"/>
+<text x="1606.9" y="470.0" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">Plant absorbs less</text>
+<text x="1606.9" y="487.0" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">calcium</text>
+</g>
+<g><rect x="1529.7" y="567.3" width="148" height="33" rx="7" fill="#1ba1e2" stroke="#006eaf" stroke-width="1.3"/>
+<text x="1603.7" y="583.8" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">Poor soil conditioning</text>
+</g>
+<g><rect x="1757.8" y="1012.5" width="167" height="33" rx="7" fill="#f5f5f5" stroke="#666666" stroke-width="1.3"/>
+<text x="1841.3" y="1029.0" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">Observer is not objective</text>
+</g>
+<g><rect x="2247.0" y="1177.1" width="137" height="33" rx="7" fill="#f5f5f5" stroke="#000000" stroke-width="1.3"/>
+<text x="2315.5" y="1193.6" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">High port utilization</text>
+</g>
+<g><rect x="2247.0" y="1224.1" width="142" height="33" rx="7" fill="#f5f5f5" stroke="#000000" stroke-width="1.3"/>
+<text x="2318.0" y="1240.6" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">Anti-narcotics check</text>
+</g>
+<g><rect x="2247.0" y="1271.1" width="103" height="50" rx="7" fill="#f5f5f5" stroke="#000000" stroke-width="1.3"/>
+<text x="2298.5" y="1287.6" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">Phytosanitary</text>
+<text x="2298.5" y="1304.6" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">inspections</text>
+</g>
+<g><rect x="2247.0" y="1335.1" width="167" height="50" rx="7" fill="#f5f5f5" stroke="#666666" stroke-width="1.3"/>
+<text x="2330.5" y="1351.6" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">High fruit demand forces</text>
+<text x="2330.5" y="1368.6" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">queuing</text>
+</g>
+<g><rect x="1542.7" y="1590.3" width="133" height="33" rx="7" fill="#1ba1e2" stroke="#006eaf" stroke-width="1.3"/>
+<text x="1609.2" y="1606.8" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">Mutual trust issues</text>
+</g>
+<g><rect x="1530.4" y="1769.1" width="147" height="50" rx="7" fill="#1ba1e2" stroke="#006eaf" stroke-width="1.3"/>
+<text x="1603.9" y="1785.6" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">The supplier changes</text>
+<text x="1603.9" y="1802.6" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">relatively often</text>
+</g>
+<g><rect x="1757.8" y="1824.8" width="168" height="33" rx="7" fill="#f5f5f5" stroke="#666666" stroke-width="1.3"/>
+<text x="1841.8" y="1841.3" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">The farmer has little land</text>
+</g>
+<g><rect x="1757.8" y="43.0" width="158" height="50" rx="7" fill="#f5f5f5" stroke="#666666" stroke-width="1.3"/>
+<text x="1836.8" y="59.5" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">neighboring crops have</text>
+<text x="1836.8" y="76.5" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">the disease</text>
+</g>
+<g><rect x="1767.3" y="107.0" width="153" height="50" rx="7" fill="#1ba1e2" stroke="#000000" stroke-width="1.3"/>
+<text x="1843.8" y="123.5" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">infected crop debris in</text>
+<text x="1843.8" y="140.5" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">the field</text>
+</g>
+<g><rect x="1757.8" y="628.3" width="169" height="50" rx="7" fill="#f5f5f5" stroke="#666666" stroke-width="1.3"/>
+<text x="1842.3" y="644.8" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">Manual handling is highly</text>
+<text x="1842.3" y="661.8" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">variable</text>
+</g>
+<g><rect x="1757.8" y="692.3" width="149" height="50" rx="7" fill="#f5f5f5" stroke="#666666" stroke-width="1.3"/>
+<text x="1832.3" y="708.8" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">Knocks during on-site</text>
+<text x="1832.3" y="725.8" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">transport</text>
+</g>
+<g><rect x="1757.8" y="756.3" width="160" height="50" rx="7" fill="#f5f5f5" stroke="#666666" stroke-width="1.3"/>
+<text x="1837.8" y="772.8" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">Vehicle vibration during</text>
+<text x="1837.8" y="789.8" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">the trip</text>
+</g>
+<g><rect x="1757.8" y="820.3" width="169" height="50" rx="7" fill="#f5f5f5" stroke="#666666" stroke-width="1.3"/>
+<text x="1842.3" y="836.8" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">Handling of crates during</text>
+<text x="1842.3" y="853.8" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">loading and unloading</text>
+</g>
+<g><rect x="1768.5" y="884.3" width="156" height="50" rx="7" fill="#1ba1e2" stroke="#000000" stroke-width="1.3"/>
+<text x="1846.5" y="900.8" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">Sudden changes in soil</text>
+<text x="1846.5" y="917.8" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">moisture</text>
+</g>
+<g><rect x="1760.3" y="948.3" width="167" height="50" rx="7" fill="#1ba1e2" stroke="#000000" stroke-width="1.3"/>
+<text x="1843.8" y="964.8" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">Plant has a high cracking</text>
+<text x="1843.8" y="981.8" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">rate</text>
+</g>
+<g><rect x="1757.8" y="423.3" width="105" height="33" rx="7" fill="#e1d5e7" stroke="#9673a6" stroke-width="1.3"/>
+<text x="1810.3" y="439.8" font-size="13" fill="#1a1a1a" text-anchor="middle" dominant-baseline="central">Root inactivity</text>
+</g>
+<g><rect x="1757.8" y="470.3" width="103" height="33" rx="7" fill="#e1d5e7" stroke="#9673a6" stroke-width="1.3"/>
+<text x="1809.3" y="486.8" font-size="13" fill="#1a1a1a" text-anchor="middle" dominant-baseline="central">High humidity</text>
+</g>
+<g><rect x="1757.8" y="517.3" width="158" height="33" rx="7" fill="#f5f5f5" stroke="#666666" stroke-width="1.3"/>
+<text x="1836.8" y="533.8" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">No soil analysis is done</text>
+</g>
+<g><rect x="1780.3" y="564.3" width="142" height="50" rx="7" fill="#1ba1e2" stroke="#006eaf" stroke-width="1.3"/>
+<text x="1851.3" y="580.8" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">Inadequate fertilizer</text>
+<text x="1851.3" y="597.8" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">application</text>
+</g>
+<g><rect x="1757.8" y="1500.8" width="143" height="50" rx="7" fill="#f5f5f5" stroke="#666666" stroke-width="1.3"/>
+<text x="1829.3" y="1517.3" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">Farmer sells to other</text>
+<text x="1829.3" y="1534.3" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">exporters in parallel</text>
+</g>
+<g><rect x="1757.8" y="1564.8" width="163" height="84" rx="7" fill="#f5f5f5" stroke="#666666" stroke-width="1.3"/>
+<text x="1839.3" y="1581.3" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">Farmer sometimes does</text>
+<text x="1839.3" y="1598.3" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">not properly</text>
+<text x="1839.3" y="1615.3" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">understand/review the</text>
+<text x="1839.3" y="1632.3" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">contract</text>
+</g>
+<g><rect x="1782.5" y="1662.8" width="135" height="84" rx="7" fill="#1ba1e2" stroke="#006eaf" stroke-width="1.3"/>
+<text x="1850.0" y="1679.3" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">Lack of trust and</text>
+<text x="1850.0" y="1696.3" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">transparency in the</text>
+<text x="1850.0" y="1713.3" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">sorting and grading</text>
+<text x="1850.0" y="1730.3" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">system</text>
+</g>
+<g><rect x="1757.8" y="1760.8" width="164" height="50" rx="7" fill="#f5f5f5" stroke="#666666" stroke-width="1.3"/>
+<text x="1839.8" y="1777.3" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">Crop rotation must be at</text>
+<text x="1839.8" y="1794.3" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">least 4 years</text>
+</g>
+<g><rect x="2003.1" y="98.5" width="163" height="67" rx="7" fill="#f5f5f5" stroke="#666666" stroke-width="1.3"/>
+<text x="2084.6" y="115.0" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">The farmer does not</text>
+<text x="2084.6" y="132.0" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">remove dead plant</text>
+<text x="2084.6" y="149.0" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">material from the plants</text>
+</g>
+<g><rect x="2024.1" y="778.6" width="130" height="50" rx="7" fill="#1ba1e2" stroke="#000000" stroke-width="1.3"/>
+<text x="2089.1" y="795.1" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">Changes in rainfall</text>
+<text x="2089.1" y="812.1" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">patterns</text>
+</g>
+<g><rect x="2036.5" y="901.1" width="122" height="33" rx="7" fill="#1ba1e2" stroke="#000000" stroke-width="1.3"/>
+<text x="2097.5" y="917.6" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">Uneven irrigation</text>
+</g>
+<g><rect x="2003.1" y="958.3" width="30" height="30" rx="7" fill="#d80073" stroke="#a50040" stroke-width="1.3"/>
+<text x="2018.1" y="973.3" font-weight="700" font-size="15" fill="#ffffff" text-anchor="middle" dominant-baseline="central">?</text>
+</g>
+<g><rect x="2003.1" y="517.3" width="161" height="33" rx="7" fill="#f5f5f5" stroke="#666666" stroke-width="1.3"/>
+<text x="2083.6" y="533.8" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">Lack of technical advice</text>
+</g>
+<g><rect x="2003.1" y="564.3" width="172" height="50" rx="7" fill="#f5f5f5" stroke="#666666" stroke-width="1.3"/>
+<text x="2089.1" y="580.8" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">Suitable fertilizers are not</text>
+<text x="2089.1" y="597.8" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">available locally</text>
+</g>
+<g><rect x="2003.1" y="628.3" width="170" height="50" rx="7" fill="#f5f5f5" stroke="#666666" stroke-width="1.3"/>
+<text x="2088.1" y="644.8" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">The farmer is unwilling to</text>
+<text x="2088.1" y="661.8" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">apply the advice given</text>
+</g>
+<g><rect x="2248.5" y="1607.0" width="168" height="67" rx="7" fill="#1ba1e2" stroke="#006eaf" stroke-width="1.3"/>
+<text x="2332.5" y="1623.5" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">Considerable differences</text>
+<text x="2332.5" y="1640.5" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">between exporters&#39;</text>
+<text x="2332.5" y="1657.5" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">quality assessments</text>
+</g>
+<g><rect x="2005.1" y="1685.3" width="169" height="67" rx="7" fill="#1ba1e2" stroke="#006eaf" stroke-width="1.3"/>
+<text x="2089.6" y="1701.8" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">Suspected manipulation</text>
+<text x="2089.6" y="1718.8" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">of quality assessments in</text>
+<text x="2089.6" y="1735.8" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">low-demand periods</text>
+</g>
+<g><rect x="2247.0" y="787.1" width="113" height="33" rx="7" fill="#f5f5f5" stroke="#666666" stroke-width="1.3"/>
+<text x="2303.5" y="803.6" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">Climate change</text>
+</g>
+<g><rect x="2247.0" y="834.1" width="167" height="50" rx="7" fill="#f5f5f5" stroke="#666666" stroke-width="1.3"/>
+<text x="2330.5" y="850.6" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">Lack of knowledge about</text>
+<text x="2330.5" y="867.6" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">how much to irrigate</text>
+</g>
+<g><rect x="2247.0" y="898.1" width="171" height="50" rx="7" fill="#f5f5f5" stroke="#666666" stroke-width="1.3"/>
+<text x="2332.5" y="914.6" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">Lack of information about</text>
+<text x="2332.5" y="931.6" font-size="13" fill="#333333" text-anchor="middle" dominant-baseline="central">when to irrigate</text>
+</g>
+<g><rect x="2494.7" y="1636.6" width="30" height="30" rx="7" fill="#d80073" stroke="#a50040" stroke-width="1.3"/>
+<text x="2509.7" y="1651.6" font-weight="700" font-size="15" fill="#ffffff" text-anchor="middle" dominant-baseline="central">?</text>
+</g>
+<g><rect x="2261.0" y="1688.0" width="143" height="84" rx="7" fill="#1ba1e2" stroke="#006eaf" stroke-width="1.3"/>
+<text x="2332.5" y="1704.5" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">Importers&#39; quality</text>
+<text x="2332.5" y="1721.5" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">demands rise</text>
+<text x="2332.5" y="1738.5" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">considerably in</text>
+<text x="2332.5" y="1755.5" font-size="13" fill="#ffffff" text-anchor="middle" dominant-baseline="central">low-demand periods</text>
+</g>
+<g><rect x="2494.7" y="1715.0" width="30" height="30" rx="7" fill="#d80073" stroke="#a50040" stroke-width="1.3"/>
+<text x="2509.7" y="1730.0" font-weight="700" font-size="15" fill="#ffffff" text-anchor="middle" dominant-baseline="central">?</text>
+</g>
+</svg>

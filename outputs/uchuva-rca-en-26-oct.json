@@ -1,0 +1,2697 @@
+{
+  "format": "uchuva-rca",
+  "schema": 1,
+  "app": "1.0",
+  "title": "Root cause analysis — Botrytis cinerea (goldenberry)",
+  "categories": [
+    {
+      "id": "problem",
+      "name": "Root problem",
+      "role": "problem",
+      "desc": "The problem being explained.",
+      "fill": "#fff2cc",
+      "stroke": "#d6b656",
+      "font": "#1a1a1a"
+    },
+    {
+      "id": "cause",
+      "name": "Intermediate cause",
+      "role": "intermediate",
+      "desc": "A cause that is itself explained by deeper causes.",
+      "fill": "#1ba1e2",
+      "stroke": "#006eaf",
+      "font": "#ffffff"
+    },
+    {
+      "id": "fact",
+      "name": "Root cause",
+      "role": "root",
+      "desc": "The very root cause, or the deepest causal point I was able to determine.",
+      "fill": "#f5f5f5",
+      "stroke": "#666666",
+      "font": "#333333"
+    },
+    {
+      "id": "plant",
+      "name": "Unsure",
+      "role": "uncertain",
+      "desc": "A cause I am not sure about. Shades of purple show the degree of doubt.",
+      "fill": "#e1d5e7",
+      "stroke": "#9673a6",
+      "font": "#1a1a1a"
+    },
+    {
+      "id": "question",
+      "name": "Open question",
+      "role": "question",
+      "desc": "A gap in the chain still to investigate.",
+      "fill": "#d80073",
+      "stroke": "#a50040",
+      "font": "#ffffff"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n0",
+      "text": "Some goldenberry is rejected at destination",
+      "cat": "problem",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 89,
+      "y": 1292
+    },
+    {
+      "id": "n1",
+      "text": "Some pallets are infested with botrytis cinerea",
+      "cat": "problem",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 322,
+      "y": 1292
+    },
+    {
+      "id": "n2",
+      "text": "Goldenberry is infected with the fungus",
+      "cat": "cause",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 593,
+      "y": 322
+    },
+    {
+      "id": "n3",
+      "text": "Conditions are favorable for the germination and growth of the pathogen",
+      "cat": "cause",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 592,
+      "y": 1292
+    },
+    {
+      "id": "n4",
+      "text": "Infected fruits are not discarded",
+      "cat": "cause",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 594,
+      "y": 1818
+    },
+    {
+      "id": "n5",
+      "text": "Spores are very small",
+      "cat": "fact",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 834,
+      "y": 1779
+    },
+    {
+      "id": "n6",
+      "text": "damage is not visible",
+      "cat": "fact",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 833,
+      "y": 1826
+    },
+    {
+      "id": "n7",
+      "text": "Fungus was already inside the fruit in a quiescent state",
+      "cat": "cause",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 845,
+      "y": 76,
+      "outline": "#000000"
+    },
+    {
+      "id": "n8",
+      "text": "Spores survived on the fruit surface since before harvest",
+      "cat": "cause",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 845,
+      "y": 168,
+      "outline": "#000000"
+    },
+    {
+      "id": "n9",
+      "text": "Spores spread on the fruit surface at sorting facilities",
+      "cat": "cause",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 848,
+      "y": 327,
+      "outline": "#000000"
+    },
+    {
+      "id": "n10",
+      "text": "Spores spread on the fruit surface during transport",
+      "cat": "cause",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 849,
+      "y": 489,
+      "outline": "#000000"
+    },
+    {
+      "id": "n11",
+      "text": "travel time of ~21 days by sea",
+      "cat": "fact",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 612,
+      "y": 917
+    },
+    {
+      "id": "n12",
+      "text": "Pathogen gets access to sugars",
+      "cat": "cause",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 846,
+      "y": 832,
+      "outline": "#000000"
+    },
+    {
+      "id": "n13",
+      "text": "Temperature allows the pathogen to develop",
+      "cat": "cause",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 847,
+      "y": 1149,
+      "outline": "#000000"
+    },
+    {
+      "id": "n14",
+      "text": "Spores reached the flower",
+      "cat": "cause",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1101,
+      "y": 76,
+      "outline": "#000000"
+    },
+    {
+      "id": "n15",
+      "text": "Air conduction",
+      "cat": "cause",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1340,
+      "y": 29,
+      "outline": "#000000"
+    },
+    {
+      "id": "n16",
+      "text": "Water droplets",
+      "cat": "cause",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1340,
+      "y": 76,
+      "outline": "#000000"
+    },
+    {
+      "id": "n17",
+      "text": "Insect dispersal",
+      "cat": "cause",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1340,
+      "y": 123,
+      "outline": "#000000"
+    },
+    {
+      "id": "n18",
+      "text": "nearby contaminated material",
+      "cat": "cause",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1584,
+      "y": 110,
+      "outline": "#000000"
+    },
+    {
+      "id": "n19",
+      "text": "neighboring crops have the disease",
+      "cat": "fact",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1823,
+      "y": 54
+    },
+    {
+      "id": "n20",
+      "text": "infected crop debris in the field",
+      "cat": "cause",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1830,
+      "y": 118,
+      "outline": "#000000"
+    },
+    {
+      "id": "n21",
+      "text": "Conditions were favorable for spore survival",
+      "cat": "cause",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1092,
+      "y": 168,
+      "outline": "#000000"
+    },
+    {
+      "id": "n22",
+      "text": "?",
+      "cat": "question",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1270,
+      "y": 168
+    },
+    {
+      "id": "n23",
+      "text": "The drying process uses fans that blow air over a batch of goldenberries",
+      "cat": "fact",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1089,
+      "y": 249
+    },
+    {
+      "id": "n24",
+      "text": "Inspection requires a manual process that involves touching fruits with and without spores",
+      "cat": "cause",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1092,
+      "y": 339,
+      "outline": "#000000"
+    },
+    {
+      "id": "n25",
+      "text": "The fruit is not directly visible because it is inside a calyx",
+      "cat": "fact",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1332,
+      "y": 339
+    },
+    {
+      "id": "n26",
+      "text": "Transport means may already be contaminated with spores",
+      "cat": "fact",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1091,
+      "y": 428
+    },
+    {
+      "id": "n27",
+      "text": "Transport happens in contact with open air",
+      "cat": "fact",
+      "status": "unassessed",
+      "notes": "Happens a lot in local transport, but is not always the case",
+      "sources": [],
+      "x": 1080,
+      "y": 501
+    },
+    {
+      "id": "n28",
+      "text": "Pathogen can break through the fruit's outer membrane",
+      "cat": "cause",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1094,
+      "y": 573,
+      "outline": "#000000"
+    },
+    {
+      "id": "n29",
+      "text": "Fruit is too ripe",
+      "cat": "cause",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1340,
+      "y": 1021,
+      "outline": "#000000"
+    },
+    {
+      "id": "n30",
+      "text": "There is uneven ventilation that generates favorable microclimates [**]",
+      "cat": "fact",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1829,
+      "y": 1197
+    },
+    {
+      "id": "n31",
+      "text": "Fungi can develop at temperatures as low as 0°C",
+      "cat": "fact",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1147,
+      "y": 1105
+    },
+    {
+      "id": "n32",
+      "text": "Container temperatures are between 2°C and 8°C",
+      "cat": "cause",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 948,
+      "y": 1030,
+      "outline": "#000000"
+    },
+    {
+      "id": "n33",
+      "text": "Fruit membrane is damaged",
+      "cat": "cause",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1347,
+      "y": 818,
+      "outline": "#000000"
+    },
+    {
+      "id": "n34",
+      "text": "Fruit membrane is too fragile",
+      "cat": "cause",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1343,
+      "y": 562,
+      "outline": "#000000"
+    },
+    {
+      "id": "n35",
+      "text": "Overripe fruit passes the selection stage",
+      "cat": "cause",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1587,
+      "y": 1015,
+      "outline": "#000000"
+    },
+    {
+      "id": "n36",
+      "text": "Cold chain is broken",
+      "cat": "cause",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1833,
+      "y": 1295,
+      "outline": "#000000"
+    },
+    {
+      "id": "n37",
+      "text": "Fresh fruit cannot endure lower temperatures",
+      "cat": "fact",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1148,
+      "y": 1026
+    },
+    {
+      "id": "n38",
+      "text": "Mechanical damage during harvest",
+      "cat": "cause",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1571,
+      "y": 631,
+      "outline": "#000000"
+    },
+    {
+      "id": "n39",
+      "text": "Mechanical damage during sorting",
+      "cat": "cause",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1592,
+      "y": 695,
+      "outline": "#000000"
+    },
+    {
+      "id": "n40",
+      "text": "Mechanical damage during transport",
+      "cat": "cause",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1592,
+      "y": 823,
+      "outline": "#000000"
+    },
+    {
+      "id": "n41",
+      "text": "In the field, the fruit fills with water too quickly",
+      "cat": "cause",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1588,
+      "y": 951,
+      "outline": "#000000"
+    },
+    {
+      "id": "n42",
+      "text": "Plant absorbs less calcium",
+      "cat": "cause",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1593,
+      "y": 465,
+      "outline": "#000000"
+    },
+    {
+      "id": "n44",
+      "text": "Observer is not objective",
+      "cat": "fact",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1828,
+      "y": 1015
+    },
+    {
+      "id": "n45",
+      "text": "At port, 2–3 day queue for inspection",
+      "cat": "cause",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2079,
+      "y": 1227,
+      "outline": "#000000"
+    },
+    {
+      "id": "n46",
+      "text": "?",
+      "cat": "question",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2004,
+      "y": 1295
+    },
+    {
+      "id": "n47",
+      "text": "Sudden changes in soil moisture",
+      "cat": "cause",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1833,
+      "y": 896,
+      "outline": "#000000"
+    },
+    {
+      "id": "n48",
+      "text": "Plant has a high cracking rate",
+      "cat": "cause",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1830,
+      "y": 960,
+      "outline": "#000000"
+    },
+    {
+      "id": "n49",
+      "text": "Root inactivity",
+      "cat": "plant",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1797,
+      "y": 426
+    },
+    {
+      "id": "n50",
+      "text": "High humidity",
+      "cat": "plant",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1796,
+      "y": 473
+    },
+    {
+      "id": "n51",
+      "text": "High port utilization",
+      "cat": "fact",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2302,
+      "y": 1180,
+      "outline": "#000000"
+    },
+    {
+      "id": "n52",
+      "text": "Anti-narcotics check",
+      "cat": "fact",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2304,
+      "y": 1227,
+      "outline": "#000000"
+    },
+    {
+      "id": "n53",
+      "text": "Phytosanitary inspections",
+      "cat": "fact",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2285,
+      "y": 1282,
+      "outline": "#000000"
+    },
+    {
+      "id": "n54",
+      "text": "Changes in rainfall patterns",
+      "cat": "cause",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2075,
+      "y": 790,
+      "outline": "#000000"
+    },
+    {
+      "id": "n55",
+      "text": "Uneven irrigation",
+      "cat": "cause",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2084,
+      "y": 904,
+      "outline": "#000000"
+    },
+    {
+      "id": "n56",
+      "text": "?",
+      "cat": "question",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2004,
+      "y": 960
+    },
+    {
+      "id": "n57",
+      "text": "There is condensation on the fruit surface",
+      "cat": "cause",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1587,
+      "y": 1292
+    },
+    {
+      "id": "n58",
+      "text": "Fruits exude liquid",
+      "cat": "cause",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1099,
+      "y": 832
+    },
+    {
+      "id": "n60",
+      "text": "High ethylene production and transpiration",
+      "cat": "cause",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1587,
+      "y": 1228
+    },
+    {
+      "id": "nmumx4510rw1c",
+      "text": "The farmer does not remove dead plant material from the plants",
+      "cat": "fact",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2071,
+      "y": 118
+    },
+    {
+      "id": "nmumx5xard0i9",
+      "text": "Poor soil conditioning",
+      "cat": "cause",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1590,
+      "y": 570
+    },
+    {
+      "id": "nmumx9w0dr7f8",
+      "text": "Climate change",
+      "cat": "fact",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2290,
+      "y": 790
+    },
+    {
+      "id": "nmumxb0zs7mjr",
+      "text": "Lack of knowledge about how much to irrigate",
+      "cat": "fact",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2317,
+      "y": 845
+    },
+    {
+      "id": "nmumxbw56jlok",
+      "text": "Lack of information about when to irrigate",
+      "cat": "fact",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2319,
+      "y": 909
+    },
+    {
+      "id": "nmumxd265hz9h",
+      "text": "No soil analysis is done",
+      "cat": "fact",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1823,
+      "y": 520
+    },
+    {
+      "id": "nmumxdtt6tiaz",
+      "text": "Inadequate fertilizer application",
+      "cat": "cause",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1838,
+      "y": 576
+    },
+    {
+      "id": "nmumxexqxjhjo",
+      "text": "Lack of technical advice",
+      "cat": "fact",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2070,
+      "y": 520
+    },
+    {
+      "id": "nmumxf8zahqpv",
+      "text": "Suitable fertilizers are not available locally",
+      "cat": "fact",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2075,
+      "y": 576
+    },
+    {
+      "id": "nmumxg8651bo7",
+      "text": "The farmer is unwilling to apply the advice given",
+      "cat": "fact",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2074,
+      "y": 640
+    },
+    {
+      "id": "nmumxh500b1pg",
+      "text": "Manual handling is highly variable",
+      "cat": "fact",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1829,
+      "y": 640
+    },
+    {
+      "id": "nmumxhvmdilbk",
+      "text": "Knocks during on-site transport",
+      "cat": "fact",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1819,
+      "y": 704
+    },
+    {
+      "id": "nmumxkhbiavz3",
+      "text": "Vehicle vibration during the trip",
+      "cat": "fact",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1824,
+      "y": 768
+    },
+    {
+      "id": "nmumxlcuhklxc",
+      "text": "Handling of crates during loading and unloading",
+      "cat": "fact",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1829,
+      "y": 832
+    },
+    {
+      "id": "nmumxp6nszrom",
+      "text": "Before sorting, fruit is sometimes stored until it can be graded",
+      "cat": "cause",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2076,
+      "y": 1358
+    },
+    {
+      "id": "nmumxqcadxnbs",
+      "text": "High fruit demand forces queuing",
+      "cat": "fact",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2317,
+      "y": 1346
+    },
+    {
+      "id": "nmumxr9tgljfa",
+      "text": "The sorting process is slow",
+      "cat": "cause",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2315,
+      "y": 1410
+    },
+    {
+      "id": "nmumxsbrq9fat",
+      "text": "manual process",
+      "cat": "fact",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2539,
+      "y": 1416
+    },
+    {
+      "id": "nmvp54yxg58u7",
+      "text": "1–3 days of processing time",
+      "cat": "cause",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 847,
+      "y": 1410
+    },
+    {
+      "id": "nmvp55q0gt14o",
+      "text": "high utilization of sorting and grading lines for other fruits",
+      "cat": "fact",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1086,
+      "y": 1365
+    },
+    {
+      "id": "nmvp5jdw4e951",
+      "text": "Harvesting takes place during rainy periods",
+      "cat": "cause",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 833,
+      "y": 1514
+    },
+    {
+      "id": "nmvp5k7bp5hhu",
+      "text": "There is strong pressure for product during high-demand periods",
+      "cat": "fact",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1073,
+      "y": 1513
+    },
+    {
+      "id": "nmvp5otdguyn5",
+      "text": "Inadequate crop rotation",
+      "cat": "cause",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 845,
+      "y": 1732
+    },
+    {
+      "id": "nmvp5rl69dl0i",
+      "text": "Farmers tend to repeatedly grow the crops they already know",
+      "cat": "fact",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1584,
+      "y": 1529
+    },
+    {
+      "id": "nmvp5uc0d2qq5",
+      "text": "Farmers' knowledge of how to design an adequate crop rotation is limited",
+      "cat": "fact",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1091,
+      "y": 1732
+    },
+    {
+      "id": "nmvp5w6oanvlz",
+      "text": "Technical advice focuses on short-term operational aspects",
+      "cat": "cause",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1093,
+      "y": 1822
+    },
+    {
+      "id": "nmvp5xnjrd2ue",
+      "text": "Long-term relationships with physalis growers are complex",
+      "cat": "cause",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1344,
+      "y": 1643
+    },
+    {
+      "id": "nmvp5yos0azq9",
+      "text": "Mutual trust issues",
+      "cat": "cause",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1596,
+      "y": 1593
+    },
+    {
+      "id": "nmvp61quyqvpy",
+      "text": "Farmer sells to other exporters in parallel",
+      "cat": "fact",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1816,
+      "y": 1512
+    },
+    {
+      "id": "nmvp63352rhwi",
+      "text": "Farmer sometimes does not properly understand/review the contract",
+      "cat": "fact",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1826,
+      "y": 1593
+    },
+    {
+      "id": "nmvp64doceioa",
+      "text": "There are many farmers to visit and support",
+      "cat": "cause",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1340,
+      "y": 1833
+    },
+    {
+      "id": "nmvp65fwe074n",
+      "text": "The supplier changes relatively often",
+      "cat": "cause",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1590,
+      "y": 1780
+    },
+    {
+      "id": "nmvp65yqiyhnk",
+      "text": "The farmer has little land",
+      "cat": "fact",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1828,
+      "y": 1828
+    },
+    {
+      "id": "nmvp66n5x2chz",
+      "text": "Crop rotation must be at least 4 years",
+      "cat": "fact",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1826,
+      "y": 1772
+    },
+    {
+      "id": "nmvp69q1t7ymu",
+      "text": "Lack of trust and transparency in the sorting and grading system",
+      "cat": "cause",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1836,
+      "y": 1691
+    },
+    {
+      "id": "nmvp6b6zzbea1",
+      "text": "Considerable differences between exporters' quality assessments",
+      "cat": "cause",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2319,
+      "y": 1627
+    },
+    {
+      "id": "nmvp6cbm8aie8",
+      "text": "?",
+      "cat": "question",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2496,
+      "y": 1638
+    },
+    {
+      "id": "nmvp6d15dodfp",
+      "text": "Suspected manipulation of quality assessments in low-demand periods",
+      "cat": "cause",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2076,
+      "y": 1705
+    },
+    {
+      "id": "nmvp6eyoq3hj0",
+      "text": "Importers' quality demands rise considerably in low-demand periods",
+      "cat": "cause",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2319,
+      "y": 1716
+    },
+    {
+      "id": "nmvp6gku3w5b4",
+      "text": "?",
+      "cat": "question",
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2496,
+      "y": 1716
+    }
+  ],
+  "edges": [
+    {
+      "id": "ea0",
+      "source": "n0",
+      "target": "n1"
+    },
+    {
+      "id": "ea1",
+      "source": "n1",
+      "target": "n2"
+    },
+    {
+      "id": "ea2",
+      "source": "n1",
+      "target": "n3"
+    },
+    {
+      "id": "ea3",
+      "source": "n1",
+      "target": "n4"
+    },
+    {
+      "id": "ea4",
+      "source": "n2",
+      "target": "n7"
+    },
+    {
+      "id": "ea5",
+      "source": "n2",
+      "target": "n8"
+    },
+    {
+      "id": "ea6",
+      "source": "n2",
+      "target": "n9"
+    },
+    {
+      "id": "ea7",
+      "source": "n2",
+      "target": "n10"
+    },
+    {
+      "id": "ea8",
+      "source": "n3",
+      "target": "n11"
+    },
+    {
+      "id": "ea9",
+      "source": "n3",
+      "target": "n12"
+    },
+    {
+      "id": "ea10",
+      "source": "n3",
+      "target": "n13"
+    },
+    {
+      "id": "ea11",
+      "source": "n4",
+      "target": "n5"
+    },
+    {
+      "id": "ea12",
+      "source": "n4",
+      "target": "n6"
+    },
+    {
+      "id": "ea13",
+      "source": "n7",
+      "target": "n14"
+    },
+    {
+      "id": "ea14",
+      "source": "n14",
+      "target": "n15"
+    },
+    {
+      "id": "ea15",
+      "source": "n14",
+      "target": "n16"
+    },
+    {
+      "id": "ea16",
+      "source": "n14",
+      "target": "n17"
+    },
+    {
+      "id": "ea17",
+      "source": "n15",
+      "target": "n18"
+    },
+    {
+      "id": "ea18",
+      "source": "n16",
+      "target": "n18"
+    },
+    {
+      "id": "ea19",
+      "source": "n17",
+      "target": "n18"
+    },
+    {
+      "id": "ea20",
+      "source": "n18",
+      "target": "n19"
+    },
+    {
+      "id": "ea21",
+      "source": "n18",
+      "target": "n20"
+    },
+    {
+      "id": "ea22",
+      "source": "n8",
+      "target": "n21"
+    },
+    {
+      "id": "ea23",
+      "source": "n21",
+      "target": "n22"
+    },
+    {
+      "id": "ea24",
+      "source": "n9",
+      "target": "n23"
+    },
+    {
+      "id": "ea25",
+      "source": "n9",
+      "target": "n24"
+    },
+    {
+      "id": "ea26",
+      "source": "n24",
+      "target": "n25"
+    },
+    {
+      "id": "ea27",
+      "source": "n10",
+      "target": "n26"
+    },
+    {
+      "id": "ea28",
+      "source": "n10",
+      "target": "n27"
+    },
+    {
+      "id": "ea29",
+      "source": "n12",
+      "target": "n28"
+    },
+    {
+      "id": "ea30",
+      "source": "n12",
+      "target": "n29"
+    },
+    {
+      "id": "ea31",
+      "source": "n28",
+      "target": "n33"
+    },
+    {
+      "id": "ea32",
+      "source": "n28",
+      "target": "n34"
+    },
+    {
+      "id": "ea33",
+      "source": "n33",
+      "target": "n38"
+    },
+    {
+      "id": "ea34",
+      "source": "n33",
+      "target": "n39"
+    },
+    {
+      "id": "ea35",
+      "source": "n33",
+      "target": "n40"
+    },
+    {
+      "id": "ea36",
+      "source": "n33",
+      "target": "n41"
+    },
+    {
+      "id": "ea37",
+      "source": "n41",
+      "target": "n47"
+    },
+    {
+      "id": "ea38",
+      "source": "n41",
+      "target": "n48"
+    },
+    {
+      "id": "ea39",
+      "source": "n47",
+      "target": "n54"
+    },
+    {
+      "id": "ea40",
+      "source": "n47",
+      "target": "n55"
+    },
+    {
+      "id": "ea41",
+      "source": "n48",
+      "target": "n56"
+    },
+    {
+      "id": "ea42",
+      "source": "n34",
+      "target": "n42"
+    },
+    {
+      "id": "ea44",
+      "source": "n42",
+      "target": "n49"
+    },
+    {
+      "id": "ea45",
+      "source": "n42",
+      "target": "n50"
+    },
+    {
+      "id": "ea46",
+      "source": "n35",
+      "target": "n44"
+    },
+    {
+      "id": "ea47",
+      "source": "n36",
+      "target": "n45"
+    },
+    {
+      "id": "ea48",
+      "source": "n36",
+      "target": "n46"
+    },
+    {
+      "id": "ea49",
+      "source": "n45",
+      "target": "n51"
+    },
+    {
+      "id": "ea50",
+      "source": "n45",
+      "target": "n52"
+    },
+    {
+      "id": "ea51",
+      "source": "n45",
+      "target": "n53"
+    },
+    {
+      "id": "ea52",
+      "source": "n13",
+      "target": "n32"
+    },
+    {
+      "id": "ea53",
+      "source": "n13",
+      "target": "n31"
+    },
+    {
+      "id": "ea54",
+      "source": "n13",
+      "target": "n30"
+    },
+    {
+      "id": "ea55",
+      "source": "n32",
+      "target": "n37"
+    },
+    {
+      "id": "ea56",
+      "source": "n3",
+      "target": "n57"
+    },
+    {
+      "id": "ea57",
+      "source": "n57",
+      "target": "n30"
+    },
+    {
+      "id": "ea58",
+      "source": "n57",
+      "target": "n36"
+    },
+    {
+      "id": "ea59",
+      "source": "n12",
+      "target": "n58"
+    },
+    {
+      "id": "ea62",
+      "source": "n29",
+      "target": "n60"
+    },
+    {
+      "id": "ea63",
+      "source": "n60",
+      "target": "n30"
+    },
+    {
+      "id": "ea64",
+      "source": "n60",
+      "target": "n36"
+    },
+    {
+      "id": "ea65",
+      "source": "n29",
+      "target": "n35"
+    },
+    {
+      "id": "ea66",
+      "source": "n58",
+      "target": "n33"
+    },
+    {
+      "id": "emuldvgfelxc8",
+      "source": "n58",
+      "target": "n29"
+    },
+    {
+      "id": "emumx5a9t2vgl",
+      "source": "n20",
+      "target": "nmumx4510rw1c"
+    },
+    {
+      "id": "emumx699i2fou",
+      "source": "n34",
+      "target": "nmumx5xard0i9"
+    },
+    {
+      "id": "emumxa6xlak93",
+      "source": "n54",
+      "target": "nmumx9w0dr7f8"
+    },
+    {
+      "id": "emumxbjmtxn13",
+      "source": "n55",
+      "target": "nmumxb0zs7mjr"
+    },
+    {
+      "id": "emumxbw57ruh3",
+      "source": "n55",
+      "target": "nmumxbw56jlok"
+    },
+    {
+      "id": "emumxd265zl25",
+      "source": "nmumx5xard0i9",
+      "target": "nmumxd265hz9h"
+    },
+    {
+      "id": "emumxdtt681rj",
+      "source": "nmumx5xard0i9",
+      "target": "nmumxdtt6tiaz"
+    },
+    {
+      "id": "emumxexqx4rdh",
+      "source": "nmumxdtt6tiaz",
+      "target": "nmumxexqxjhjo"
+    },
+    {
+      "id": "emumxf8zay3e5",
+      "source": "nmumxdtt6tiaz",
+      "target": "nmumxf8zahqpv"
+    },
+    {
+      "id": "emumxg865k7vj",
+      "source": "nmumxdtt6tiaz",
+      "target": "nmumxg8651bo7"
+    },
+    {
+      "id": "emumxh500i268",
+      "source": "n39",
+      "target": "nmumxh500b1pg"
+    },
+    {
+      "id": "emumxhvmdlqgl",
+      "source": "n39",
+      "target": "nmumxhvmdilbk"
+    },
+    {
+      "id": "emumxkhbii01h",
+      "source": "n40",
+      "target": "nmumxkhbiavz3"
+    },
+    {
+      "id": "emumxlcuihyux",
+      "source": "n40",
+      "target": "nmumxlcuhklxc"
+    },
+    {
+      "id": "emumxp6ntc9zm",
+      "source": "n36",
+      "target": "nmumxp6nszrom"
+    },
+    {
+      "id": "emumxqcadlpnu",
+      "source": "nmumxp6nszrom",
+      "target": "nmumxqcadxnbs"
+    },
+    {
+      "id": "emumxr9tgi7sc",
+      "source": "nmumxp6nszrom",
+      "target": "nmumxr9tgljfa"
+    },
+    {
+      "id": "emumxsbrqaq3e",
+      "source": "nmumxr9tgljfa",
+      "target": "nmumxsbrq9fat"
+    },
+    {
+      "id": "emvp54yxg261i",
+      "source": "n3",
+      "target": "nmvp54yxg58u7"
+    },
+    {
+      "id": "emvp55q0hphgh",
+      "source": "nmvp54yxg58u7",
+      "target": "nmvp55q0gt14o"
+    },
+    {
+      "id": "emvp583l6fryn",
+      "source": "nmvp54yxg58u7",
+      "target": "nmumxr9tgljfa"
+    },
+    {
+      "id": "emvp5jdw50p9u",
+      "source": "n3",
+      "target": "nmvp5jdw4e951"
+    },
+    {
+      "id": "emvp5k7bq544y",
+      "source": "nmvp5jdw4e951",
+      "target": "nmvp5k7bp5hhu"
+    },
+    {
+      "id": "emvp5otdhrczy",
+      "source": "n3",
+      "target": "nmvp5otdguyn5"
+    },
+    {
+      "id": "emvp5rl6ax4fx",
+      "source": "nmvp5otdguyn5",
+      "target": "nmvp5rl69dl0i"
+    },
+    {
+      "id": "emvp5uc0ekcb2",
+      "source": "nmvp5otdguyn5",
+      "target": "nmvp5uc0d2qq5"
+    },
+    {
+      "id": "emvp5w6oaglnb",
+      "source": "nmvp5otdguyn5",
+      "target": "nmvp5w6oanvlz"
+    },
+    {
+      "id": "emvp5xnjrj0q5",
+      "source": "nmvp5w6oanvlz",
+      "target": "nmvp5xnjrd2ue"
+    },
+    {
+      "id": "emvp5yos0f7rz",
+      "source": "nmvp5xnjrd2ue",
+      "target": "nmvp5yos0azq9"
+    },
+    {
+      "id": "emvp6161t3bdm",
+      "source": "nmvp5xnjrd2ue",
+      "target": "nmvp5rl69dl0i"
+    },
+    {
+      "id": "emvp61quyl2n9",
+      "source": "nmvp5yos0azq9",
+      "target": "nmvp61quyqvpy"
+    },
+    {
+      "id": "emvp633535w8q",
+      "source": "nmvp5yos0azq9",
+      "target": "nmvp63352rhwi"
+    },
+    {
+      "id": "emvp64dock7y2",
+      "source": "nmvp5w6oanvlz",
+      "target": "nmvp64doceioa"
+    },
+    {
+      "id": "emvp65fwe47oy",
+      "source": "nmvp5xnjrd2ue",
+      "target": "nmvp65fwe074n"
+    },
+    {
+      "id": "emvp65yqi3ux6",
+      "source": "nmvp65fwe074n",
+      "target": "nmvp65yqiyhnk"
+    },
+    {
+      "id": "emvp66n5xek7j",
+      "source": "nmvp65fwe074n",
+      "target": "nmvp66n5x2chz"
+    },
+    {
+      "id": "emvp67n8hogn8",
+      "source": "nmvp64doceioa",
+      "target": "nmvp65yqiyhnk"
+    },
+    {
+      "id": "emvp69q1t7rj1",
+      "source": "nmvp5yos0azq9",
+      "target": "nmvp69q1t7ymu"
+    },
+    {
+      "id": "emvp6b6zzvqji",
+      "source": "nmvp69q1t7ymu",
+      "target": "nmvp6b6zzbea1"
+    },
+    {
+      "id": "emvp6cbm86oj6",
+      "source": "nmvp6b6zzbea1",
+      "target": "nmvp6cbm8aie8"
+    },
+    {
+      "id": "emvp6d15dlcob",
+      "source": "nmvp69q1t7ymu",
+      "target": "nmvp6d15dodfp"
+    },
+    {
+      "id": "emvp6eyoq1ecb",
+      "source": "nmvp6d15dodfp",
+      "target": "nmvp6eyoq3hj0"
+    },
+    {
+      "id": "emvp6gku3v5ls",
+      "source": "nmvp6eyoq3hj0",
+      "target": "nmvp6gku3w5b4"
+    },
+    {
+      "id": "emvp6i059v0sc",
+      "source": "nmvp6b6zzbea1",
+      "target": "nmumxsbrq9fat"
+    },
+    {
+      "id": "emvp6npjbuphz",
+      "source": "nmvp6d15dodfp",
+      "target": "nmvp6b6zzbea1"
+    }
+  ],
+  "versions": [
+    {
+      "id": "vmuld7y218556",
+      "name": "Imported from draw.io",
+      "note": "Imported from aaaaaaaa.drawio",
+      "at": "2026-09-28T14:51:15.625Z",
+      "snapshot": {
+        "title": "aaaaaaaa",
+        "categories": [
+          {
+            "id": "problem",
+            "name": "Root problem",
+            "role": "problem",
+            "desc": "The problem being explained.",
+            "fill": "#fff2cc",
+            "stroke": "#d6b656",
+            "font": "#1a1a1a"
+          },
+          {
+            "id": "cause",
+            "name": "Intermediate cause",
+            "role": "intermediate",
+            "desc": "A cause that is itself explained by deeper causes.",
+            "fill": "#1ba1e2",
+            "stroke": "#006eaf",
+            "font": "#ffffff"
+          },
+          {
+            "id": "fact",
+            "name": "Root cause",
+            "role": "root",
+            "desc": "The very root cause, or the last causal point I was able to determine.",
+            "fill": "#f5f5f5",
+            "stroke": "#666666",
+            "font": "#333333"
+          },
+          {
+            "id": "plant",
+            "name": "Unsure",
+            "role": "uncertain",
+            "desc": "A cause I am not sure about. Shades of purple show the degree of doubt.",
+            "fill": "#e1d5e7",
+            "stroke": "#9673a6",
+            "font": "#1a1a1a"
+          },
+          {
+            "id": "question",
+            "name": "Open question",
+            "role": "question",
+            "desc": "A gap in the chain still to investigate.",
+            "fill": "#d80073",
+            "stroke": "#a50040",
+            "font": "#ffffff"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n0",
+            "text": "Some goldenberry is rejected at destination",
+            "cat": "problem",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 138,
+            "y": 938
+          },
+          {
+            "id": "n1",
+            "text": "Some pallets are infested with botrytis cinerea",
+            "cat": "problem",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 500,
+            "y": 938
+          },
+          {
+            "id": "n2",
+            "text": "Goldenberry is infected with the fungus",
+            "cat": "cause",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 886,
+            "y": 440
+          },
+          {
+            "id": "n3",
+            "text": "Conditions are favorable for the germination and growth of the pathogen",
+            "cat": "cause",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 884,
+            "y": 1244
+          },
+          {
+            "id": "n4",
+            "text": "Infected fruits are not discarded",
+            "cat": "cause",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 887,
+            "y": 938
+          },
+          {
+            "id": "n5",
+            "text": "Spores are too small",
+            "cat": "fact",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1240,
+            "y": 878
+          },
+          {
+            "id": "n6",
+            "text": "damage is not visible",
+            "cat": "fact",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1244,
+            "y": 951
+          },
+          {
+            "id": "n7",
+            "text": "Fungus was already inside the fruit in quiescent state",
+            "cat": "cause",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1259,
+            "y": 215,
+            "outline": "#000000"
+          },
+          {
+            "id": "n8",
+            "text": "Spores survived in the fruit surface since preharvest",
+            "cat": "cause",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1259,
+            "y": 72,
+            "outline": "#000000"
+          },
+          {
+            "id": "n9",
+            "text": "Spores get disseminated on the fruit surface at sorting facilities",
+            "cat": "cause",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1259,
+            "y": 449,
+            "outline": "#000000"
+          },
+          {
+            "id": "n10",
+            "text": "Spores get disseminated on the fruit surface during transport",
+            "cat": "cause",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1234,
+            "y": 660,
+            "outline": "#000000"
+          },
+          {
+            "id": "n11",
+            "text": "travel time of ~13 days overseas",
+            "cat": "fact",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1251,
+            "y": 1254
+          },
+          {
+            "id": "n12",
+            "text": "Pathogen gets access to sugars",
+            "cat": "cause",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1320,
+            "y": 1091,
+            "outline": "#000000"
+          },
+          {
+            "id": "n13",
+            "text": "Temperature is allows the pathogen to develop",
+            "cat": "cause",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1260,
+            "y": 1353,
+            "outline": "#000000"
+          },
+          {
+            "id": "n14",
+            "text": "Spores reached the flower",
+            "cat": "cause",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1643,
+            "y": 214,
+            "outline": "#000000"
+          },
+          {
+            "id": "n15",
+            "text": "Air conduction",
+            "cat": "cause",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2011,
+            "y": 142,
+            "outline": "#000000"
+          },
+          {
+            "id": "n16",
+            "text": "Water droplets",
+            "cat": "cause",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2011,
+            "y": 215,
+            "outline": "#000000"
+          },
+          {
+            "id": "n17",
+            "text": "Insect dispersal",
+            "cat": "cause",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2010,
+            "y": 367,
+            "outline": "#000000"
+          },
+          {
+            "id": "n18",
+            "text": "near by contaminated material",
+            "cat": "cause",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2381,
+            "y": 347,
+            "outline": "#000000"
+          },
+          {
+            "id": "n19",
+            "text": "neighboring crops have the disease",
+            "cat": "fact",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2745,
+            "y": 360
+          },
+          {
+            "id": "n20",
+            "text": "infected crop debris in the field",
+            "cat": "cause",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2741,
+            "y": 260,
+            "outline": "#000000"
+          },
+          {
+            "id": "n21",
+            "text": "Conditions where favorable for spore survival",
+            "cat": "cause",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1631,
+            "y": 72,
+            "outline": "#000000"
+          },
+          {
+            "id": "n22",
+            "text": "?",
+            "cat": "question",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1902,
+            "y": 71
+          },
+          {
+            "id": "n23",
+            "text": "The drying process uses fans which blow air at a batch of physalis",
+            "cat": "fact",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1628,
+            "y": 328
+          },
+          {
+            "id": "n24",
+            "text": "Inspection requires a manual process that implies touching fruits with & without spores",
+            "cat": "cause",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1631,
+            "y": 465,
+            "outline": "#000000"
+          },
+          {
+            "id": "n25",
+            "text": "The fruit is not visible directly as it is inside a calyx",
+            "cat": "fact",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1998,
+            "y": 466
+          },
+          {
+            "id": "n26",
+            "text": "Transport means may be already contaminated with spores",
+            "cat": "fact",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1631,
+            "y": 735
+          },
+          {
+            "id": "n27",
+            "text": "Transport happens in contact with open air",
+            "cat": "fact",
+            "status": "unassessed",
+            "notes": "Happens a lot for local transportation but is not always the case",
+            "sources": [],
+            "x": 1615,
+            "y": 623
+          },
+          {
+            "id": "n28",
+            "text": "Pathogen can break through the fruit outer membrane",
+            "cat": "cause",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1635,
+            "y": 861,
+            "outline": "#000000"
+          },
+          {
+            "id": "n29",
+            "text": "Fruit is too ripe",
+            "cat": "cause",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2379,
+            "y": 1145,
+            "outline": "#000000"
+          },
+          {
+            "id": "n30",
+            "text": "There is uneven ventillation that generates favorable microclimates [**]",
+            "cat": "fact",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 3108,
+            "y": 1375
+          },
+          {
+            "id": "n31",
+            "text": "Fungi can develop in temperatures as low 0°C",
+            "cat": "fact",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1631,
+            "y": 1254
+          },
+          {
+            "id": "n32",
+            "text": "Container temperatures are around 2°C and 8°C",
+            "cat": "cause",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1631,
+            "y": 1353,
+            "outline": "#000000"
+          },
+          {
+            "id": "n33",
+            "text": "Fruit membrane is damaged",
+            "cat": "cause",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2020,
+            "y": 891,
+            "outline": "#000000"
+          },
+          {
+            "id": "n34",
+            "text": "Fruit membrane is too fragile",
+            "cat": "cause",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2016,
+            "y": 578,
+            "outline": "#000000"
+          },
+          {
+            "id": "n35",
+            "text": "Too ripe fruit passes the selection stage",
+            "cat": "cause",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2753,
+            "y": 994,
+            "outline": "#000000"
+          },
+          {
+            "id": "n36",
+            "text": "Cold chain is broken",
+            "cat": "cause",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 3129,
+            "y": 1171,
+            "outline": "#000000"
+          },
+          {
+            "id": "n37",
+            "text": "Fresh fruit cannot endure lower temperatures",
+            "cat": "fact",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2010,
+            "y": 1353
+          },
+          {
+            "id": "n38",
+            "text": "Mechanical damage during harvest",
+            "cat": "cause",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2364,
+            "y": 998,
+            "outline": "#000000"
+          },
+          {
+            "id": "n39",
+            "text": "Mechanical damage during sorting",
+            "cat": "cause",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2364,
+            "y": 800,
+            "outline": "#000000"
+          },
+          {
+            "id": "n40",
+            "text": "Mechanical damage during transportation",
+            "cat": "cause",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2370,
+            "y": 899,
+            "outline": "#000000"
+          },
+          {
+            "id": "n41",
+            "text": "During field the fruit fills with too much water too quick",
+            "cat": "cause",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2384,
+            "y": 687,
+            "outline": "#000000"
+          },
+          {
+            "id": "n42",
+            "text": "Plant absorbs less calcium",
+            "cat": "cause",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2394,
+            "y": 507,
+            "outline": "#000000"
+          },
+          {
+            "id": "n43",
+            "text": "?",
+            "cat": "question",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2280,
+            "y": 591
+          },
+          {
+            "id": "n44",
+            "text": "Observer is not objective",
+            "cat": "fact",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 3130,
+            "y": 994
+          },
+          {
+            "id": "n45",
+            "text": "At port 2-3 days long queue for inspection",
+            "cat": "cause",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 3484,
+            "y": 1180,
+            "outline": "#000000"
+          },
+          {
+            "id": "n46",
+            "text": "?",
+            "cat": "question",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 3393,
+            "y": 1096
+          },
+          {
+            "id": "n47",
+            "text": "Sudden changes in soil humidity",
+            "cat": "cause",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2756,
+            "y": 606,
+            "outline": "#000000"
+          },
+          {
+            "id": "n48",
+            "text": "Plant has a high cracking rate",
+            "cat": "cause",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2754,
+            "y": 705,
+            "outline": "#000000"
+          },
+          {
+            "id": "n49",
+            "text": "Root inactivity",
+            "cat": "plant",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2704,
+            "y": 520
+          },
+          {
+            "id": "n50",
+            "text": "High humidity",
+            "cat": "plant",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2702,
+            "y": 447
+          },
+          {
+            "id": "n51",
+            "text": "High utilization of the port",
+            "cat": "cause",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 3819,
+            "y": 1265,
+            "outline": "#000000"
+          },
+          {
+            "id": "n52",
+            "text": "Anti-narcotics check",
+            "cat": "cause",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 3816,
+            "y": 1107,
+            "outline": "#000000"
+          },
+          {
+            "id": "n53",
+            "text": "Phytosanitary checks",
+            "cat": "cause",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 3819,
+            "y": 1180,
+            "outline": "#000000"
+          },
+          {
+            "id": "n54",
+            "text": "Changes in rainfall patterns",
+            "cat": "cause",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 3102,
+            "y": 532,
+            "outline": "#000000"
+          },
+          {
+            "id": "n55",
+            "text": "Uneven irrigation",
+            "cat": "cause",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 3095,
+            "y": 619,
+            "outline": "#000000"
+          },
+          {
+            "id": "n56",
+            "text": "?",
+            "cat": "question",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 3024,
+            "y": 705
+          },
+          {
+            "id": "n57",
+            "text": "There is condensation on fruit surface",
+            "cat": "cause",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2754,
+            "y": 1192
+          },
+          {
+            "id": "n58",
+            "text": "Fruits leach",
+            "cat": "cause",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1669,
+            "y": 993
+          },
+          {
+            "id": "n59",
+            "text": "Pectins composition of the fruit change",
+            "cat": "cause",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2014,
+            "y": 1039
+          },
+          {
+            "id": "n60",
+            "text": "high etilene production and transpiration",
+            "cat": "cause",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2757,
+            "y": 1093
+          },
+          {
+            "id": "QWQDKlorEdmQoNiPML2p-1",
+            "text": "AAAAA",
+            "cat": "cause",
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2024,
+            "y": 757,
+            "outline": "#000000"
+          }
+        ],
+        "edges": [
+          {
+            "id": "eQWQDKlorEdmQoNiPML2p-2",
+            "source": "n28",
+            "target": "QWQDKlorEdmQoNiPML2p-1"
+          },
+          {
+            "id": "ea0",
+            "source": "n0",
+            "target": "n1"
+          },
+          {
+            "id": "ea1",
+            "source": "n1",
+            "target": "n2"
+          },
+          {
+            "id": "ea2",
+            "source": "n1",
+            "target": "n3"
+          },
+          {
+            "id": "ea3",
+            "source": "n1",
+            "target": "n4"
+          },
+          {
+            "id": "ea4",
+            "source": "n2",
+            "target": "n7"
+          },
+          {
+            "id": "ea5",
+            "source": "n2",
+            "target": "n8"
+          },
+          {
+            "id": "ea6",
+            "source": "n2",
+            "target": "n9"
+          },
+          {
+            "id": "ea7",
+            "source": "n2",
+            "target": "n10"
+          },
+          {
+            "id": "ea8",
+            "source": "n3",
+            "target": "n11"
+          },
+          {
+            "id": "ea9",
+            "source": "n3",
+            "target": "n12"
+          },
+          {
+            "id": "ea10",
+            "source": "n3",
+            "target": "n13"
+          },
+          {
+            "id": "ea11",
+            "source": "n4",
+            "target": "n5"
+          },
+          {
+            "id": "ea12",
+            "source": "n4",
+            "target": "n6"
+          },
+          {
+            "id": "ea13",
+            "source": "n7",
+            "target": "n14"
+          },
+          {
+            "id": "ea14",
+            "source": "n14",
+            "target": "n15"
+          },
+          {
+            "id": "ea15",
+            "source": "n14",
+            "target": "n16"
+          },
+          {
+            "id": "ea16",
+            "source": "n14",
+            "target": "n17"
+          },
+          {
+            "id": "ea17",
+            "source": "n15",
+            "target": "n18"
+          },
+          {
+            "id": "ea18",
+            "source": "n16",
+            "target": "n18"
+          },
+          {
+            "id": "ea19",
+            "source": "n17",
+            "target": "n18"
+          },
+          {
+            "id": "ea20",
+            "source": "n18",
+            "target": "n19"
+          },
+          {
+            "id": "ea21",
+            "source": "n18",
+            "target": "n20"
+          },
+          {
+            "id": "ea22",
+            "source": "n8",
+            "target": "n21"
+          },
+          {
+            "id": "ea23",
+            "source": "n21",
+            "target": "n22"
+          },
+          {
+            "id": "ea24",
+            "source": "n9",
+            "target": "n23"
+          },
+          {
+            "id": "ea25",
+            "source": "n9",
+            "target": "n24"
+          },
+          {
+            "id": "ea26",
+            "source": "n24",
+            "target": "n25"
+          },
+          {
+            "id": "ea27",
+            "source": "n10",
+            "target": "n26"
+          },
+          {
+            "id": "ea28",
+            "source": "n10",
+            "target": "n27"
+          },
+          {
+            "id": "ea29",
+            "source": "n12",
+            "target": "n28"
+          },
+          {
+            "id": "ea30",
+            "source": "n12",
+            "target": "n29"
+          },
+          {
+            "id": "ea31",
+            "source": "n28",
+            "target": "n33"
+          },
+          {
+            "id": "ea32",
+            "source": "n28",
+            "target": "n34"
+          },
+          {
+            "id": "ea33",
+            "source": "n33",
+            "target": "n38"
+          },
+          {
+            "id": "ea34",
+            "source": "n33",
+            "target": "n39"
+          },
+          {
+            "id": "ea35",
+            "source": "n33",
+            "target": "n40"
+          },
+          {
+            "id": "ea36",
+            "source": "n33",
+            "target": "n41"
+          },
+          {
+            "id": "ea37",
+            "source": "n41",
+            "target": "n47"
+          },
+          {
+            "id": "ea38",
+            "source": "n41",
+            "target": "n48"
+          },
+          {
+            "id": "ea39",
+            "source": "n47",
+            "target": "n54"
+          },
+          {
+            "id": "ea40",
+            "source": "n47",
+            "target": "n55"
+          },
+          {
+            "id": "ea41",
+            "source": "n48",
+            "target": "n56"
+          },
+          {
+            "id": "ea42",
+            "source": "n34",
+            "target": "n42"
+          },
+          {
+            "id": "ea43",
+            "source": "n34",
+            "target": "n43"
+          },
+          {
+            "id": "ea44",
+            "source": "n42",
+            "target": "n49"
+          },
+          {
+            "id": "ea45",
+            "source": "n42",
+            "target": "n50"
+          },
+          {
+            "id": "ea46",
+            "source": "n35",
+            "target": "n44"
+          },
+          {
+            "id": "ea47",
+            "source": "n36",
+            "target": "n45"
+          },
+          {
+            "id": "ea48",
+            "source": "n36",
+            "target": "n46"
+          },
+          {
+            "id": "ea49",
+            "source": "n45",
+            "target": "n51"
+          },
+          {
+            "id": "ea50",
+            "source": "n45",
+            "target": "n52"
+          },
+          {
+            "id": "ea51",
+            "source": "n45",
+            "target": "n53"
+          },
+          {
+            "id": "ea52",
+            "source": "n13",
+            "target": "n32"
+          },
+          {
+            "id": "ea53",
+            "source": "n13",
+            "target": "n31"
+          },
+          {
+            "id": "ea54",
+            "source": "n13",
+            "target": "n30"
+          },
+          {
+            "id": "ea55",
+            "source": "n32",
+            "target": "n37"
+          },
+          {
+            "id": "ea56",
+            "source": "n3",
+            "target": "n57"
+          },
+          {
+            "id": "ea57",
+            "source": "n57",
+            "target": "n30"
+          },
+          {
+            "id": "ea58",
+            "source": "n57",
+            "target": "n36"
+          },
+          {
+            "id": "ea59",
+            "source": "n12",
+            "target": "n58"
+          },
+          {
+            "id": "ea60",
+            "source": "n58",
+            "target": "n59"
+          },
+          {
+            "id": "ea61",
+            "source": "n59",
+            "target": "n29"
+          },
+          {
+            "id": "ea62",
+            "source": "n29",
+            "target": "n60"
+          },
+          {
+            "id": "ea63",
+            "source": "n60",
+            "target": "n30"
+          },
+          {
+            "id": "ea64",
+            "source": "n60",
+            "target": "n36"
+          },
+          {
+            "id": "ea65",
+            "source": "n29",
+            "target": "n35"
+          },
+          {
+            "id": "ea66",
+            "source": "n58",
+            "target": "n33"
+          },
+          {
+            "id": "eQWQDKlorEdmQoNiPML2p-3",
+            "source": "QWQDKlorEdmQoNiPML2p-1",
+            "target": "n41"
+          }
+        ]
+      }
+    }
+  ],
+  "meta": {
+    "created": "2026-09-28T14:51:15.625Z",
+    "modified": "2026-10-26T14:25:06.469Z"
+  }
+}
