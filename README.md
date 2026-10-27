@@ -2,6 +2,12 @@
 
 An offline editor for the uchuva *Botrytis* root-cause analysis. No install and no internet needed.
 
+![Screnshot of the RCA app](./outputs/software-example-image.png)
+
+Have a look at the video to see how it works briefly. It shows the app in action. Try it yourself: open `uchuva-rca.html` in your browser, then **File → New Empty RCA** and play🚀🚀🚀!!!
+
+![GIF of the RCA app](./outputs/rca-tool-on-work.gif)
+
 ## Start
 
 1. Double-click `uchuva-rca.html`. It opens in your browser.
