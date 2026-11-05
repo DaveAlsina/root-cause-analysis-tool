@@ -4,7 +4,7 @@
 "use strict";
 
 /* ================= Constants ================= */
-const APP_VERSION = "1.0";
+const APP_VERSION = "2.0";
 const FONT_PX = 13, LINE = 17, MAXW = 150, PADX = 11, PADY = 8;
 const FONT_STACK = '"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif';
 const STATUSES = {
@@ -30,76 +30,29 @@ const DEFAULT_CATS = [
 ];
 // names the first version of the app guessed; files that still carry them get the real meanings
 const OLD_GUESSES = { problem: "Observed problem", cause: "Cause", fact: "Supporting fact / condition", plant: "Plant-level factor", question: "Open question" };
-const DEFAULT_VIEW = { mode: "manual", focusR: 0, trace: true, redundant: "show", effort: 3, place: 1,
+const DEFAULT_VIEW = { lang: null, legendOpen: false, tagChips: true, mode: "manual", focusR: 0, trace: true, redundant: "show", effort: 3, place: 1,
   levelSp: 70, nodeSp: 14, route: "ORTHOGONAL", keepOrder: false, split: false, repeat: true };
 const LS_DOC = "uchuva-rca:doc", LS_VIEW = "uchuva-rca:view", LS_FILE = "uchuva-rca:file";
-
-/* ================= Built-in diagram (transcribed from draw.io, 27 Sep 2026) ================= */
-// [id, text, x, y, w, h, kind]  kind: Y problem, B cause (blue outline), K cause (black outline), G fact, Q question, P plant
-const RAW = [
- ["3","Some goldenberry is rejected at destination",-970,531.99,120,83.76,"Y"],
- ["16","Some pallets are infested with botrytis cinerea",-805,531.99,120,83.76,"Y"],
- ["10","Goldenberry is infected with the fungus",-610,486.91,140,50,"B"],
- ["14","Conditions are favorable for the germination and growth of the pathogen",-610,602,170,73.75,"B"],
- ["71","Infected fruits are not discarded",-610,385.75,120,50,"B"],
- ["72","Spores are too small",-632.5,267,80,50,"G"],
- ["73","damage is not visible",-547.5,266.99,80,50,"G"],
- ["60","Fungus was already inside the fruit in quiescent state",-400,162,130,61.89,"K"],
- ["51","Spores survived in the fruit surface since preharvest",-400,262,130,61.89,"K"],
- ["55","Spores get disseminated on the fruit surface at sorting facilities",-400,367,130,73.75,"K"],
- ["58","Spores get disseminated on the fruit surface during transport",-400,484,130,61.89,"K"],
- ["24","travel time of ~13 days overseas",-410,618.88,130,40,"G"],
- ["30","Pathogen gets access to sugars",-410,675.75,130,50,"K"],
- ["23","Temperature is allows the pathogen to develop",-410,748.99,130,61.89,"K"],
- ["79","Spores reached the flower",-220,167.94,90,50,"K"],
- ["81","Air conduction",-110,157,110,20,"K"],
- ["83","Water droplets",-110,182.94,110,20,"K"],
- ["85","Insect dispersal",-110,207.94,110,20,"K"],
- ["88","near by contaminated material",25,167.47,90,50,"K"],
- ["109","neighboring crops have the disease",142.5,138.94,90,50,"G"],
- ["110","infected crop debris in the field",140,196,95,50,"K"],
- ["68","Conditions where favorable for spore survival",-230,267,130,50,"K"],
- ["75","?",-70,281.99,20,20,"Q"],
- ["62","The drying process uses fans which blow air at a batch of physalis",-230,328,150,61.89,"G"],
- ["64","Inspection requires a manual process that implies touching fruits with & without spores",-220,397,130,83.76,"K"],
- ["74","The fruit is not visible directly as it is inside a calyx",-70,402.01,110,73.75,"G"],
- ["65","Transport means may be already contaminated with spores",-230,486.91,180,50,"G"],
- ["66","Transport happens in contact with open air",-230,542,180,40,"G"],
- ["27","Pathogen can break through the fruit outer membrane",-240,632,130,61.89,"K"],
- ["92","Fruit is too ripe",-235,712,120,50,"K"],
- ["61","There is uneven ventillation that generates favorable microclimates [**]",-240,802,130,61.89,"G"],
- ["17","Fungi can develop in temperatures as low 0°C",-240,874.65,130,61.89,"G"],
- ["19","Container temperatures are around 2°C and 8°C",-240,947,130,61.89,"K"],
- ["35","Fruit membrane is damaged",-80,637.94,80,50,"K"],
- ["101","Fruit membrane is too fragile",-80,705,90,50,"K"],
- ["94","Too ripe fruit passes the selection stage",-80,772,120,50,"K"],
- ["96","Cold chain is broken",-80,844.65,120,50,"K"],
- ["52","Fresh fruit cannot endure lower temperatures",-80,952.95,120,50,"G"],
- ["36","Mechanical damage during harvest",70,397.45,120,50,"K"],
- ["37","Mechanical damage during sorting",75,455.02,120,50,"K"],
- ["38","Mechanical damage during transportation",75,518.7,120,50,"K"],
- ["40","During field the fruit fills with too much water too quick",75,582.45,140,50,"K"],
- ["104","Plant absorbs less calcium",80,687.94,90,40,"K"],
- ["106","?",80,742,20,20,"Q"],
- ["95","Observer is not objective",70,772,120,50,"G"],
- ["114","At port 2-3 days long queue for inspection",75,834,120,50,"K"],
- ["99","?",80,895.59,20,20,"Q"],
- ["43","Sudden changes in soil humidity",235,523.23,110,40,"K"],
- ["45","Plant has a high cracking rate",235,579.35,110,40,"K"],
- ["107","Root inactivity",235,661,70,40,"P"],
- ["108","High humidity",235,702.99,70,40,"P"],
- ["115","High utilization of the port",260,807.12,95,40,"K"],
- ["116","Anti-narcotics check",260,849.77,95,40,"K"],
- ["117","Phytosanitary checks",260,892.18,95,40,"K"],
- ["48","Changes in rainfall patterns",380,472,110,40,"K"],
- ["49","Uneven irrigation",380,523.23,110,40,"K"],
- ["47","?",380,589.35,20,20,"Q"],
+const LANG_NAMES = { en: "English", es: "Español", nl: "Nederlands", de: "Deutsch", fr: "Français", pt: "Português", it: "Italiano" };
+const DEFAULT_TAG_GROUPS = [
+  { id: "product", name: "Product flow", nameTr: { es: "Flujo de producto" } },
+  { id: "info", name: "Information flow", nameTr: { es: "Flujo de información" } },
 ];
-const RAW_EDGES = `3>16 16>10 16>14 16>71 10>60 10>51 10>55 10>58 14>24 14>30 14>23 71>72 71>73
-60>79 79>81 79>83 79>85 81>88 83>88 85>88 88>109 88>110 51>68 68>75 55>62 55>64 64>74 58>65 58>66
-30>27 30>92 27>35 27>101 35>36 35>37 35>38 35>40 40>43 40>45 43>48 43>49 45>47
-101>104 101>106 104>107 104>108 92>61 92>94 92>96 94>95 96>114 96>99 114>115 114>116 114>117
-23>19 23>17 23>61 19>52`;
+// stages of a fresh-produce export chain, in chain order; offered as an example set in the tag editor
+const STAGE_TEMPLATE = [
+  { id: "t-culture",  group: "product", emoji: "🌱", name: "Culture care",      es: "Cuidado del cultivo",   desc: "Field and pre-harvest crop management" },
+  { id: "t-harvest",  group: "product", emoji: "🧺", name: "Harvest",           es: "Cosecha",               desc: "" },
+  { id: "t-drying",   group: "product", emoji: "🌬️", name: "Calyx drying",      es: "Secado del cáliz",      desc: "" },
+  { id: "t-sorting",  group: "product", emoji: "🔍", name: "Sorting",           es: "Selección",             desc: "Grading and discarding fruit" },
+  { id: "t-packing",  group: "product", emoji: "📦", name: "Packing",           es: "Empaque",               desc: "" },
+  { id: "t-storage",  group: "product", emoji: "❄️", name: "Storage",           es: "Almacenamiento",        desc: "Cold rooms at farm, packhouse or exporter" },
+  { id: "t-inland",   group: "product", emoji: "🚚", name: "Inland transport",  es: "Transporte terrestre",  desc: "Farm to packhouse, packhouse to port" },
+  { id: "t-port",     group: "product", emoji: "🛃", name: "Port & inspection", es: "Puerto e inspección",   desc: "Port queues, phytosanitary and anti-narcotics checks" },
+  { id: "t-sea",      group: "product", emoji: "🚢", name: "Sea freight",       es: "Transporte marítimo",   desc: "Reefer container, cold chain at sea" },
+  { id: "t-monitor",  group: "info",    emoji: "📈", name: "Monitoring",        es: "Monitoreo",             desc: "Measuring conditions (°C, RH, rainfall) in the field and along the chain, and using the data for modelling and decisions" },
+  { id: "t-comms",    group: "info",    emoji: "💬", name: "Communication",     es: "Comunicación",          desc: "Sharing information and relevant events along the chain, to build trust and improve the process" },
+];
+const EMOJI_PALETTE = "🌱🌿🌧️☀️🌡️💧🧺✂️🌬️🔍👁️📦🏷️❄️🧊🏭🚚🛃🚢✈️🏬🛒📈📊📡🧪🦠🍄💬📣🤝📋⚠️❓✅❌💰⏱️🔧👷🎓".match(/\p{Extended_Pictographic}\uFE0F?/gu);
 
 /* ================= Small helpers ================= */
 const $ = s => document.querySelector(s);
@@ -158,58 +111,76 @@ let fileHandle = null, fileName = "uchuva-rca.json", dirty = false;
 const undoStack = [], redoStack = [];
 
 function emptyDoc() {
-  return { format: "uchuva-rca", schema: 1, app: APP_VERSION, title: "Rejected uchuva: why?",
-    categories: clone(DEFAULT_CATS), nodes: [], edges: [], versions: [],
+  return { format: "uchuva-rca", schema: 2, app: APP_VERSION, title: "New root-cause analysis", titleTr: {}, languages: ["en"],
+    categories: clone(DEFAULT_CATS), tagGroups: clone(DEFAULT_TAG_GROUPS), tags: [], scales: [], nodes: [], edges: [], versions: [], sessions: [], activeSession: null,
     meta: { created: nowISO(), modified: nowISO() } };
 }
 function newNode(text, cat, x, y) {
-  return { id: uid("n"), text, cat, status: "unassessed", notes: "", sources: [], x: Math.round(x), y: Math.round(y) };
+  return { id: uid("n"), text, textTr: {}, cat, tags: [], status: "unassessed", notes: "", sources: [], x: Math.round(x), y: Math.round(y) };
 }
-function coreOf(d) { return { title: d.title, categories: d.categories, nodes: d.nodes, edges: d.edges }; }
+function coreOf(d) { return { title: d.title, titleTr: d.titleTr, languages: d.languages, categories: d.categories, tagGroups: d.tagGroups, tags: d.tags, scales: d.scales, nodes: d.nodes, edges: d.edges }; }
+function stageTags(langs) { // the example stage set, named in the project's languages where the template has them
+  const main = langs[0];
+  const pick = t => main === "es" ? t.es : t.name;
+  const tr = t => { const o = {}; langs.slice(1).forEach(l => { if (l === "es") o.es = t.es; if (l === "en") o.en = t.name; }); return o; };
+  return STAGE_TEMPLATE.map(t => ({ id: t.id, group: t.group, emoji: t.emoji, name: pick(t), nameTr: tr(t), desc: t.desc }));
+}
+function groupsFor(langs) {
+  const main = langs[0];
+  return DEFAULT_TAG_GROUPS.map(g => ({ id: g.id, name: main === "es" ? g.nameTr.es : g.name,
+    nameTr: Object.fromEntries(langs.slice(1).filter(l => l === "es" || l === "en").map(l => [l, l === "es" ? g.nameTr.es : g.name])) }));
+}
+function guessLang(texts) { // rough stop-word vote, only used for files saved before languages existed
+  const s = " " + texts.join(" ").toLowerCase().replace(/[^\p{L}\s]/gu, " ") + " ";
+  const count = ws => ws.reduce((a, w) => a + (s.split(" " + w + " ").length - 1), 0);
+  const es = count(["la", "el", "de", "que", "los", "las", "se", "del", "por", "con", "una", "es", "está", "son"]);
+  const en = count(["the", "is", "of", "and", "to", "are", "not", "with", "for", "by", "in", "it"]);
+  return es > en * 1.2 ? "es" : "en";
+}
+const trObj = o => { const r = {}; if (o && typeof o === "object") Object.entries(o).forEach(([k, v]) => { if (typeof v === "string" && v.trim()) r[k] = v; }); return r; };
 function mkVersion(d, name, note) { return { id: uid("v"), name, note: note || "", at: nowISO(), snapshot: clone(coreOf(d)) }; }
-
-function builtinDoc() {
-  const K = { Y: ["problem"], B: ["cause"], K: ["cause", "#000000"], G: ["fact"], Q: ["question"], P: ["plant"] };
-  const d = emptyDoc();
-  d.nodes = RAW.map(([id, text, x, y, w, h, k]) => {
-    const n = { id, text, cat: K[k][0], status: "unassessed", notes: "", sources: [],
-      x: Math.round((x + w / 2) * 1.55), y: Math.round((y + h / 2) * 1.55) };
-    if (K[k][1]) n.outline = K[k][1];
-    return n;
-  });
-  d.edges = RAW_EDGES.trim().split(/\s+/).map((p, i) => { const [s, t] = p.split(">"); return { id: "e" + (i + 1), source: s, target: t }; });
-  tidyPositions(d.nodes);
-  d.versions = [mkVersion(d, "Imported from draw.io", "Transcribed from the draw.io root-cause diagram (57 boxes, 59 arrows).")];
-  return d;
-}
 
 function normalizeDoc(d) {
   if (!d || typeof d !== "object" || !Array.isArray(d.nodes) || !Array.isArray(d.edges)) throw new Error("This JSON file is not an RCA file.");
   const out = emptyDoc();
-  out.title = String(d.title || out.title);
+  out.title = String(d.title ?? out.title); out.titleTr = trObj(d.titleTr);
+  if (Array.isArray(d.languages) && d.languages.length) out.languages = [...new Set(d.languages.map(String))];
+  else { out.languages = [guessLang(d.nodes.map(n => String(n.text || "")))]; out.meta._guessedLang = true; }
   out.categories = Array.isArray(d.categories) && d.categories.length ? d.categories.map(c => {
-    const r = { id: String(c.id), name: String(c.name || c.id), role: ROLES[c.role] ? c.role : "none", desc: String(c.desc || ""),
+    const r = { id: String(c.id), name: String(c.name ?? c.id), nameTr: trObj(c.nameTr), role: ROLES[c.role] ? c.role : "none", desc: String(c.desc || ""),
       fill: c.fill || "#ffffff", stroke: c.stroke || "#000000", font: c.font || "#000000" };
     const def = DEFAULT_CATS.find(x => x.id === r.id);
     if (def && OLD_GUESSES[r.id] === r.name && !c.role) { r.name = def.name; r.role = def.role; r.desc = def.desc; out._migrated = true; }
     return r;
   }) : clone(DEFAULT_CATS);
   const catIds = new Set(out.categories.map(c => c.id));
+  out.tagGroups = Array.isArray(d.tagGroups) && d.tagGroups.length ? d.tagGroups.map(g => ({ id: String(g.id), name: String(g.name ?? g.id), nameTr: trObj(g.nameTr) })) : groupsFor(out.languages);
+  const gIds = new Set(out.tagGroups.map(g => g.id));
+  out.tags = Array.isArray(d.tags) ? d.tags.filter(t => t && t.id).map(t => ({ id: String(t.id), emoji: String(t.emoji || "🏷️"), name: String(t.name ?? ""), nameTr: trObj(t.nameTr),
+    group: gIds.has(t.group) ? t.group : out.tagGroups[0].id, desc: String(t.desc || "") })) : [];
+  const tagIds = new Set(out.tags.map(t => t.id));
+  if (d.bib && Array.isArray(d.bib)) out.bib = d.bib;
+  if (d.viewDefaults && typeof d.viewDefaults === "object") out.viewDefaults = d.viewDefaults;
   const ids = new Set();
   let missingPos = false;
   out.nodes = d.nodes.map(n => {
     const id = String(n.id); ids.add(id);
     if (!Number.isFinite(n.x) || !Number.isFinite(n.y)) missingPos = true;
-    const r = { id, text: String(n.text ?? n.label ?? ""), cat: catIds.has(n.cat) ? n.cat : out.categories[0].id,
+    const r = { id, text: String(n.text ?? n.label ?? ""), textTr: trObj(n.textTr), cat: catIds.has(n.cat) ? n.cat : out.categories[0].id,
+      tags: Array.isArray(n.tags) ? n.tags.map(String).filter(t => tagIds.has(t)) : [],
       status: STATUSES[n.status] ? n.status : "unassessed", notes: String(n.notes || ""),
       sources: Array.isArray(n.sources) ? n.sources.map(String) : [], x: Math.round(+n.x || 0), y: Math.round(+n.y || 0) };
     if (n.outline) r.outline = n.outline;
+    if (n.origin && typeof n.origin === "object" && n.origin.session) r.origin = { session: String(n.origin.session), at: String(n.origin.at || "") };
     return r;
   });
   const seen = new Set();
   out.edges = d.edges.map(e => ({ id: String(e.id || uid("e")), source: String(e.source), target: String(e.target) }))
     .filter(e => ids.has(e.source) && ids.has(e.target) && e.source !== e.target && !seen.has(e.source + ">" + e.target) && seen.add(e.source + ">" + e.target));
   out.versions = Array.isArray(d.versions) ? d.versions.filter(v => v && v.snapshot) : [];
+  out.scales = Array.isArray(d.scales) ? d.scales.filter(x => x && x.id).map(normScale) : [];
+  out.sessions = Array.isArray(d.sessions) ? d.sessions.filter(x => x && x.id).map(normSession) : [];
+  out.activeSession = out.sessions.some(x => x.id === d.activeSession) ? d.activeSession : null;
   out.meta = Object.assign(out.meta, d.meta || {});
   if (missingPos) gridPositions(out);
   const migrated = !!out._migrated; delete out._migrated;
@@ -222,9 +193,13 @@ function gridPositions(d) { // crude level-based placement, then tidy
   tidyPositions(d.nodes);
 }
 
+function boxSize(n, extra = "") { // big enough for the text in every language, so the layout holds when switching
+  const all = txAll(n); if (!all.length) all.push(" ");
+  return all.map(t => measureText(t + extra)).reduce((a, b) => ({ w: Math.max(a.w, b.w), h: Math.max(a.h, b.h) }));
+}
 /* Push overlapping boxes apart (mostly vertically, so columns stay intact) */
 function tidyPositions(nodes, gap = 12) {
-  const S = nodes.map(n => ({ n, ...measureText(n.text) }));
+  const S = nodes.map(n => ({ n, ...boxSize(n) }));
   for (let it = 0; it < 300; it++) {
     let moved = false;
     S.sort((a, b) => a.n.y - b.n.y || a.n.x - b.n.x);
@@ -244,10 +219,19 @@ function tidyPositions(nodes, gap = 12) {
 }
 
 /* ================= Undo / commit ================= */
-const snap = () => JSON.stringify(coreOf(doc));
-function restoreCore(s) { const c = JSON.parse(s); doc.title = c.title; doc.categories = c.categories; doc.nodes = c.nodes; doc.edges = c.edges; }
+const snap = () => JSON.stringify({ ...coreOf(doc), sessions: doc.sessions, activeSession: doc.activeSession });
+function restoreCore(s) {
+  const c = typeof s === "string" ? JSON.parse(s) : clone(s);
+  doc.title = c.title; doc.titleTr = c.titleTr || (c.languages ? {} : doc.titleTr); doc.languages = c.languages || doc.languages;
+  doc.categories = c.categories; doc.tagGroups = c.tagGroups || doc.tagGroups; doc.tags = c.tags || doc.tags;
+  const tagIds = new Set(doc.tags.map(t => t.id));
+  doc.nodes = c.nodes.map(n => ({ ...n, textTr: n.textTr || {}, tags: (n.tags || []).filter(t => tagIds.has(t)) })); doc.edges = c.edges;
+  if (c.scales) doc.scales = c.scales;
+  if (c.sessions) { doc.sessions = c.sessions; doc.activeSession = c.activeSession || null; }
+}
 function pushUndo(s) { undoStack.push(s); if (undoStack.length > 300) undoStack.shift(); redoStack.length = 0; }
 function commit(fn, opts = {}) {
+  if (VIEWER) return Promise.resolve();
   flushField(true);
   pushUndo(snap());
   fn();
@@ -255,7 +239,19 @@ function commit(fn, opts = {}) {
   return render(opts);
 }
 function touch() {
-  doc.meta.modified = nowISO(); dirty = true; autosave(); updateChrome();
+  doc.meta.modified = nowISO(); dirty = true; autosave(); updateChrome(); fileAutosave();
+}
+let fileTimer = null, fileSavedAt = null, fileNeedsGesture = false;
+function fileAutosave() { // write into the file you opened, a moment after each change
+  if (VIEWER || !fileHandle) return;
+  clearTimeout(fileTimer);
+  fileTimer = setTimeout(async () => {
+    try {
+      if (fileHandle.queryPermission && (await fileHandle.queryPermission({ mode: "readwrite" })) !== "granted") { fileNeedsGesture = true; updateChrome(); return; }
+      const w = await fileHandle.createWritable(); await w.write(docText()); await w.close();
+      dirty = false; fileNeedsGesture = false; fileSavedAt = new Date(); updateChrome(); autosave();
+    } catch (e) { console.warn("Automatic save to file failed", e); }
+  }, 1200);
 }
 function undo() {
   flushField(true);
@@ -268,6 +264,7 @@ function redo() {
 }
 let autosaveTimer = null;
 function autosave() {
+  if (VIEWER) return;
   clearTimeout(autosaveTimer);
   autosaveTimer = setTimeout(() => {
     if (!lsSet(LS_DOC, JSON.stringify(doc))) console.warn("Autosave to browser storage failed");
@@ -276,7 +273,33 @@ function autosave() {
 }
 const nodeById = id => doc.nodes.find(n => n.id === id);
 const catById = id => doc.categories.find(c => c.id === id) || { id, name: id, fill: "#ffffff", stroke: "#000000", font: "#000000" };
-const isQ = n => n.text.trim() === "?";
+
+/* ================= Languages: main text in `field`, others in `fieldTr[lang]` ================= */
+const langName = c => LANG_NAMES[c] || c.toUpperCase();
+const mainLang = () => doc.languages[0];
+const curLang = () => (doc.languages.includes(view.lang) ? view.lang : mainLang());
+const neutralText = s => /^[\s?¿!.…\-–—]*$/.test(s || "");
+function txRaw(o, f, lang) { return lang === mainLang() ? (o[f] || "") : ((o[f + "Tr"] || {})[lang] || ""); }
+function tx(o, f = "text", lang = curLang()) {
+  if (!o) return "";
+  return txRaw(o, f, lang) || o[f] || Object.values(o[f + "Tr"] || {}).find(Boolean) || "";
+}
+const txAll = (o, f = "text") => [o[f] || "", ...Object.values(o[f + "Tr"] || {})].filter(Boolean);
+function txMissing(o, f = "text", lang = curLang()) {
+  if (txRaw(o, f, lang).trim()) return false;
+  const all = txAll(o, f); return all.length > 0 && !all.every(neutralText);
+}
+function txSet(o, f, lang, v) {
+  if (lang === mainLang()) o[f] = v;
+  else { o[f + "Tr"] = o[f + "Tr"] || {}; if (v) o[f + "Tr"][lang] = v; else delete o[f + "Tr"][lang]; }
+}
+function everyTranslatable(d, fn) { // visit every visible text: title, categories, tag groups, tags, boxes
+  fn(d, "title"); d.categories.forEach(c => fn(c, "name")); d.tagGroups.forEach(g => fn(g, "name"));
+  d.tags.forEach(t => fn(t, "name")); d.nodes.forEach(n => fn(n, "text"));
+}
+const isQ = n => (n.text || txAll(n)[0] || "").trim() === "?";
+const tagById = id => doc.tags.find(t => t.id === id);
+const orderedTags = ids => doc.tags.filter(t => ids.includes(t.id)); // in the order of the tag list = chain order
 
 /* ================= Graph analysis ================= */
 function analyze(d = doc) {
@@ -340,19 +363,79 @@ function chainTo(id) {
 }
 
 /* ================= View state ================= */
-const view = Object.assign({}, DEFAULT_VIEW, { folded: new Set(), hiddenCats: new Set(), diff: null });
+const view = Object.assign({}, DEFAULT_VIEW, { folded: new Set(), hiddenCats: new Set(), tagFilter: new Set(), diff: null });
 const pins = new Map(); // ref -> {x,y} in Untangle coordinates, for boxes without arrows
 try { Object.assign(view, JSON.parse(lsGet(LS_VIEW) || "{}")); } catch (e) {}
-view.folded = new Set(); view.hiddenCats = new Set(); view.diff = null;
-function saveView() { const { folded, hiddenCats, diff, ...rest } = view; lsSet(LS_VIEW, JSON.stringify(rest)); }
+view.folded = new Set(); view.hiddenCats = new Set(); view.tagFilter = new Set(); view.diff = null;
+let VIEWER = false; // read-only viewer for published diagrams
+let GRADING = false; // interview grading: the diagram is locked, boxes get scores
+const LS_VPREF = "uchuva-rca:viewer";
+function saveViewerPref() { if (VIEWER) lsSet(LS_VPREF, JSON.stringify({ lang: view.lang, tagChips: view.tagChips })); }
+function saveView() { if (VIEWER) return; const { folded, hiddenCats, tagFilter, diff, ...rest } = view; lsSet(LS_VIEW, JSON.stringify(rest)); }
 
 let selRef = null, selCopy = null, selEdge = null, multi = [];
 let lastRender = null, manualCrossings = 0, lastTries = 1;
 
-function computeView(A) {
+/* ================= Branches: the dominator tree =================
+   Box B belongs to branch A when every chain from the top problem to B passes through A.
+   A cause shared by two branches belongs to the nearest box that both branches go through. */
+function dominatorTree(A) {
+  const R = "__root";
+  const starts = [...A.roots]; let reach = bfs(starts, A.out, () => false);
+  for (const id of A.ids) if (!reach.has(id)) { starts.push(id); reach = bfs(starts, A.out, () => false); }
+  const startSet = new Set(starts);
+  const succ = u => (u === R ? starts : A.out.get(u));
+  const preds = v => { const p = A.inn.get(v).slice(); if (startSet.has(v)) p.push(R); return p; };
+  const order = [], seen = new Set([R]), stack = [[R, 0]];
+  while (stack.length) {
+    const top = stack[stack.length - 1], ch = succ(top[0]);
+    if (top[1] < ch.length) { const v = ch[top[1]++]; if (!seen.has(v)) { seen.add(v); stack.push([v, 0]); } }
+    else { order.push(top[0]); stack.pop(); }
+  }
+  const po = new Map(order.map((v, i) => [v, i])), rpo = order.slice().reverse();
+  const idom = new Map([[R, R]]);
+  const meet = (a, b) => { while (a !== b) { while (po.get(a) < po.get(b)) a = idom.get(a); while (po.get(b) < po.get(a)) b = idom.get(b); } return a; };
+  for (let changed = true; changed;) {
+    changed = false;
+    for (const v of rpo) {
+      if (v === R) continue;
+      const ps = preds(v).filter(x => idom.has(x)); if (!ps.length) continue;
+      let nd = ps[0]; for (const x of ps.slice(1)) nd = meet(x, nd);
+      if (idom.get(v) !== nd) { idom.set(v, nd); changed = true; }
+    }
+  }
+  const kids = new Map(); idom.forEach((d, v) => { if (v === R) return; if (!kids.has(d)) kids.set(d, []); kids.get(d).push(v); });
+  const trunk = []; let end = R;
+  while ((kids.get(end) || []).length === 1) { end = kids.get(end)[0]; trunk.push(end); }
+  const subCache = new Map();
+  const sub = id => {
+    if (subCache.has(id)) return subCache.get(id);
+    const s = new Set([id]), q = [id];
+    while (q.length) { const u = q.pop(); (kids.get(u) || []).forEach(c => { if (!s.has(c)) { s.add(c); q.push(c); } }); }
+    subCache.set(id, s); return s;
+  };
+  const ancestors = id => { const a = []; let x = idom.get(id); while (x && x !== R) { a.push(x); x = idom.get(x); } return a; };
+  const yOf = new Map(doc.nodes.map(n => [n.id, n.y]));
+  const top = (kids.get(end) || []).slice().sort((a, b) => (yOf.get(a) || 0) - (yOf.get(b) || 0));
+  const shared = id => A.inn.get(id).length > 1; // reached from more than one box above it
+  return { R, idom, kids, trunk, end, top, sub, ancestors, shared };
+}
+function branchOf(D, id) { // the top-level branch a box belongs to (null for the trunk)
+  if (!D.idom.has(id) || D.trunk.includes(id)) return null;
+  let x = id; while (x && D.idom.get(x) !== D.end && D.idom.get(x) !== D.R) x = D.idom.get(x);
+  return D.top.includes(x) ? x : null;
+}
+const short = (s, n = 46) => (s.length > n ? s.slice(0, n - 1) + "…" : s);
+
+function computeView(A, D) {
   const reachAll = bfs(A.roots, A.out, () => false);
   const vis = bfs(A.roots, A.out, u => view.folded.has(u));
   A.ids.forEach(id => { if (!reachAll.has(id)) vis.add(id); });
+  if (view.branch && D && D.idom.has(view.branch)) { // one branch plus the boxes above it that lead there
+    const keep = new Set(D.sub(view.branch));
+    if (view.mode === "untangle") D.ancestors(view.branch).forEach(a => keep.add(a)); // in My layout those boxes sit far away
+    for (const id of [...vis]) if (!keep.has(id)) vis.delete(id);
+  }
   const catOf = new Map(doc.nodes.map(n => [n.id, n.cat]));
   for (const id of [...vis]) if (view.hiddenCats.has(catOf.get(id))) vis.delete(id);
   let focusActive = false;
@@ -498,6 +581,7 @@ function styleSheet() {
       "background-color": "data(fill)", "border-color": "data(stroke)", "border-width": "data(bw)", "border-style": "data(bs)",
       label: "data(label)", color: "data(font)", "font-family": FONT_STACK, "font-size": FONT_PX, "line-height": LINE / FONT_PX,
       "text-wrap": "wrap", "text-max-width": MAXW * 3, "text-valign": "center", "text-halign": "center",
+      "font-style": "data(fs)",
       "min-zoomed-font-size": 4, "transition-property": "opacity", "transition-duration": "140ms" } },
     { selector: "node.q", style: { "font-weight": 700, "font-size": 15 } },
     { selector: "node.ref", style: { opacity: .78, "border-style": "dashed", "border-width": 2 } },
@@ -507,6 +591,15 @@ function styleSheet() {
       shape: "round-rectangle", "corner-radius": 9, width: "data(w)", height: 19, "background-color": ink, "border-color": ground, "border-width": 2,
       label: "data(label)", color: ground, "font-family": '"IBM Plex Sans Condensed", ' + FONT_STACK, "font-weight": 600, "font-size": 12,
       "text-valign": "center", "text-halign": "center", events: "no", "z-index": 20, "z-compound-depth": "top" } },
+    { selector: "node.gradechip", style: {
+      shape: "round-rectangle", "corner-radius": 9, width: "data(w)", height: 19, "background-color": "#3B2F7A", "border-color": ground, "border-width": 2,
+      label: "data(label)", color: "#ffffff", "font-family": '"IBM Plex Mono", monospace', "font-weight": 500, "font-size": 11,
+      "text-valign": "center", "text-halign": "center", events: "no", "z-index": 22 } },
+    { selector: "node.shade", style: { "underlay-color": "#6E56CF", "underlay-padding": 9 } },
+    { selector: "node.tagchip", style: {
+      shape: "round-rectangle", "corner-radius": 10, width: "data(w)", height: 21, "background-color": ground, "border-color": edge, "border-width": 1,
+      label: "data(label)", color: ink, "font-family": EMOJI_FONT, "font-size": 13, "font-weight": 400, "text-valign": "center", "text-halign": "center",
+      events: "no", "z-index": 21 } },
     { selector: "edge", style: {
       width: 1.4, "line-color": edge, "target-arrow-color": edge, "target-arrow-shape": "triangle", "arrow-scale": 1,
       "curve-style": "straight", "transition-property": "opacity", "transition-duration": "140ms" } },
@@ -521,21 +614,34 @@ function styleSheet() {
     { selector: "node.match", style: { "underlay-color": "#F5B700", "underlay-opacity": .6, "underlay-padding": 7 } },
     { selector: "node.diff-add", style: { "underlay-color": "#15924F", "underlay-opacity": .5, "underlay-padding": 8 } },
     { selector: "node.diff-chg", style: { "underlay-color": "#E0A100", "underlay-opacity": .55, "underlay-padding": 8 } },
+    { selector: ".tagoff", style: { opacity: .16 } },
+    { selector: "node.tagon", style: { "underlay-color": "#FF6A3D", "underlay-opacity": .5, "underlay-padding": 8 } },
     { selector: "node.drop", style: { "underlay-color": hi, "underlay-opacity": .55, "underlay-padding": 10 } },
   ];
 }
 
 function nodeVisual(n, extraLabel) {
   const c = catById(n.cat), st = STATUSES[n.status] || STATUSES.unassessed;
-  const label = n.text + (extraLabel || "");
-  const sz = measureText(label);
-  return { label: sz.lines.join("\n"), w: sz.w, h: sz.h, fill: c.fill, font: c.font,
+  const extra = extraLabel || "";
+  const sz = measureText((tx(n) || " ") + extra), box = boxSize(n, extra);
+  const missing = doc.languages.length > 1 && txMissing(n);
+  return { label: sz.lines.join("\n"), w: box.w, h: box.h, fill: c.fill, font: c.font, fs: missing ? "italic" : "normal",
     stroke: st.color || n.outline || c.stroke, bw: st.width, bs: st.style };
+}
+const EMOJI_FONT = '"Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", "Twemoji Mozilla", sans-serif';
+function tagChipLabel(n) {
+  const ts = orderedTags(n.tags || []); if (!ts.length) return null;
+  const shown = ts.slice(0, 3).map(t => t.emoji).join(""), more = ts.length - 3;
+  const label = shown + (more > 0 ? ` +${more}` : "");
+  mctx.font = `13px ${EMOJI_FONT}`;
+  return { label, w: Math.ceil(mctx.measureText(label).width) + 12, title: ts.map(t => tx(t, "name")).join(", ") };
 }
 
 async function render(opts = {}) {
   const my = (render.token = (render.token || 0) + 1);
-  const A = analyze(); const V = computeView(A);
+  const A = analyze(); const D = dominatorTree(A);
+  if (view.branch && !D.idom.has(view.branch)) view.branch = null;
+  const V = computeView(A, D);
   const byId = new Map(doc.nodes.map(n => [n.id, n]));
   let U;
   const untangle = view.mode === "untangle";
@@ -568,12 +674,14 @@ async function render(opts = {}) {
     pos = new Map(U.copies.map(c => [c.id, mpos.get(c.ref)]));
     crossings = manualCrossings;
   }
-  lastRender = { A, V, U, pos, routes, crossings };
+  lastRender = { A, D, V, U, pos, routes, crossings };
+  renderBranchUI();
   applyToCy(U, V, A, byId, vis, pos, routes, opts);
-  updateChrome(true); renderLegend(); syncControls();
+  updateChrome(true); renderLegend(); renderTagbar(); syncControls();
   if (!opts.skipPanel) renderPanel();
-  applySelection(); doSearch(false);
+  applySelection(); applyTagFilter(); applyGradeVisuals(); doSearch(false); renderGradebar();
   if (opts.fit) {
+    cy.resize();
     if (opts.animate) setTimeout(() => { fitView(opts.readable); updateOverlays(); }, 360);
     else fitView(opts.readable);
   }
@@ -588,6 +696,18 @@ function applyToCy(U, V, A, byId, vis, pos, routes, opts) {
     const cls = [isQ(n) ? "q" : "", c.kind !== "full" ? "ref" : "", n.status === "refuted" ? "refuted" : "", A.cyc.has(n.id) ? "cyc" : "",
       diff && diff.added.has(n.id) ? "diff-add" : "", diff && diff.changed.has(n.id) ? "diff-chg" : ""].filter(Boolean).join(" ");
     nodes.push({ group: "nodes", data: { id: c.id, ref: c.ref, kind: c.kind, total: c.total, ...v }, classes: cls, position: { ...pos.get(c.id) } });
+    const chip = view.tagChips !== false && tagChipLabel(n);
+    if (chip) {
+      const p = pos.get(c.id);
+      nodes.push({ group: "nodes", data: { id: "t:" + c.id, owner: c.id, label: chip.label, w: chip.w, h: 21 }, classes: "badge tagchip",
+        position: { x: p.x - v.w / 2 + chip.w / 2 - 6, y: p.y - v.h / 2 - 1 } });
+    }
+    const gchip = GRADING && gradeChipLabel(n);
+    if (gchip) {
+      const p = pos.get(c.id);
+      nodes.push({ group: "nodes", data: { id: "g:" + c.id, owner: c.id, label: gchip.label, w: gchip.w, h: 19 }, classes: "badge gradechip",
+        position: { x: p.x + v.w / 2 - gchip.w / 2 + 6, y: p.y + v.h / 2 + 2 } });
+    }
     if (c.total >= 2) {
       const r = roman(c.total), p = pos.get(c.id);
       nodes.push({ group: "nodes", data: { id: "b:" + c.id, owner: c.id, label: r, w: 12 + r.length * 7.5, h: 19 }, classes: "badge",
@@ -625,7 +745,7 @@ function applyToCy(U, V, A, byId, vis, pos, routes, opts) {
   if (animate) { cy.batch(() => routeJobs.forEach(j => j[0].removeStyle("curve-style segment-weights segment-distances edge-distances"))); setTimeout(runRoutes, 340); }
   else runRoutes();
   cy.autoungrabify(false);
-  cy.nodes().forEach(n => { const ok = !n.hasClass("badge") && (view.mode === "manual" || (pins.has(n.data("ref")) && n.connectedEdges().empty())); ok ? n.grabify() : n.ungrabify(); });
+  cy.nodes().forEach(n => { const ok = !VIEWER && !GRADING && !n.hasClass("badge") && (view.mode === "manual" || (pins.has(n.data("ref")) && n.connectedEdges().empty())); ok ? n.grabify() : n.ungrabify(); });
 }
 
 function setRoute(el, pts, S, T) {
@@ -673,7 +793,12 @@ function selectNode(ref, copyId, additive) {
 }
 function selectEdge(ref) { flushField(true); selEdge = ref; selRef = null; selCopy = null; multi = []; afterSelection(); }
 function clearSelection() { flushField(true); selRef = null; selCopy = null; selEdge = null; multi = []; afterSelection(); }
+function openSide(open) {
+  $("main").classList.toggle("side-closed", !open);
+  $("#side-open").hidden = open;
+}
 function afterSelection() {
+  if (selRef || selEdge || multi.length) openSide(true);
   if (view.focusR > 0) { render(); return; }
   applySelection(); renderPanel(); updateOverlays();
 }
@@ -696,6 +821,20 @@ function applySelection() {
   });
 }
 
+function applyTagFilter() {
+  cy.batch(() => {
+    cy.elements().removeClass("tagon tagoff");
+    if (!view.tagFilter.size) return;
+    const on = new Set(doc.nodes.filter(n => (n.tags || []).some(t => view.tagFilter.has(t))).map(n => n.id));
+    cy.nodes().forEach(el => {
+      if (el.hasClass("badge")) return;
+      el.addClass(on.has(el.data("ref")) ? "tagon" : "tagoff");
+    });
+    cy.nodes(".badge").forEach(b => { if (cy.getElementById(b.data("owner")).hasClass("tagoff")) b.addClass("tagoff"); });
+    cy.edges().forEach(e => { if (e.source().hasClass("tagoff") || e.target().hasClass("tagoff")) e.addClass("tagoff"); });
+  });
+}
+
 /* ================= Editing operations ================= */
 function untangleToManual(x, y, skip) { // place the box near the same neighbour it sits next to on screen
   let best = null, bd = Infinity;
@@ -705,25 +844,34 @@ function untangleToManual(x, y, skip) { // place the box near the same neighbour
   });
   return best ? { x: best.n.x + (x - best.p.x), y: best.n.y + (y - best.p.y) } : { x, y };
 }
-async function addNodeAt(x, y, fromRef) {
+async function addNodeAt(x, y, fromRef, origin) {
+  if (VIEWER || (GRADING && !origin)) return;
   const m = view.mode === "untangle" ? untangleToManual(x, y) : { x, y };
+  if (fromRef) { // a cause added from a box slides down until it has room
+    const sz = measureText("New cause");
+    for (let g = 0; g < 80 && doc.nodes.some(o => { const b = boxSize(o); return Math.abs(o.x - m.x) < (b.w + sz.w) / 2 + 10 && Math.abs(o.y - m.y) < (b.h + sz.h) / 2 + 10; }); g++) m.y += 24;
+  }
   const n = newNode("New cause", "cause", m.x, m.y);
+  const live = doc.activeSession && activeSession();
+  if (origin || live) n.origin = origin || { session: live.code, at: nowISO() };
   if (view.mode === "untangle" && !fromRef) pins.set(n.id, { x, y });
   await commit(() => {
     doc.nodes.push(n);
     if (fromRef) { doc.edges.push({ id: uid("e"), source: fromRef, target: n.id }); view.folded.delete(fromRef); }
   });
   selRef = n.id; selCopy = n.id; selEdge = null; multi = [n.id]; applySelection(); renderPanel();
-  inlineEdit(n.id, true);
+  inlineEdit(n.id, true, origin ? { langs: [curLang()], quick: true } : {});
 }
-function addChild(pref) {
+function addChild(pref, origin) {
+  if (VIEWER || (GRADING && !origin)) return;
   const p = nodeById(pref); if (!p) return;
   const kids = doc.edges.filter(e => e.source === pref).map(e => nodeById(e.target)).filter(Boolean);
-  const x = p.x + measureText(p.text).w / 2 + 40 + MAXW / 2 + PADX;
-  const y = kids.length ? Math.max(...kids.map(k => k.y + measureText(k.text).h / 2)) + 40 : p.y;
-  addNodeAt(x, y, pref);
+  const x = p.x + boxSize(p).w / 2 + 40 + MAXW / 2 + PADX;
+  const y = kids.length ? Math.max(...kids.map(k => k.y + boxSize(k).h / 2)) + 40 : p.y;
+  addNodeAt(x, y, pref, origin);
 }
 function addEdge(s, t) {
+  if (VIEWER || GRADING) return;
   if (s === t) return toast("A box can't explain itself.");
   if (doc.edges.some(e => e.source === s && e.target === t)) return toast("These boxes are already connected.");
   const loop = reaches(t, s);
@@ -732,6 +880,7 @@ function addEdge(s, t) {
   if (loop) toast("This arrow closes a loop (circular reasoning). Boxes in the loop glow red.", 5000);
 }
 function rewire(edgeId, end, ref) {
+  if (VIEWER || GRADING) return;
   const e = doc.edges.find(x => x.id === edgeId); if (!e) return;
   const s = end === "source" ? ref : e.source, t = end === "target" ? ref : e.target;
   if (s === t) return toast("A box can't explain itself.");
@@ -741,11 +890,13 @@ function rewire(edgeId, end, ref) {
   toast("Arrow rewired.");
 }
 function reverseEdge(edgeId) {
+  if (VIEWER || GRADING) return;
   const e = doc.edges.find(x => x.id === edgeId); if (!e) return;
   if (doc.edges.some(x => x.source === e.target && x.target === e.source)) return toast("The opposite arrow already exists.");
   commit(() => { [e.source, e.target] = [e.target, e.source]; });
 }
 function deleteSelection() {
+  if (VIEWER || GRADING) return;
   if (selEdge) { const id = selEdge; selEdge = null; commit(() => { doc.edges = doc.edges.filter(e => e.id !== id); }); toast("Arrow deleted. Ctrl Z to undo."); return; }
   const ids = new Set(multi.length ? multi : selRef ? [selRef] : []);
   if (!ids.size) return;
@@ -763,33 +914,86 @@ function toggleFold(ref) {
   render({ animate: true });
 }
 
-/* inline text editor over a box */
-function inlineEdit(copyId, isNew) {
+/* inline text editor over a box: asks for each language in turn */
+function inlineEdit(copyId, isNew, opts = {}) {
+  if (VIEWER || (GRADING && !opts.quick)) return;
   const el = cy.getElementById(copyId); if (el.empty()) return;
   const ref = el.data("ref"); const n = nodeById(ref); if (!n) return;
-  const ta = $("#inline"); const bb = el.renderedBoundingBox({ includeLabels: false, includeOverlays: false });
-  const z = cy.zoom(), w = Math.max(bb.w, 190), h = Math.max(bb.h, 60);
-  ta.style.left = (bb.x1 + bb.w / 2 - w / 2) + "px"; ta.style.top = (bb.y1 + bb.h / 2 - h / 2) + "px";
+  const first = curLang();
+  const langs = opts.langs || [first, ...doc.languages.filter(l => l !== first)];
+  const multi = doc.languages.length > 1;
+  const vals = {}; langs.forEach(l => (vals[l] = isNew ? "" : txRaw(n, "text", l)));
+  const ta = $("#inline"), lab = $("#inline-lang");
+  const bb = el.renderedBoundingBox({ includeLabels: false, includeOverlays: false });
+  const z = cy.zoom(), w = Math.max(bb.w, 220), h = Math.max(bb.h, 60);
+  const left = bb.x1 + bb.w / 2 - w / 2, top = bb.y1 + bb.h / 2 - h / 2;
+  ta.style.left = left + "px"; ta.style.top = top + "px";
   ta.style.width = w + "px"; ta.style.height = h + "px"; ta.style.fontSize = Math.max(12, Math.min(18, FONT_PX * z)) + "px";
-  ta.value = isNew ? "" : n.text; ta.placeholder = "What explains it?"; ta.hidden = false; ta.focus(); ta.select();
-  let done = false;
+  lab.style.left = left + "px"; lab.style.width = w + "px"; lab.style.bottom = (cy.height() - top + 4) + "px";
+  let i = 0, done = false;
+  const show = () => {
+    const l = langs[i];
+    ta.value = vals[l];
+    ta.placeholder = i === 0 && !opts.langs ? "What explains it?" : `${langName(l)} text`;
+    const src = vals[langs[0]] && i > 0 ? vals[langs[0]] : (opts.langs && !isNew ? tx(n, "text", mainLang()) : "");
+    lab.hidden = !(multi || opts.pass);
+    lab.innerHTML = `<b>${esc(l.toUpperCase())}</b>${langs.length > 1 ? ` ${i + 1}/${langs.length}` : ""}` +
+      (opts.pass ? ` box ${opts.pass.i} of ${opts.pass.n}` : "") +
+      (src && l !== langs[0] || opts.langs ? `<span class="src">${esc(src)}</span>` : "") +
+      `<span class="keys">${i < langs.length - 1 ? "Enter: next language" : opts.pass ? "Enter: next box" : "Enter: done"} · Esc: ${opts.pass ? "stop" : "cancel"}</span>`;
+    ta.hidden = false; ta.focus(); ta.select();
+  };
+  const clean = v => v.replace(/\s+/g, " ").trim();
   const finish = save => {
-    if (done) return; done = true; ta.hidden = true;
+    if (done) return; done = true; vals[langs[i]] = ta.value;
+    ta.hidden = true; lab.hidden = true;
     ta.removeEventListener("keydown", onKey); ta.removeEventListener("blur", onBlur);
-    const v = ta.value.replace(/\s+/g, " ").trim();
+    const apply = m => langs.forEach(l => { const v = clean(vals[l]); if (v || l !== mainLang() || !isNew) txSet(m, "text", l, v); });
+    const changed = langs.some(l => clean(vals[l]) !== txRaw(n, "text", l));
     if (isNew) {
-      if (!save || !v) { restoreCore(undoStack.pop()); pruneSelection(); if (!undoStack.length) {} touch(); render(); return; }
-      const m = nodeById(ref); if (m) m.text = v; touch(); render();
-    } else if (save && v && v !== n.text) commit(() => { const m = nodeById(ref); if (m) m.text = v; });
+      if (!save || langs.every(l => !clean(vals[l]))) { restoreCore(undoStack.pop()); pruneSelection(); touch(); render(); }
+      else { const m = nodeById(ref); if (m) { m.text = ""; apply(m); } touch(); render(); }
+    } else if (save && changed) {
+      const probe = clone(n); apply(probe);
+      if (!txAll(probe).length) toast("A box needs some text. Delete it with Del instead.");
+      else commit(() => { const m = nodeById(ref); if (m) apply(m); });
+    }
+    if (opts.onDone) opts.onDone(save);
   };
   const onKey = e => {
-    if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); finish(true); }
-    else if (e.key === "Escape") { e.preventDefault(); finish(false); }
-    else if (e.key === "Tab") { e.preventDefault(); finish(true); setTimeout(() => addChild(ref), 30); }
     e.stopPropagation();
+    if (e.key === "Escape") { e.preventDefault(); finish(false); return; }
+    if ((e.key === "Enter" && !e.shiftKey) || (e.key === "Tab" && !e.shiftKey)) {
+      e.preventDefault(); vals[langs[i]] = ta.value;
+      if (i < langs.length - 1) { i++; show(); return; }
+      finish(true);
+      if (e.key === "Tab" && !opts.pass) setTimeout(() => addChild(ref), 30);
+      return;
+    }
+    if (e.key === "Tab" && e.shiftKey) { e.preventDefault(); vals[langs[i]] = ta.value; if (i > 0) { i--; show(); } }
   };
-  const onBlur = () => finish(true);
+  const onBlur = () => setTimeout(() => { if (document.activeElement !== ta) finish(true); }, 0);
   ta.addEventListener("keydown", onKey); ta.addEventListener("blur", onBlur);
+  show();
+}
+
+/* walk through every box missing a language, one after the other */
+async function translatePass(lang) {
+  if (VIEWER) return;
+  const A = analyze();
+  const todo = doc.nodes.filter(n => txMissing(n, "text", lang))
+    .sort((a, b) => (A.depth.get(a.id) || 99) - (A.depth.get(b.id) || 99) || a.y - b.y).map(n => n.id);
+  if (!todo.length) return toast(`Every box already has ${langName(lang)} text.`);
+  $$(".overlay").forEach(o => (o.hidden = true));
+  let k = 0;
+  const step = async () => {
+    while (k < todo.length && !txMissing(nodeById(todo[k]) || {}, "text", lang)) k++;
+    if (k >= todo.length) { toast(`${langName(lang)} translations complete.`); return; }
+    const id = todo[k]; k++;
+    await goTo(id);
+    setTimeout(() => inlineEdit(id, false, { langs: [lang], pass: { i: k, n: todo.length }, onDone: saved => { if (saved) setTimeout(step, 60); else toast("Translation pass stopped."); } }), 330);
+  };
+  step();
 }
 
 /* ================= Canvas overlays: connect handle, rewire grips ================= */
@@ -797,6 +1001,7 @@ let hoverCopy = null, hoverTimer = null, dragging = null;
 const toRendered = p => ({ x: p.x * cy.zoom() + cy.pan().x, y: p.y * cy.zoom() + cy.pan().y });
 function updateOverlays() {
   const h = $("#handle"), gs = $("#grip-s"), gt = $("#grip-t");
+  if (VIEWER || GRADING) { h.hidden = gs.hidden = gt.hidden = true; return; }
   const target = hoverCopy && cy.getElementById(hoverCopy).nonempty() ? cy.getElementById(hoverCopy)
     : (selCopy && multi.length <= 1 ? cy.getElementById(selCopy) : null);
   if (target && target.nonempty() && !dragging && $("#inline").hidden && target.visible()) {
@@ -860,30 +1065,117 @@ function startDrag(kind, ev, info) {
   move(ev);
 }
 
+/* ================= Interface words seen by viewers (the editor stays in English) ================= */
+const UI = {
+  en: {
+    manual: "My layout", manualV: "As drawn", untangle: "Untangle", allLevels: "All levels", levels: n => `${n} levels`, search: "Search text, notes, sources",
+    searchV: "Search boxes or #tag", tags: "Tags", clear: "Clear", editTags: "Edit tags", colourKey: "Colour key", collapse: "Collapse", expand: "Expand", edit: "Edit",
+    view: "View", crossings: "crossings", focus: "Focus radius", off: "off", steps: n => `${n} step${n > 1 ? "s" : ""} from the selected box`,
+    trace: "Highlight the chain of the selected box", redundant: "Redundant arrows", show: "Show", dashed: "Dashed", hide: "Hide",
+    untangleSet: "Untangle settings", effort: "Effort", placement: "Box placement", levelSp: "Level spacing", boxSp: "Box spacing", arrows: "Arrow style",
+    rightAngled: "Right-angled", angled: "Angled", straight: "Straight", keepOrder: "Respect my vertical order", split: "Split shared causes into copies",
+    repeat: "Repeat the full branch under every copy", reset: "Reset settings", switchUntangle: "Switch to <b>Untangle</b> to use these.",
+    readOnly: "Read-only view", makeOwn: "Make your own RCA",
+    howTo: "How to read this diagram",
+    howToBody: "Each arrow points from an effect to the cause that explains it, so every step to the right answers “why?”. Click a box to light up its whole chain. Scroll or pinch to zoom, drag to move around. Use the tag row to highlight one stage of the chain, and Focus radius in the View panel to see only the boxes near the one you selected.",
+    openQ: "Open questions", why: s => `Why does “${s}” happen?`, deepest: "Deepest causes", deepestNote: "Ranked by how many distinct chains connect them to the rejection.",
+    category: "Category", status: "Status", sources: "Sources", notes: "Notes", explainedBy: "Why? Explained by", explains: "It explains",
+    nothingYet: "Nothing yet. The chain ends here.", topLevel: "This is a top-level problem.", chain: "Chain from the top problem",
+    copyLink: "Copy a link to this box", copied: "Link copied", byStage: "Boxes per tag", none: "None.", open: "Open question (?)",
+    level: "Level", chains: "Chains to the top problem", below: "Causes below it", missingTr: "Not translated yet; shown in another language.",
+    hypothesis: "Hypothesis", supported: "Supported by evidence", refuted: "Refuted",
+    hideEmoji: "Hide emojis on boxes", showEmoji: "Show emojis on boxes", chipsTip: "Tags still highlight boxes when their emojis are hidden",
+    interview: "Interview", pickBox: "Pick a box to grade it. Ungraded boxes in a branch marked as discussed count as not relevant.",
+    keysHelp: names => `Keys: <kbd>0</kbd>–<kbd>9</kbd> ${esc(names[0] || "")}${names[1] ? ` · <kbd>Shift</kbd> + number ${esc(names[1])}` : ""}${names[2] ? ` · <kbd>Alt</kbd> + number ${esc(names[2])}` : ""} · <kbd>N</kbd>/<kbd>P</kbd> next/previous box · <kbd>B</kbd> branch discussed · <kbd>A</kbd> add a cause`,
+    branches: "Branches", proposedBy: c => `Proposed in interview ${c}`, clearGrade: "Clear this grade", gatedNote: (s, m) => `Asked when ${s} is ${m} or more.`,
+    gatedOut: "Not counted: the condition above is no longer met.", whyNote: "Why (optional)", whyPlaceholder: "What they said, in a few words",
+    everythingBelow: n => `This branch was discussed (${n} box${n === 1 ? "" : "es"})`, coveredBy: s => `Discussed as part of “${s}”`,
+    prev: "Previous", next: "Next", addCauseHere: "Add a cause here", noScales: "No scales yet.", gradedOf: (g, n) => `<b>${g}</b>/${n} graded`,
+    discussedBranches: "Branches discussed", discussedHelp: "Tick the branches you walked through. Their ungraded boxes count as not relevant; the rest count as not discussed.",
+    shadeBy: s => `Shade by ${s}`, endInterview: "End interview", clockTip: "Time since the interview clock started", clockReset: "Restart the clock from zero",
+    clockWasReset: "Clock restarted.", outOfRange: (s, a, b) => `${s} goes from ${a} to ${b}.`, started: c => `Interview ${c} started. Every click is saved in this browser.`,
+    details: "Details", close: "Close", allBranches: "All branches", shared: "shared", branch: "Branch", boxes: "boxes",
+    upLevel: "Up one level", showAll: "Show everything", onlyBranch: "Show only this branch",
+    export: "Export", tries: n => `${n} tr${n > 1 ? "ies" : "y"}`, place0: "Compact", place1: "Balanced", place2: "Straight arrows",
+  },
+  es: {
+    manual: "Mi diseño", manualV: "Como se dibujó", untangle: "Desenredar", allLevels: "Todos los niveles", levels: n => `${n} niveles`, search: "Buscar",
+    searchV: "Buscar cajas o #etiqueta", tags: "Etiquetas", clear: "Quitar", editTags: "Editar etiquetas", colourKey: "Colores", collapse: "Ocultar", expand: "Mostrar", edit: "Editar",
+    view: "Vista", crossings: "cruces", focus: "Radio de enfoque", off: "apagado", steps: n => `${n} paso${n > 1 ? "s" : ""} desde la caja elegida`,
+    trace: "Resaltar la cadena de la caja elegida", redundant: "Flechas redundantes", show: "Mostrar", dashed: "Punteadas", hide: "Ocultar",
+    untangleSet: "Ajustes de Desenredar", effort: "Esfuerzo", placement: "Ubicación de cajas", levelSp: "Espacio entre niveles", boxSp: "Espacio entre cajas", arrows: "Estilo de flechas",
+    rightAngled: "En ángulo recto", angled: "Inclinadas", straight: "Rectas", keepOrder: "Respetar el orden vertical original", split: "Separar causas compartidas en copias",
+    repeat: "Repetir la rama completa bajo cada copia", reset: "Restablecer", switchUntangle: "Cambia a <b>Desenredar</b> para usarlos.",
+    readOnly: "Vista de solo lectura", makeOwn: "Haz tu propio análisis",
+    howTo: "Cómo leer este diagrama",
+    howToBody: "Cada flecha va de un efecto a la causa que lo explica, así que cada paso hacia la derecha responde “¿por qué?”. Haz clic en una caja para resaltar toda su cadena. Usa la rueda o dos dedos para hacer zoom y arrastra para moverte. Usa la fila de etiquetas para resaltar una etapa de la cadena, y el Radio de enfoque en el panel Vista para ver solo las cajas cercanas a la elegida.",
+    openQ: "Preguntas abiertas", why: s => `¿Por qué ocurre “${s}”?`, deepest: "Causas más profundas", deepestNote: "Ordenadas por cuántas cadenas distintas las conectan con el rechazo.",
+    category: "Categoría", status: "Estado", sources: "Fuentes", notes: "Notas", explainedBy: "¿Por qué? Lo explica", explains: "Explica",
+    nothingYet: "Nada aún. La cadena termina aquí.", topLevel: "Este es un problema de primer nivel.", chain: "Cadena desde el problema principal",
+    copyLink: "Copiar un enlace a esta caja", copied: "Enlace copiado", byStage: "Cajas por etiqueta", none: "Ninguna.", open: "Pregunta abierta (?)",
+    level: "Nivel", chains: "Cadenas hasta el problema principal", below: "Causas debajo", missingTr: "Aún sin traducir; se muestra en otro idioma.",
+    hypothesis: "Hipótesis", supported: "Respaldada por evidencia", refuted: "Descartada",
+    hideEmoji: "Ocultar emojis en las cajas", showEmoji: "Mostrar emojis en las cajas", chipsTip: "Las etiquetas siguen resaltando cajas aunque sus emojis estén ocultos",
+    interview: "Entrevista", pickBox: "Elige una caja para calificarla. Las cajas sin calificar en una rama marcada como conversada cuentan como no relevantes.",
+    keysHelp: names => `Teclas: <kbd>0</kbd>–<kbd>9</kbd> ${esc(names[0] || "")}${names[1] ? ` · <kbd>Shift</kbd> + número ${esc(names[1])}` : ""}${names[2] ? ` · <kbd>Alt</kbd> + número ${esc(names[2])}` : ""} · <kbd>N</kbd>/<kbd>P</kbd> caja siguiente/anterior · <kbd>B</kbd> rama conversada · <kbd>A</kbd> agregar una causa`,
+    branches: "Ramas", proposedBy: c => `Propuesta en la entrevista ${c}`, clearGrade: "Borrar esta calificación", gatedNote: (s, m) => `Se pregunta cuando ${s} es ${m} o más.`,
+    gatedOut: "No cuenta: la condición de arriba ya no se cumple.", whyNote: "Por qué (opcional)", whyPlaceholder: "Lo que dijo, en pocas palabras",
+    everythingBelow: n => `Esta rama se conversó (${n} caja${n === 1 ? "" : "s"})`, coveredBy: s => `Conversada como parte de “${s}”`,
+    prev: "Anterior", next: "Siguiente", addCauseHere: "Agregar una causa aquí", noScales: "Aún no hay escalas.", gradedOf: (g, n) => `<b>${g}</b>/${n} calificadas`,
+    discussedBranches: "Ramas conversadas", discussedHelp: "Marca las ramas que recorriste. Sus cajas sin calificar cuentan como no relevantes; las demás, como no conversadas.",
+    shadeBy: s => `Sombrear por ${s}`, endInterview: "Terminar entrevista", clockTip: "Tiempo desde que empezó el reloj de la entrevista", clockReset: "Reiniciar el reloj en cero",
+    clockWasReset: "Reloj reiniciado.", outOfRange: (s, a, b) => `${s} va de ${a} a ${b}.`, started: c => `Entrevista ${c} iniciada. Cada clic se guarda en este navegador.`,
+    details: "Detalles", close: "Cerrar", allBranches: "Todas las ramas", shared: "compartida", branch: "Rama", boxes: "cajas",
+    upLevel: "Subir un nivel", showAll: "Mostrar todo", onlyBranch: "Mostrar solo esta rama",
+    export: "Exportar", tries: n => `${n} intento${n > 1 ? "s" : ""}`, place0: "Compacta", place1: "Equilibrada", place2: "Flechas rectas",
+  },
+};
+function t(k, ...a) { const L = VIEWER || GRADING ? curLang() : "en"; const v = (UI[L] && UI[L][k] !== undefined) ? UI[L][k] : UI.en[k]; return typeof v === "function" ? v(...a) : (v ?? k); }
+function applyUI() {
+  $$("[data-ui]").forEach(el => { el.innerHTML = t(el.dataset.ui); }); $("#q").placeholder = VIEWER ? t("searchV") : UI.en.search;
+  if (VIEWER) $("#viewer-line").innerHTML = `<span>${esc(t("readOnly"))}</span> · <a href="${esc(pageBase())}?edit" target="_blank" rel="noopener">${esc(t("makeOwn"))} ↗</a>`;
+  const lv = $("#depth"); [...lv.options].forEach(o => { if (o.value !== "all") o.textContent = t("levels", o.value); });
+}
+
 /* ================= Side panel ================= */
 const swatch = n => { const c = catById(n.cat); return `<span class="sw" style="background:${c.fill};border-color:${c.stroke}"></span>`; };
-const nm = n => isQ(n) ? "<i>Open question (?)</i>" : esc(n.text);
+const nm = n => isQ(n) ? `<i>${esc(t("open"))}</i>` : (txMissing(n) && doc.languages.length > 1 ? `<i>${esc(tx(n))}</i>` : esc(tx(n)));
+const tagPills = n => orderedTags(n.tags || []).map(tg => `<span class="tpill" title="${esc(tx(tg, "name"))}">${tg.emoji}</span>`).join("");
+const boxList = arr => `<ul class="list">${arr.map(c => `<li><button data-go="${esc(c.id)}">${swatch(c)}<span>${nm(c)}</span>${tagPills(c) ? `<span class="tps">${tagPills(c)}</span>` : ""}</button></li>`).join("")}</ul>`;
+function missingSummary() { // per language: boxes and other visible texts still untranslated
+  if (doc.languages.length < 2) return [];
+  return doc.languages.map(l => {
+    const boxes = doc.nodes.filter(n => txMissing(n, "text", l)).length;
+    let other = 0; everyTranslatable(doc, (o, f) => { if (f !== "text" && txMissing(o, f, l)) other++; });
+    return { l, boxes, other };
+  });
+}
 function renderPanel() {
+  if (VIEWER) return renderViewerPanel();
+  if (GRADING) return renderGradePanel();
   const p = $("#panel");
   if (!lastRender) return;
   const { A } = lastRender;
   if (selEdge) {
     const e = doc.edges.find(x => x.id === selEdge); if (!e) { selEdge = null; return renderPanel(); }
-    const s = nodeById(e.source), t = nodeById(e.target);
+    const s = nodeById(e.source), tg = nodeById(e.target);
     p.innerHTML = `<div class="sec"><h2>Arrow</h2>
       <div class="sel-edge"><button class="btn" data-go="${esc(s.id)}">${swatch(s)}${nm(s)}</button>
       <span class="arrow">is explained by ↓</span>
-      <button class="btn" data-go="${esc(t.id)}">${swatch(t)}${nm(t)}</button></div>
+      <button class="btn" data-go="${esc(tg.id)}">${swatch(tg)}${nm(tg)}</button></div>
       <p class="muted">Drag either round end of the selected arrow onto another box to rewire it.</p>
       <div class="row"><button class="btn" id="p-rev">Reverse <kbd>R</kbd></button><button class="btn danger" id="p-del">Delete <kbd>Del</kbd></button></div></div>`;
     $("#p-rev").onclick = () => reverseEdge(selEdge); $("#p-del").onclick = deleteSelection;
     return;
   }
   if (multi.length > 1) {
-    p.innerHTML = `<div class="sec"><h2>${multi.length} boxes selected</h2>
-      <ul class="list">${multi.map(id => nodeById(id)).filter(Boolean).map(n => `<li><button data-go="${esc(n.id)}">${swatch(n)}<span>${nm(n)}</span></button></li>`).join("")}</ul>
+    const sel = multi.map(id => nodeById(id)).filter(Boolean);
+    p.innerHTML = `<div class="sec"><h2>${multi.length} boxes selected</h2>${boxList(sel)}
+      ${doc.tags.length ? `<div class="field"><span>Tag all of them</span><div class="tagpick" id="multi-tags">${tagPicker(sel)}</div></div>` : ""}
       <div class="row"><button class="btn danger" id="p-del">Delete all <kbd>Del</kbd></button><button class="btn" id="p-clr">Clear selection</button></div></div>`;
-    $("#p-del").onclick = deleteSelection; $("#p-clr").onclick = clearSelection; return;
+    $("#p-del").onclick = deleteSelection; $("#p-clr").onclick = clearSelection;
+    $$("#multi-tags [data-tag]").forEach(b => b.onclick = () => toggleTag(multi.slice(), b.dataset.tag));
+    return;
   }
   const n = selRef && nodeById(selRef);
   if (!n) {
@@ -891,21 +1183,25 @@ function renderPanel() {
     const leaves = doc.nodes.filter(x => A.out.get(x.id).length === 0 && !isQ(x))
       .sort((a, b) => (A.paths.get(b.id) || 0) - (A.paths.get(a.id) || 0) || (A.depth.get(b.id) || 0) - (A.depth.get(a.id) || 0));
     const cyc = doc.nodes.filter(x => A.cyc.has(x.id));
+    const miss = missingSummary().filter(m => m.boxes || m.other);
     p.innerHTML = `
       <div class="sec"><h2>Getting around</h2>
       <p class="muted">Click a box to edit it and light up its chain. Double-click empty space to add a box; drag the green dot on a box onto its cause to connect them. Press <kbd>?</kbd> for all shortcuts.</p></div>
-      ${cyc.length ? `<div class="warnbox"><b>Loop found.</b> ${cyc.length} boxes explain each other in a circle: ${cyc.map(x => esc(x.text)).join(" → ")}</div>` : ""}
+      ${miss.length ? `<div class="sec"><h2>Missing translations</h2>${miss.map(m => `<div class="trline"><span><b>${m.l.toUpperCase()}</b> ${m.boxes} box${m.boxes === 1 ? "" : "es"}${m.other ? ` · ${m.other} other text${m.other === 1 ? "" : "s"}` : ""}</span>${m.boxes ? `<button class="btn small" data-trpass="${m.l}">Translate one by one</button>` : ""}${m.other ? `<button class="btn small" data-act="langs">Names and title…</button>` : ""}</div>`).join("")}
+        <p class="muted">Untranslated boxes show their text in another language, in italics.</p></div>` : ""}
+      ${cyc.length ? `<div class="warnbox"><b>Loop found.</b> ${cyc.length} boxes explain each other in a circle: ${cyc.map(x => esc(tx(x))).join(" → ")}</div>` : ""}
       ${(() => { const ck = keyChecks(A); if (!ck.length) return "";
         const open = ck.filter(c => c.kind === "open"), deeper = ck.filter(c => c.kind === "deeper");
         return `<div class="sec"><h2>Colour key checks · ${ck.length}</h2>
         <p class="muted">Boxes whose colour and arrows disagree. Either the chain continues, or the colour should change.</p>
-        ${open.length ? `<details class="ck"><summary>${open.length} intermediate cause${open.length > 1 ? "s" : ""} with nothing below</summary><ul class="list">${open.map(c => { const x = nodeById(c.id); return `<li><button data-go="${esc(x.id)}">${swatch(x)}<span>${nm(x)}</span></button></li>`; }).join("")}</ul></details>` : ""}
-        ${deeper.length ? `<details class="ck" open><summary>${deeper.length} root cause${deeper.length > 1 ? "s" : ""} with deeper causes</summary><ul class="list">${deeper.map(c => { const x = nodeById(c.id); return `<li><button data-go="${esc(x.id)}">${swatch(x)}<span>${nm(x)}</span></button></li>`; }).join("")}</ul></details>` : ""}</div>`; })()}
+        ${open.length ? `<details class="ck"><summary>${open.length} intermediate cause${open.length > 1 ? "s" : ""} with nothing below</summary>${boxList(open.map(c => nodeById(c.id)))}</details>` : ""}
+        ${deeper.length ? `<details class="ck" open><summary>${deeper.length} root cause${deeper.length > 1 ? "s" : ""} with deeper causes</summary>${boxList(deeper.map(c => nodeById(c.id)))}</details>` : ""}</div>`; })()}
       <div class="sec"><h2>Open questions · ${qs.length}</h2>
-      <ul class="list">${qs.map(x => { const par = A.inn.get(x.id).map(nodeById)[0]; return `<li><button data-go="${esc(x.id)}">${swatch(x)}<span>Why does “${esc(par ? par.text : "?")}” happen?</span></button></li>`; }).join("") || `<p class="muted">None.</p>`}</ul></div>
+      <ul class="list">${qs.map(x => { const par = A.inn.get(x.id).map(nodeById)[0]; return `<li><button data-go="${esc(x.id)}">${swatch(x)}<span>Why does “${esc(par ? tx(par) : "?")}” happen?</span></button></li>`; }).join("") || `<p class="muted">None.</p>`}</ul></div>
       <div class="sec"><h2>Deepest causes · ${leaves.length}</h2>
       <p class="muted">Ranked by how many distinct chains connect them to the rejection.</p>
-      <ul class="list">${leaves.map(x => `<li><button data-go="${esc(x.id)}">${swatch(x)}<span>${nm(x)}</span><span class="cnt">${A.paths.get(x.id) ? "×" + A.paths.get(x.id) : "–"}</span></button></li>`).join("")}</ul></div>`;
+      <ul class="list">${leaves.map(x => `<li><button data-go="${esc(x.id)}">${swatch(x)}<span>${nm(x)}</span>${tagPills(x) ? `<span class="tps">${tagPills(x)}</span>` : ""}<span class="cnt">${A.paths.get(x.id) ? "×" + A.paths.get(x.id) : "–"}</span></button></li>`).join("")}</ul></div>`;
+    $$("[data-trpass]").forEach(b => b.onclick = () => translatePass(b.dataset.trpass));
     return;
   }
   const causes = A.out.get(n.id).map(nodeById), effects = A.inn.get(n.id).map(nodeById);
@@ -913,16 +1209,19 @@ function renderPanel() {
   const qBelow = below.filter(id => isQ(nodeById(id))).length;
   const chain = chainTo(n.id).map(nodeById);
   const copies = lastRender.U.copies.filter(c => c.ref === n.id).length;
+  const L = doc.languages, many = L.length > 1;
   p.innerHTML = `
     <div class="sec">
-      <label class="field"><span>Text</span><textarea id="f-text" class="big" rows="3">${esc(n.text)}</textarea></label>
-      <div class="field"><label for="f-cat">Category · <button type="button" class="linkbtn" id="p-cats">edit categories</button></label><select id="f-cat">${doc.categories.map(c => `<option value="${esc(c.id)}"${c.id === n.cat ? " selected" : ""}>${esc(c.name)}</option>`).join("")}<option disabled>──────────</option><option value="__new">＋ New category…</option><option value="__manage">Edit, delete or recolour categories…</option></select>
+      ${L.map((l, i) => `<label class="field"><span>Text${many ? ` · <b>${l.toUpperCase()}</b>${i === 0 ? " (main)" : ""}${txMissing(n, "text", l) ? ` <em class="mt">missing</em>` : ""}` : ""}</span><textarea data-lang="${l}" class="ftext${i === 0 ? " big" : ""}" rows="${i === 0 ? 3 : 2}" placeholder="${many ? esc(langName(l)) + " text" : ""}">${esc(txRaw(n, "text", l))}</textarea></label>`).join("")}
+      <div class="field"><label for="f-cat">Category · <button type="button" class="linkbtn" id="p-cats">edit categories</button></label><select id="f-cat">${doc.categories.map(c => `<option value="${esc(c.id)}"${c.id === n.cat ? " selected" : ""}>${esc(tx(c, "name"))}</option>`).join("")}<option disabled>──────────</option><option value="__new">＋ New category…</option><option value="__manage">Edit, delete or recolour categories…</option></select>
         ${catById(n.cat).desc ? `<span class="catdesc">${esc(catById(n.cat).desc)}</span>` : ""}
         ${keyChecks(A).filter(c => c.id === n.id).map(c => `<span class="ckwarn">${esc(c.msg)}.</span>`).join("")}</div>
+      <div class="field"><span>Tags · <button type="button" class="linkbtn" id="p-tags">edit tags</button></span><div class="tagpick" id="f-tags">${doc.tags.length ? tagPicker([n]) : `<span class="muted">No tags yet.</span>`}</div></div>
       <div class="field"><span>Status</span><div class="status-seg" role="group" aria-label="Status">${Object.entries(STATUSES).map(([k, s]) =>
         `<button data-status="${k}" aria-pressed="${n.status === k}"><i style="border-color:${s.color || "var(--muted)"};border-style:${s.style}"></i>${s.short}</button>`).join("")}</div></div>
-      <label class="field"><span>Notes</span><textarea id="f-notes" rows="3" placeholder="Reasoning, observations, what to check next">${esc(n.notes)}</textarea></label>
+      <label class="field"><span>Notes · only for you</span><textarea id="f-notes" rows="3" placeholder="Reasoning, observations, what to check next">${esc(n.notes)}</textarea></label>
       <div class="field bibfield"><label for="f-src">Sources, one per line · type <kbd>@</kbd> to cite from your .bib</label><textarea id="f-src" rows="3" placeholder="@williamson2007botrytis or free text" autocomplete="off" spellcheck="false">${esc(n.sources.join("\n"))}</textarea><div class="bibpop" id="bibpop" role="listbox" hidden></div><ul class="bibres" id="bibres"></ul></div>
+      ${lastRender.D.sub(n.id).size > 1 && view.branch !== n.id ? `<div class="row"><button class="btn small" id="p-branch">Show only this branch (${lastRender.D.sub(n.id).size} boxes)</button></div>` : ""}
       <div class="row"><button class="btn" id="p-add">Add a cause <kbd>Tab</kbd></button>
         ${causes.length ? `<button class="btn" id="p-fold">${view.folded.has(n.id) ? "Unfold" : "Fold"} <kbd>F</kbd></button>` : ""}
         <button class="btn danger" id="p-del">Delete <kbd>Del</kbd></button></div>
@@ -933,27 +1232,88 @@ function renderPanel() {
       ${A.cyc.has(n.id) ? `<div class="warnbox">This box is part of a loop. Check whether one of its arrows points the wrong way.</div>` : ""}
     </div>
     <div class="sec"><h2>Why? Explained by · ${causes.length}</h2>
-      ${causes.length ? `<ul class="list">${causes.map(c => `<li><button data-go="${esc(c.id)}">${swatch(c)}<span>${nm(c)}</span></button></li>`).join("")}</ul>` : `<p class="muted">Nothing yet. The chain ends here.</p>`}</div>
+      ${causes.length ? boxList(causes) : `<p class="muted">Nothing yet. The chain ends here.</p>`}</div>
     <div class="sec"><h2>It explains · ${effects.length}</h2>
-      ${effects.length ? `<ul class="list">${effects.map(c => `<li><button data-go="${esc(c.id)}">${swatch(c)}<span>${nm(c)}</span></button></li>`).join("")}</ul>` : `<p class="muted">This is a top-level problem.</p>`}</div>
+      ${effects.length ? boxList(effects) : `<p class="muted">This is a top-level problem.</p>`}</div>
     <div class="sec"><h2>Chain from the rejection</h2>
       <ol class="chain">${chain.map(c => `<li><button data-go="${esc(c.id)}">${nm(c)}</button></li>`).join("")}</ol></div>`;
   const ref = n.id;
-  $("#f-text").addEventListener("input", e => fieldEdit(ref, m => { m.text = e.target.value.replace(/\s+/g, " ").trim() || m.text; }));
+  $$(".ftext").forEach(ta => {
+    const l = ta.dataset.lang;
+    ta.addEventListener("input", e => fieldEdit(ref, m => { txSet(m, "text", l, e.target.value.replace(/\s+/g, " ").trim()); }));
+    ta.addEventListener("change", () => flushField());
+  });
   $("#f-notes").addEventListener("input", e => fieldEdit(ref, m => { m.notes = e.target.value; }));
   $("#f-src").addEventListener("input", e => { fieldEdit(ref, m => { m.sources = e.target.value.split("\n").map(s => s.trim()).filter(Boolean); }); showBibResolved(e.target.value); });
   attachBibComplete($("#f-src")); showBibResolved($("#f-src").value);
-  ["#f-text", "#f-notes", "#f-src"].forEach(s => $(s).addEventListener("change", () => flushField()));
+  ["#f-notes", "#f-src"].forEach(s => $(s).addEventListener("change", () => flushField()));
   $("#f-cat").onchange = e => {
     const v = e.target.value;
     if (v === "__new" || v === "__manage") { e.target.value = nodeById(ref).cat; openCats(v === "__new" ? ref : null); return; }
     commit(() => { nodeById(ref).cat = v; });
   };
-  $("#p-cats").onclick = openCats;
+  $("#p-cats").onclick = openCats; $("#p-tags").onclick = () => openTags();
+  $$("#f-tags [data-tag]").forEach(b => b.onclick = () => toggleTag([ref], b.dataset.tag));
   $$(".status-seg button").forEach(b => b.onclick = () => commit(() => { nodeById(ref).status = b.dataset.status; }));
   $("#p-add").onclick = () => addChild(ref);
+  $("#p-branch") && ($("#p-branch").onclick = () => setBranch(ref));
   $("#p-fold") && ($("#p-fold").onclick = () => toggleFold(ref));
   $("#p-del").onclick = deleteSelection;
+}
+function tagPicker(nodes) { // grouped toggle chips; pressed = every given box has the tag
+  return doc.tagGroups.map(g => {
+    const ts = doc.tags.filter(tg => tg.group === g.id); if (!ts.length) return "";
+    return `<div class="tp-group"><span class="tp-g">${esc(tx(g, "name"))}</span>${ts.map(tg => {
+      const on = nodes.every(n => (n.tags || []).includes(tg.id));
+      return `<button type="button" class="tchip" data-tag="${esc(tg.id)}" aria-pressed="${on}" title="${esc(tg.desc || "")}">${tg.emoji} ${esc(tx(tg, "name"))}</button>`; }).join("")}</div>`;
+  }).join("");
+}
+function toggleTag(refs, tagId) {
+  const nodes = refs.map(nodeById).filter(Boolean); if (!nodes.length) return;
+  const allOn = nodes.every(n => (n.tags || []).includes(tagId));
+  commit(() => refs.forEach(r => { const n = nodeById(r); if (!n) return;
+    n.tags = (n.tags || []).filter(x => x !== tagId); if (!allOn) n.tags.push(tagId);
+    n.tags = doc.tags.filter(tg => n.tags.includes(tg.id)).map(tg => tg.id); }));
+}
+function renderViewerPanel() {
+  const p = $("#panel");
+  if (!lastRender) return;
+  const { A } = lastRender;
+  const n = selRef && nodeById(selRef);
+  if (!n) {
+    const qs = doc.nodes.filter(isQ);
+    const leaves = doc.nodes.filter(x => A.out.get(x.id).length === 0 && !isQ(x))
+      .sort((a, b) => (A.paths.get(b.id) || 0) - (A.paths.get(a.id) || 0) || (A.depth.get(b.id) || 0) - (A.depth.get(a.id) || 0));
+    p.innerHTML = `<div class="sec"><h2>${t("howTo")}</h2><p class="muted">${t("howToBody")}</p></div>
+      <div class="sec"><h2>${t("openQ")} · ${qs.length}</h2>
+      <ul class="list">${qs.map(x => { const par = A.inn.get(x.id).map(nodeById)[0]; return `<li><button data-go="${esc(x.id)}">${swatch(x)}<span>${esc(t("why", par ? tx(par) : "?"))}</span></button></li>`; }).join("") || `<p class="muted">${t("none")}</p>`}</ul></div>
+      <div class="sec"><h2>${t("deepest")} · ${leaves.length}</h2><p class="muted">${t("deepestNote")}</p>
+      <ul class="list">${leaves.map(x => `<li><button data-go="${esc(x.id)}">${swatch(x)}<span>${nm(x)}</span>${tagPills(x) ? `<span class="tps">${tagPills(x)}</span>` : ""}<span class="cnt">${A.paths.get(x.id) ? "×" + A.paths.get(x.id) : "–"}</span></button></li>`).join("")}</ul></div>`;
+    return;
+  }
+  const causes = A.out.get(n.id).map(nodeById), effects = A.inn.get(n.id).map(nodeById);
+  const c = catById(n.cat), st = STATUSES[n.status];
+  const chain = chainTo(n.id).map(nodeById);
+  const tagsHtml = orderedTags(n.tags || []).map(tg => `<span class="tchip static">${tg.emoji} ${esc(tx(tg, "name"))}</span>`).join("");
+  const srcHtml = (n.sources || []).map(sx => { const r = bibLookup(sx);
+    return `<li>${r && r.entry ? `<b>${esc(bibLabel(r.entry))}</b> ${esc(r.entry.title)}${r.entry.venue ? ` <i>${esc(r.entry.venue)}</i>` : ""}` : esc(sx)}</li>`; }).join("");
+  p.innerHTML = `<div class="sec">
+      <p class="sel-title">${isQ(n) ? esc(t("open")) : esc(tx(n))}</p>
+      ${doc.languages.length > 1 && txMissing(n) ? `<p class="muted"><i>${t("missingTr")}</i></p>` : ""}
+      <span class="chip"><span class="sw" style="background:${c.fill};border-color:${c.stroke}"></span>${esc(tx(c, "name"))}</span>
+      ${c.desc && curLang() === mainLang() ? `<span class="catdesc">${esc(c.desc)}</span>` : ""}
+      ${n.status !== "unassessed" ? `<span class="chip"><i class="stbox" style="border-color:${st.color};border-style:${st.style}"></i>${esc(t(n.status))}</span>` : ""}
+      ${tagsHtml ? `<div class="tagpick">${tagsHtml}</div>` : ""}
+      ${srcHtml ? `<div class="field"><span>${t("sources")}</span><ul class="srclist">${srcHtml}</ul></div>` : ""}
+      ${n.notes ? `<div class="field"><span>${t("notes")}</span><p class="muted">${esc(n.notes)}</p></div>` : ""}
+      <div class="row"><button class="btn small" id="v-link">${t("copyLink")}</button>${A && lastRender.D.sub(n.id).size > 1 && view.branch !== n.id ? `<button class="btn small" id="v-branch">${t("onlyBranch")} (${lastRender.D.sub(n.id).size})</button>` : ""}</div>
+      <dl class="kv"><dt>${t("level")}</dt><dd>${A.depth.get(n.id) || "–"}</dd><dt>${t("chains")}</dt><dd>${A.paths.get(n.id) || "–"}</dd></dl>
+    </div>
+    <div class="sec"><h2>${t("explainedBy")} · ${causes.length}</h2>${causes.length ? boxList(causes) : `<p class="muted">${t("nothingYet")}</p>`}</div>
+    <div class="sec"><h2>${t("explains")} · ${effects.length}</h2>${effects.length ? boxList(effects) : `<p class="muted">${t("topLevel")}</p>`}</div>
+    <div class="sec"><h2>${t("chain")}</h2><ol class="chain">${chain.map(x => `<li><button data-go="${esc(x.id)}">${nm(x)}</button></li>`).join("")}</ol></div>`;
+  $("#v-link").onclick = () => copyText(deepLink({ box: n.id }), t("copied"));
+  $("#v-branch") && ($("#v-branch").onclick = () => setBranch(n.id));
 }
 $("#panel").addEventListener("click", e => { const b = e.target.closest("[data-go]"); if (b) goTo(b.dataset.go); });
 
@@ -980,18 +1340,24 @@ function goTo(ref) {
   while (q.length) { const u = q.shift(); for (const v of A.inn.get(u)) if (!anc.has(v)) { anc.add(v); q.push(v); } }
   anc.forEach(a => { if (view.folded.delete(a)) changed = true; });
   const c = nodeById(ref).cat; if (view.hiddenCats.delete(c)) changed = true;
-  selRef = ref; selCopy = ref; selEdge = null; multi = [ref];
+  selRef = ref; selCopy = ref; selEdge = null; multi = [ref]; openSide(true);
   const after = () => { const n = copiesOf(ref)[0]; if (n) cy.animate({ center: { eles: n }, zoom: Math.max(cy.zoom(), .9) }, { duration: 280 }); };
-  if (changed || view.focusR > 0) { $("#depth").value = "all"; render().then(after); }
-  else { applySelection(); renderPanel(); updateOverlays(); after(); }
+  if (changed || view.focusR > 0) { $("#depth").value = "all"; return render().then(after); }
+  applySelection(); renderPanel(); updateOverlays(); after(); return Promise.resolve();
 }
 
 /* ================= Chrome: header, stats, legend, controls ================= */
 function updateChrome(full) {
-  $("#doc-title").textContent = doc.title;
-  document.title = (dirty ? "● " : "") + doc.title + " · Uchuva RCA";
+  const title = tx(doc, "title") || "Untitled RCA";
+  $("#doc-title").textContent = title;
+  document.title = (dirty && !VIEWER ? "● " : "") + title + (VIEWER ? "" : " · RCA Workbench");
+  const ls = $("#langseg"); ls.hidden = doc.languages.length < 2;
+  ls.innerHTML = doc.languages.map(l => `<button data-lang="${esc(l)}" aria-pressed="${l === curLang()}" title="${esc(langName(l))}${!VIEWER && l === mainLang() ? " (main)" : ""}">${esc(l.toUpperCase())}</button>`).join("");
   $("#file-name").textContent = fileName + (fileHandle ? "" : "");
   $("#dirty").hidden = !dirty;
+  $("#dirty").textContent = fileNeedsGesture && dirty ? "● not yet in the file: press Ctrl S once to allow automatic saving" : "● unsaved changes";
+  $("#saved-at").hidden = !(fileHandle && !dirty && fileSavedAt);
+  if (fileSavedAt) $("#saved-at").textContent = "✓ saved to file " + fileSavedAt.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit", second: "2-digit" });
   $("#b-undo").disabled = !undoStack.length; $("#b-redo").disabled = !redoStack.length;
   $("#ver-count").textContent = doc.versions.length || "";
   if (!lastRender || !full) return;
@@ -1004,37 +1370,86 @@ function updateChrome(full) {
     (A.cyc.size ? `<span class="bad"><b>${A.cyc.size}</b> boxes in loops</span>` : "") +
     (() => { const k = keyChecks(A).length; return k ? `<span class="warnstat"><b>${k}</b> colour key checks</span>` : ""; })() +
     (hidden ? `<span><b>${hidden}</b> hidden by folds or filters</span>` : "") +
-    `<span><b>${Object.keys(STATUSES).filter(k => k !== "unassessed").map(k => doc.nodes.filter(n => n.status === k).length).join(" / ")}</b> hypothesis / supported / refuted</span>`;
-  $("#xnum").textContent = crossings;
-  $("#xline").innerHTML = view.mode === "untangle"
+    `<span><b>${Object.keys(STATUSES).filter(k => k !== "unassessed").map(k => doc.nodes.filter(n => n.status === k).length).join(" / ")}</b> hypothesis / supported / refuted</span>` +
+    missingSummary().filter(m => m.boxes).map(m => `<span class="warnstat"><b>${m.boxes}</b> missing ${m.l.toUpperCase()}</span>`).join("");
+  $("#xnum").textContent = crossings; $("#xnum").dataset.unit = t("crossings");
+  $("#xline").innerHTML = VIEWER ? "" : view.mode === "untangle"
     ? `<b>${crossings}</b> crossings untangled vs <b>${manualCrossings}</b> in my layout${lastTries > 1 ? ` · best of ${lastTries} tries` : ""}.`
     : `<b>${crossings}</b> arrow crossings in my layout. Switch to <b>Untangle</b> to reduce them.`;
   $("#o-red").textContent = V.redundant.size ? `${V.redundant.size} found` : "none found";
 }
 function renderLegend() {
   const counts = {}; doc.nodes.forEach(n => (counts[n.cat] = (counts[n.cat] || 0) + 1));
-  const open = view.legendOpen !== false;
-  $("#legend").innerHTML = `<div class="h"><span>Colour key</span><span><button id="edit-cats">Edit</button> · <button id="fold-legend">${open ? "Collapse" : "Expand"}</button></span></div>` + (!open ? "" :
-    doc.categories.map(c => `<button class="cat" title="${esc((c.desc ? c.desc + "\n" : "") + "Click to hide or show")}" data-cat="${esc(c.id)}" aria-pressed="${!view.hiddenCats.has(c.id)}"><span class="sw" style="background:${c.fill};border-color:${c.stroke}"></span>${esc(c.name)}<span class="n">${counts[c.id] || 0}</span></button>`).join("") +
-    `<hr>` + Object.entries(STATUSES).filter(([k]) => k !== "unassessed").map(([k, s]) => `<span class="st"><i style="border-color:${s.color};border-style:${s.style}"></i>${s.name}</span>`).join(""));
-  $("#edit-cats").onclick = openCats;
+  const open = view.legendOpen === true;
+  $("#legend").innerHTML = `<div class="h"><span>${t("colourKey")}</span><span>${VIEWER ? "" : `<button id="edit-cats">${t("edit")}</button> · `}<button id="fold-legend">${open ? t("collapse") : t("expand")}</button></span></div>` + (!open ? "" :
+    doc.categories.map(c => `<button class="cat" title="${esc((c.desc && curLang() === mainLang() ? c.desc + "\n" : ""))}" data-cat="${esc(c.id)}" aria-pressed="${!view.hiddenCats.has(c.id)}"><span class="sw" style="background:${c.fill};border-color:${c.stroke}"></span>${esc(tx(c, "name"))}<span class="n">${counts[c.id] || 0}</span></button>`).join("") +
+    (doc.nodes.some(n => n.status !== "unassessed") || !VIEWER ? `<hr>` + Object.entries(STATUSES).filter(([k]) => k !== "unassessed").map(([k, s]) => `<span class="st"><i style="border-color:${s.color};border-style:${s.style}"></i>${esc(t(k))}</span>`).join("") : ""));
+  $("#edit-cats") && ($("#edit-cats").onclick = openCats);
   $("#fold-legend").onclick = () => { view.legendOpen = !open; saveView(); renderLegend(); };
 }
 $("#legend").addEventListener("click", e => {
   const b = e.target.closest("[data-cat]"); if (!b) return;
   const k = b.dataset.cat; view.hiddenCats.has(k) ? view.hiddenCats.delete(k) : view.hiddenCats.add(k); render({ animate: true });
 });
+function renderBranchUI() {
+  const { D } = lastRender; const sel = $("#branch");
+  const label = (id, ind) => { const n = nodeById(id); return `<option value="${esc(id)}">${ind}${esc(short(isQ(n) ? "?" : tx(n), ind ? 42 : 46))} · ${D.sub(id).size}${D.shared(id) ? " · " + esc(t("shared")) : ""}</option>`; };
+  const listed = new Set();
+  const opts = [`<option value="">${esc(t("allBranches"))}</option>`];
+  D.top.forEach(id => { // big branches also list their own sub-branches
+    opts.push(label(id, "")); listed.add(id);
+    if (D.sub(id).size > 15) (D.kids.get(id) || []).filter(k => D.sub(k).size >= 3).sort((a, b) => D.sub(b).size - D.sub(a).size)
+      .forEach(k => { opts.push(label(k, "\u00a0\u00a0↳ ")); listed.add(k); });
+  });
+  if (view.branch && !listed.has(view.branch)) { const n = nodeById(view.branch); opts.push(`<option value="${esc(view.branch)}">↳ ${esc(short(tx(n)))} · ${D.sub(view.branch).size}</option>`); }
+  sel.innerHTML = opts.join(""); sel.value = view.branch || ""; sel.hidden = D.top.length < 2 && !view.branch;
+  const bar = $("#branchbar");
+  if (!view.branch) { bar.hidden = true; return; }
+  const n = nodeById(view.branch), up = D.idom.get(view.branch);
+  const canUp = up && up !== D.R && !D.trunk.includes(up) && up !== D.end;
+  bar.hidden = false;
+  bar.innerHTML = `<span>${esc(t("branch"))}: <b>${esc(short(tx(n), 60))}</b> · ${D.sub(view.branch).size} ${esc(t("boxes"))}</span>` +
+    (canUp ? `<button class="btn small" id="br-up">${esc(t("upLevel"))}</button>` : "") + `<button class="btn small" id="br-all">${esc(t("showAll"))}</button>`;
+  $("#br-up") && ($("#br-up").onclick = () => setBranch(up));
+  $("#br-all").onclick = () => setBranch(null);
+}
+function setBranch(id) { view.branch = id || null; render({ fit: true, animate: true }); }
+$("#branch").onchange = e => setBranch(e.target.value);
+
+function renderTagbar() {
+  const bar = $("#tagbar");
+  if (!doc.tags.length) { bar.hidden = VIEWER; bar.innerHTML = VIEWER ? "" : `<span class="tb-label">Tags</span><span class="muted">None yet. Tag boxes by stage of the chain, then click a tag here to highlight them.</span><button class="btn small" data-act="tags">Add tags…</button>`; return; }
+  bar.hidden = false;
+  const count = id => doc.nodes.filter(n => (n.tags || []).includes(id)).length;
+  bar.innerHTML = `<span class="tb-label">${t("tags")}</span><div class="tb-scroll">` + doc.tagGroups.map(g => {
+    const ts = doc.tags.filter(tg => tg.group === g.id); if (!ts.length) return "";
+    return `<span class="tb-group">${esc(tx(g, "name"))}</span>` + ts.map(tg => `<button class="tchip" data-tf="${esc(tg.id)}" aria-pressed="${view.tagFilter.has(tg.id)}" title="${esc(tg.desc || "")}">${tg.emoji} ${esc(tx(tg, "name"))} <span class="n">${count(tg.id)}</span></button>`).join("");
+  }).join("") + `</div>` + (view.tagFilter.size ? `<button class="btn small" id="tf-clear">${t("clear")}</button>` : "") +
+    `<button class="btn small" id="tb-chips" title="${esc(t("chipsTip"))}">${view.tagChips !== false ? t("hideEmoji") : t("showEmoji")}</button>` +
+    (VIEWER ? "" : `<button class="btn small" data-act="tags">${t("editTags")}</button>`);
+  $("#tf-clear") && ($("#tf-clear").onclick = () => { view.tagFilter.clear(); renderTagbar(); applyTagFilter(); });
+  $("#tb-chips").onclick = () => { view.tagChips = view.tagChips === false; saveView(); saveViewerPref(); render(); };
+}
+$("#tagbar").addEventListener("click", e => {
+  const b = e.target.closest("[data-tf]"); if (!b) return;
+  const id = b.dataset.tf; view.tagFilter.has(id) ? view.tagFilter.delete(id) : view.tagFilter.add(id);
+  renderTagbar(); applyTagFilter();
+});
+$("#langseg").addEventListener("click", e => {
+  const b = e.target.closest("[data-lang]"); if (!b) return;
+  view.lang = b.dataset.lang; saveView(); saveViewerPref(); applyUI(); syncControls(); render();
+});
 const PLACE = ["Compact", "Balanced", "Straight arrows"];
 function syncControls() {
   $("#mode-manual").setAttribute("aria-pressed", view.mode === "manual");
   $("#mode-untangle").setAttribute("aria-pressed", view.mode === "untangle");
-  $("#v-focus").value = view.focusR; $("#o-focus").textContent = view.focusR ? `${view.focusR} step${view.focusR > 1 ? "s" : ""} from the selected box` : "off";
+  $("#v-focus").value = view.focusR; $("#o-focus").textContent = view.focusR ? t("steps", view.focusR) : t("off");
   $("#v-trace").checked = view.trace;
   $$("[data-red]").forEach(b => b.setAttribute("aria-pressed", b.dataset.red === view.redundant));
   const un = view.mode === "untangle";
   $("#untangle-set").disabled = !un; $("#untangle-note").hidden = un; $("#manual-only").hidden = un;
-  $("#v-effort").value = view.effort; $("#o-effort").textContent = `${view.effort} · ${[1, 1, 3, 6, 10][view.effort - 1]} tr${view.effort > 2 ? "ies" : "y"}`;
-  $("#v-place").value = view.place; $("#o-place").textContent = PLACE[view.place];
+  $("#v-effort").value = view.effort; $("#o-effort").textContent = `${view.effort} · ${t("tries", [1, 1, 3, 6, 10][view.effort - 1])}`;
+  $("#v-place").value = view.place; $("#o-place").textContent = t("place" + view.place);
   $("#v-level").value = view.levelSp; $("#o-level").textContent = view.levelSp + " px";
   $("#v-node").value = view.nodeSp; $("#o-node").textContent = view.nodeSp + " px";
   $$("[data-route]").forEach(b => b.setAttribute("aria-pressed", b.dataset.route === view.route));
@@ -1068,7 +1483,7 @@ $("#depth").onchange = e => {
 $("#zin").onclick = () => cy.animate({ zoom: { level: cy.zoom() * 1.25, renderedPosition: { x: cy.width() / 2, y: cy.height() / 2 } } }, { duration: 150 });
 $("#zout").onclick = () => cy.animate({ zoom: { level: cy.zoom() / 1.25, renderedPosition: { x: cy.width() / 2, y: cy.height() / 2 } } }, { duration: 150 });
 $("#zfit").onclick = () => fitView(false, true);
-$("#doc-title").ondblclick = () => { const t = prompt("Name of this RCA", doc.title); if (t && t.trim() && t.trim() !== doc.title) commit(() => { doc.title = t.trim(); }); };
+$("#doc-title").ondblclick = () => { if (VIEWER) return; const l = curLang(); const v = prompt(`Name of this RCA (${langName(l)})`, txRaw(doc, "title", l)); if (v && v.trim() && v.trim() !== txRaw(doc, "title", l)) commit(() => txSet(doc, "title", l, v.trim())); };
 
 /* ================= Search ================= */
 let matches = [], matchIdx = -1;
@@ -1076,7 +1491,12 @@ function doSearch(jump) {
   const t = $("#q").value.trim().toLowerCase();
   cy.nodes().removeClass("match"); matches = [];
   if (!t) { $("#qcount").textContent = ""; return; }
-  const refs = new Set(doc.nodes.filter(n => (n.text + " " + n.notes + " " + n.sources.map(sourceSearchText).join(" ")).toLowerCase().includes(t)).map(n => n.id));
+  let refs;
+  if (t.startsWith("#")) { // #tag: boxes carrying a tag whose name (any language) or emoji matches
+    const q = t.slice(1);
+    const tagIds = new Set(doc.tags.filter(tg => !q || txAll(tg, "name").some(x => x.toLowerCase().includes(q)) || tg.emoji.includes(q)).map(tg => tg.id));
+    refs = new Set(doc.nodes.filter(n => (n.tags || []).some(x => tagIds.has(x))).map(n => n.id));
+  } else refs = new Set(doc.nodes.filter(n => (txAll(n).join(" ") + " " + (VIEWER ? "" : n.notes) + " " + n.sources.map(sourceSearchText).join(" ")).toLowerCase().includes(t)).map(n => n.id));
   matches = [...refs];
   cy.nodes().filter(n => refs.has(n.data("ref")) && !n.hasClass("badge")).addClass("match");
   $("#qcount").textContent = matches.length ? (matchIdx >= 0 && jump ? `${matchIdx + 1}/${matches.length}` : matches.length) : "0";
@@ -1147,9 +1567,10 @@ async function parseDrawio(raw) {
 /* ================= Files ================= */
 const FSA = "showOpenFilePicker" in window;
 function setDoc(d, name, handle) {
+  view.branch = null; if (GRADING) { GRADING = false; document.body.classList.remove("grading"); $("#work-edit").setAttribute("aria-pressed", true); $("#work-grade").setAttribute("aria-pressed", false); }
   doc = d; fileName = name; fileHandle = handle || null; dirty = false;
   undoStack.length = 0; redoStack.length = 0; selRef = selCopy = selEdge = null; multi = [];
-  view.folded.clear(); view.hiddenCats.clear(); view.diff = null; $("#diffbar").hidden = true; $("#depth").value = "all";
+  view.folded.clear(); view.hiddenCats.clear(); view.tagFilter.clear(); view.diff = null; $("#diffbar").hidden = true; $("#depth").value = "all";
   autosave(); render({ fit: true, readable: true });
 }
 async function loadText(text, name, handle) {
@@ -1157,8 +1578,10 @@ async function loadText(text, name, handle) {
   if (t.startsWith("{")) {
     let d; try { d = JSON.parse(t); } catch (e) { throw new Error("This file is not valid JSON."); }
     const nd = normalizeDoc(d); const mig = nd.meta.migratedKey; delete nd.meta.migratedKey;
+    const guessed = nd.meta._guessedLang; delete nd.meta._guessedLang;
     setDoc(nd, name, handle);
-    if (mig) { dirty = true; updateChrome(); toast(`Opened ${name}. Its colour key was updated to your meanings; save to keep it.`, 5500); }
+    if (guessed) { dirty = true; updateChrome(); toast(`Opened ${name}. It looks like ${langName(nd.languages[0])}; change that or add languages in File → Languages.`, 6500); }
+    else if (mig) { dirty = true; updateChrome(); toast(`Opened ${name}. Its colour key was updated to your meanings; save to keep it.`, 5500); }
     else toast(`Opened ${name}`);
   } else {
     const g = await parseDrawio(t);
@@ -1188,14 +1611,14 @@ function docText() { doc.app = APP_VERSION; return JSON.stringify(doc, null, 2) 
 async function saveFile(as) {
   flushField(true);
   if (FSA && fileHandle && !as) {
-    try { const w = await fileHandle.createWritable(); await w.write(docText()); await w.close(); dirty = false; updateChrome(); autosave(); toast(`Saved to ${fileHandle.name}`); return; }
+    try { const w = await fileHandle.createWritable(); await w.write(docText()); await w.close(); dirty = false; fileNeedsGesture = false; fileSavedAt = new Date(); updateChrome(); autosave(); toast(`Saved to ${fileHandle.name}. Later changes are saved to it automatically.`); return; }
     catch (e) { if (e.name === "AbortError") return; toast("Could not write to the file. Choose where to save it."); }
   }
   if (FSA && window.showSaveFilePicker) {
     try {
       const h = await window.showSaveFilePicker({ suggestedName: fileName, types: [{ description: "RCA file", accept: { "application/json": [".json"] } }] });
       const w = await h.createWritable(); await w.write(docText()); await w.close();
-      fileHandle = h; fileName = h.name; dirty = false; updateChrome(); autosave(); toast(`Saved to ${h.name}`); return;
+      fileHandle = h; fileName = h.name; dirty = false; fileNeedsGesture = false; fileSavedAt = new Date(); updateChrome(); autosave(); toast(`Saved to ${h.name}. Later changes are saved to it automatically.`); return;
     } catch (e) { if (e.name === "AbortError") return; }
   }
   download(fileName, docText(), "application/json");
@@ -1219,7 +1642,7 @@ function exportSVG() {
   const pad = 24, W = Math.ceil(bb.w + pad * 2), H = Math.ceil(bb.h + pad * 2), ox = pad - bb.x1, oy = pad - bb.y1;
   const P = p => `${(p.x + ox).toFixed(1)},${(p.y + oy).toFixed(1)}`;
   const out = [`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" font-family="IBM Plex Sans, Helvetica, Arial, sans-serif">`,
-    `<title>${esc(doc.title)}</title>`, `<rect width="100%" height="100%" fill="#ffffff"/>`];
+    `<title>${esc(tx(doc, "title"))}</title>`, `<rect width="100%" height="100%" fill="#ffffff"/>`];
   cy.edges().filter(e => e.visible()).forEach(e => {
     const pts = [e.sourceEndpoint(), ...(e.style("curve-style") === "segments" ? (e.segmentPoints() || []) : []), e.targetEndpoint()];
     if (pts.some(p => !p || !Number.isFinite(p.x))) return;
@@ -1233,6 +1656,11 @@ function exportSVG() {
   });
   cy.nodes().filter(n => n.visible()).forEach(n => {
     const d = n.data(), p = n.position();
+    if (n.hasClass("tagchip")) {
+      out.push(`<rect x="${(p.x - d.w / 2 + ox).toFixed(1)}" y="${(p.y - 10.5 + oy).toFixed(1)}" width="${d.w}" height="21" rx="10" fill="#ffffff" stroke="${edgeC}" stroke-width="1"/>`);
+      out.push(`<text x="${(p.x + ox).toFixed(1)}" y="${(p.y + oy).toFixed(1)}" font-size="13" font-family="Apple Color Emoji, Segoe UI Emoji, Noto Color Emoji, sans-serif" text-anchor="middle" dominant-baseline="central">${esc(d.label)}</text>`);
+      return;
+    }
     if (n.hasClass("badge")) {
       out.push(`<rect x="${(p.x - d.w / 2 + ox).toFixed(1)}" y="${(p.y - 9.5 + oy).toFixed(1)}" width="${d.w}" height="19" rx="9" fill="${ink}" stroke="#ffffff" stroke-width="2"/>`);
       out.push(`<text x="${(p.x + ox).toFixed(1)}" y="${(p.y + oy).toFixed(1)}" font-size="12" font-weight="600" fill="#ffffff" text-anchor="middle" dominant-baseline="central">${esc(d.label)}</text>`);
@@ -1242,7 +1670,7 @@ function exportSVG() {
     const op = n.hasClass("refuted") ? ` opacity="0.5"` : n.hasClass("ref") ? ` opacity="0.8"` : "";
     out.push(`<g${op}><rect x="${(p.x - d.w / 2 + ox).toFixed(1)}" y="${(p.y - d.h / 2 + oy).toFixed(1)}" width="${d.w}" height="${d.h}" rx="7" fill="${d.fill}" stroke="${d.stroke}" stroke-width="${d.bw}"${dash}/>`);
     const lines = measureText(d.label).lines; const y0 = p.y - (lines.length - 1) * LINE / 2;
-    const fw = n.hasClass("q") ? ` font-weight="700" font-size="15"` : ` font-size="${FONT_PX}"`;
+    const fw = (n.hasClass("q") ? ` font-weight="700" font-size="15"` : ` font-size="${FONT_PX}"`) + (d.fs === "italic" ? ` font-style="italic"` : "");
     lines.forEach((l, i) => out.push(`<text x="${(p.x + ox).toFixed(1)}" y="${(y0 + i * LINE + oy).toFixed(1)}"${fw} fill="${d.font}" text-anchor="middle" dominant-baseline="central">${esc(l)}</text>`));
     out.push(`</g>`);
   });
@@ -1264,23 +1692,26 @@ function exportDrawio() {
   const cells = ['<mxCell id="0"/>', '<mxCell id="1" parent="0"/>'];
   const idOf = new Map(doc.nodes.map((n, i) => [n.id, "n" + i]));
   doc.nodes.forEach(n => {
-    const c = catById(n.cat), m = measureText(n.text), st = STATUSES[n.status];
+    const c = catById(n.cat), m = boxSize(n), st = STATUSES[n.status];
     const stroke = st.color || n.outline || c.stroke;
     const style = `rounded=1;whiteSpace=wrap;html=1;fontSize=13;fillColor=${c.fill};strokeColor=${stroke};fontColor=${c.font};` +
       (st.style === "dashed" ? "dashed=1;" : st.style === "dotted" ? "dashed=1;dashPattern=1 2;" : "") + (st.width > 2 ? "strokeWidth=2;" : "");
     const tip = [n.notes, n.sources.length ? "Sources: " + n.sources.join("; ") : ""].filter(Boolean).join("\n");
-    cells.push(`<UserObject label="${xmlEsc(n.text)}"${tip ? ` tooltip="${xmlEsc(tip)}"` : ""} status="${n.status}" id="${idOf.get(n.id)}"><mxCell style="${style}" vertex="1" parent="1"><mxGeometry x="${Math.round(n.x - m.w / 2)}" y="${Math.round(n.y - m.h / 2)}" width="${m.w}" height="${m.h}" as="geometry"/></mxCell></UserObject>`);
+    const tg = orderedTags(n.tags || []).map(x => x.emoji + " " + tx(x, "name")).join("; ");
+    cells.push(`<UserObject label="${xmlEsc(tx(n))}"${tip ? ` tooltip="${xmlEsc(tip)}"` : ""}${tg ? ` tags="${xmlEsc(tg)}"` : ""} status="${n.status}" id="${idOf.get(n.id)}"><mxCell style="${style}" vertex="1" parent="1"><mxGeometry x="${Math.round(n.x - m.w / 2)}" y="${Math.round(n.y - m.h / 2)}" width="${m.w}" height="${m.h}" as="geometry"/></mxCell></UserObject>`);
   });
   doc.edges.forEach((e, i) => cells.push(`<mxCell id="a${i}" style="rounded=0;html=1;endArrow=classic;" edge="1" parent="1" source="${idOf.get(e.source)}" target="${idOf.get(e.target)}"><mxGeometry relative="1" as="geometry"/></mxCell>`));
-  const xml = `<mxfile host="uchuva-rca"><diagram name="${xmlEsc(doc.title)}" id="rca"><mxGraphModel><root>\n${cells.join("\n")}\n</root></mxGraphModel></diagram></mxfile>\n`;
-  download(baseName() + ".drawio", xml, "application/xml"); toast("draw.io file exported (uses the positions from My layout).");
+  const xml = `<mxfile host="uchuva-rca"><diagram name="${xmlEsc(tx(doc, "title"))}" id="rca"><mxGraphModel><root>\n${cells.join("\n")}\n</root></mxGraphModel></diagram></mxfile>\n`;
+  const sfx = doc.languages.length > 1 ? "-" + curLang() : "";
+  download(baseName() + sfx + ".drawio", xml, "application/xml"); toast(`draw.io file exported in ${langName(curLang())}, with the positions from My layout.`);
 }
 function exportGraphML() {
-  const keys = [["text", "node"], ["category", "node"], ["status", "node"], ["notes", "node"], ["sources", "node"], ["x", "node", "double"], ["y", "node", "double"]];
+  const L = doc.languages;
+  const keys = [...L.map(l => ["text_" + l, "node"]), ["tags", "node"], ["category", "node"], ["status", "node"], ["notes", "node"], ["sources", "node"], ["x", "node", "double"], ["y", "node", "double"]];
   const out = [`<?xml version="1.0" encoding="UTF-8"?>`, `<graphml xmlns="http://graphml.graphdrawing.org/xmlns">`,
     ...keys.map(([k, f, t]) => `  <key id="${k}" for="${f}" attr.name="${k}" attr.type="${t || "string"}"/>`),
     `  <graph id="rca" edgedefault="directed">`];
-  doc.nodes.forEach(n => out.push(`    <node id="${xmlEsc(n.id)}"><data key="text">${xmlEsc(n.text)}</data><data key="category">${xmlEsc(catById(n.cat).name)}</data><data key="status">${n.status}</data><data key="notes">${xmlEsc(n.notes)}</data><data key="sources">${xmlEsc(n.sources.join(" | "))}</data><data key="x">${n.x}</data><data key="y">${n.y}</data></node>`));
+  doc.nodes.forEach(n => out.push(`    <node id="${xmlEsc(n.id)}">${L.map(l => `<data key="text_${l}">${xmlEsc(txRaw(n, "text", l))}</data>`).join("")}<data key="tags">${xmlEsc(orderedTags(n.tags || []).map(x => x.name).join(" | "))}</data><data key="category">${xmlEsc(catById(n.cat).name)}</data><data key="status">${n.status}</data><data key="notes">${xmlEsc(n.notes)}</data><data key="sources">${xmlEsc(n.sources.join(" | "))}</data><data key="x">${n.x}</data><data key="y">${n.y}</data></node>`));
   doc.edges.forEach(e => out.push(`    <edge id="${xmlEsc(e.id)}" source="${xmlEsc(e.source)}" target="${xmlEsc(e.target)}"/>`));
   out.push(`  </graph>`, `</graphml>`, "");
   download(baseName() + ".graphml", out.join("\n"), "application/xml");
@@ -1289,10 +1720,11 @@ const csvCell = v => { const s = String(v ?? ""); return /[",\n]/.test(s) ? `"${
 function exportCSV(which) {
   const A = analyze();
   let rows;
-  if (which === "nodes") rows = [["id", "text", "category", "status", "level", "chains_to_rejection", "notes", "sources"],
-    ...doc.nodes.map(n => [n.id, n.text, catById(n.cat).name, n.status, A.depth.get(n.id) || "", A.paths.get(n.id) || "", n.notes, n.sources.join(" | ")])];
+  const L = doc.languages;
+  if (which === "nodes") rows = [["id", ...L.map(l => "text_" + l), "category", "tags", "status", "level", "chains_to_rejection", "notes", "sources"],
+    ...doc.nodes.map(n => [n.id, ...L.map(l => txRaw(n, "text", l)), tx(catById(n.cat), "name"), orderedTags(n.tags || []).map(x => tx(x, "name")).join(" | "), n.status, A.depth.get(n.id) || "", A.paths.get(n.id) || "", n.notes, n.sources.join(" | ")])];
   else rows = [["source_id", "source_text", "target_id", "target_text"],
-    ...doc.edges.map(e => [e.source, nodeById(e.source).text, e.target, nodeById(e.target).text])];
+    ...doc.edges.map(e => [e.source, tx(nodeById(e.source)), e.target, tx(nodeById(e.target))])];
   download(`${baseName()}-${which === "nodes" ? "boxes" : "arrows"}.csv`, "﻿" + rows.map(r => r.map(csvCell).join(",")).join("\r\n") + "\r\n", "text/csv");
 }
 
@@ -1300,7 +1732,8 @@ function exportCSV(which) {
 function diffCores(a, b) { // a = old snapshot, b = new
   const an = new Map(a.nodes.map(n => [n.id, n])), bn = new Map(b.nodes.map(n => [n.id, n]));
   const added = b.nodes.filter(n => !an.has(n.id)), removed = a.nodes.filter(n => !bn.has(n.id));
-  const changed = b.nodes.filter(n => { const o = an.get(n.id); return o && (o.text !== n.text || o.cat !== n.cat || o.status !== n.status || o.notes !== n.notes || (o.sources || []).join("\n") !== (n.sources || []).join("\n")); });
+  const trs = n => JSON.stringify(n.textTr || {}), tgs = n => (n.tags || []).join(",");
+  const changed = b.nodes.filter(n => { const o = an.get(n.id); return o && (o.text !== n.text || trs(o) !== trs(n) || tgs(o) !== tgs(n) || o.cat !== n.cat || o.status !== n.status || o.notes !== n.notes || (o.sources || []).join("\n") !== (n.sources || []).join("\n")); });
   const k = e => e.source + ">" + e.target;
   const ae = new Set(a.edges.map(k)), be = new Set(b.edges.map(k));
   return { added, removed, changed, edgesAdded: b.edges.filter(e => !ae.has(k(e))), edgesRemoved: a.edges.filter(e => !be.has(k(e))), an, bn };
@@ -1343,10 +1776,10 @@ $("#ver-list").addEventListener("click", e => {
     const d = diffCores(v.snapshot, coreOf(doc));
     const box = $("#ver-diff"); box.hidden = false;
     const li = arr => arr.length ? `<ul>${arr.slice(0, 40).map(x => `<li>${esc(x)}</li>`).join("")}${arr.length > 40 ? `<li>…and ${arr.length - 40} more</li>` : ""}</ul>` : `<p class="muted">None.</p>`;
-    const et = (e, m) => `${(m.get(e.source) || {}).text || e.source} → ${(m.get(e.target) || {}).text || e.target}`;
+    const et = (e, m) => `${tx(m.get(e.source) || {}) || e.source} → ${tx(m.get(e.target) || {}) || e.target}`;
     box.innerHTML = `<h4>Now compared with “${esc(v.name)}”</h4>${chgLine(d)}
-      <b>New boxes</b>${li(d.added.map(n => n.text))}<b>Edited boxes</b>${li(d.changed.map(n => { const o = d.an.get(n.id); return o.text !== n.text ? `${o.text} ⟶ ${n.text}` : n.text; }))}
-      <b>Removed boxes</b>${li(d.removed.map(n => n.text))}<b>New arrows</b>${li(d.edgesAdded.map(e => et(e, d.bn)))}<b>Removed arrows</b>${li(d.edgesRemoved.map(e => et(e, d.an)))}
+      <b>New boxes</b>${li(d.added.map(n => tx(n)))}<b>Edited boxes</b>${li(d.changed.map(n => { const o = d.an.get(n.id); return o.text !== n.text ? `${o.text} ⟶ ${n.text}` : tx(n); }))}
+      <b>Removed boxes</b>${li(d.removed.map(n => tx(n)))}<b>New arrows</b>${li(d.edgesAdded.map(e => et(e, d.bn)))}<b>Removed arrows</b>${li(d.edgesRemoved.map(e => et(e, d.an)))}
       <div class="row"><button class="btn primary" id="vd-show">Highlight on the graph</button></div>`;
     $("#vd-show").onclick = () => {
       view.diff = { added: new Set(d.added.map(n => n.id)), changed: new Set(d.changed.map(n => n.id)), name: v.name };
@@ -1364,7 +1797,7 @@ let catDraft = [], catMoves = {}, catAssign = null;
 function openCats(assignRef) {
   catDraft = clone(doc.categories); catMoves = {}; catAssign = null; drawCats(); $("#m-cats").hidden = false;
   if (typeof assignRef === "string") { // "New category…" from a box: add a row, and give the box that category on Apply
-    const c = { id: uid("c"), name: "New category", role: "none", desc: "", fill: "#c8e6c9", stroke: "#2e7d32", font: "#1a1a1a" };
+    const c = { id: uid("c"), name: "New category", nameTr: {}, role: "none", desc: "", fill: "#c8e6c9", stroke: "#2e7d32", font: "#1a1a1a" };
     catDraft.push(c); catAssign = { ref: assignRef, cat: c.id }; drawCats();
     setTimeout(() => { const el = $(`#cat-name-${catDraft.length - 1}`); if (el) { el.focus(); el.select(); el.scrollIntoView({ block: "nearest" }); } }, 20);
   }
@@ -1399,6 +1832,7 @@ function drawCats() {
       <label>outline<input type="color" id="cat-stroke-${i}" value="${c.stroke}"></label>
       <label>text<input type="color" id="cat-font-${i}" value="${c.font}"></label>
     </div>
+    ${doc.languages.length > 1 ? `<div class="catrow3">${doc.languages.slice(1).map(l => `<label class="trin"><b>${esc(l.toUpperCase())}</b><input type="text" data-trl="${esc(l)}" value="${esc((c.nameTr || {})[l] || "")}" placeholder="${esc(langName(l))} name"></label>`).join("")}</div>` : ""}
     <div class="catrow2">
       <input type="text" id="cat-desc-${i}" value="${esc(c.desc || "")}" placeholder="What this colour means" aria-label="Meaning">
       <select id="cat-role-${i}" aria-label="Rule" title="${esc(ROLES[c.role || "none"].hint)}">${Object.entries(ROLES).map(([k, r]) => `<option value="${k}"${(c.role || "none") === k ? " selected" : ""}>${k === "none" ? "No rule" : "Acts as: " + r.name}</option>`).join("")}</select>
@@ -1415,7 +1849,9 @@ function drawCats() {
   </div>`; }).join("");
 }
 $("#cat-rows").addEventListener("input", e => {
-  const card = e.target.closest(".catcard"); if (!card || !e.target.id) return; const c = catDraft[+card.dataset.i];
+  const card = e.target.closest(".catcard"); if (!card) return;
+  if (e.target.dataset.trl) { const c = catDraft[+card.dataset.i]; c.nameTr = c.nameTr || {}; c.nameTr[e.target.dataset.trl] = e.target.value.trim(); return; }
+  if (!e.target.id) return; const c = catDraft[+card.dataset.i];
   const k = e.target.id.split("-")[1]; c[k] = e.target.value;
   const pv = card.querySelector(".prev"); pv.style.background = c.fill; pv.style.borderColor = c.stroke; pv.style.color = c.font; pv.textContent = c.name || "Unnamed";
 });
@@ -1439,15 +1875,15 @@ $("#cat-rows").addEventListener("click", e => {
     const i = +b.dataset.cshade, c = catDraft[i], step = +b.dataset.step;
     const base = c.name.replace(/ \((lighter|darker)( \d+)?\)$/, ""), dir = step > 0 ? "darker" : "lighter";
     let nm = `${base} (${dir})`, k = 2; while (catDraft.some(o => o.name === nm)) nm = `${base} (${dir} ${k++})`;
-    catDraft.splice(i + 1, 0, { id: uid("c"), name: nm, role: c.role, desc: c.desc, ...shadeOf(c, step) });
+    catDraft.splice(i + 1, 0, { id: uid("c"), name: nm, nameTr: {}, role: c.role, desc: c.desc, ...shadeOf(c, step) });
     drawCats(); setTimeout(() => { const el = $(`#cat-name-${i + 1}`); if (el) { el.focus(); el.select(); } }, 20);
   }
 });
-$("#cat-add").onclick = () => { catDraft.push({ id: uid("c"), name: "New category", role: "none", desc: "", fill: "#c8e6c9", stroke: "#2e7d32", font: "#1a1a1a" }); drawCats();
+$("#cat-add").onclick = () => { catDraft.push({ id: uid("c"), name: "New category", nameTr: {}, role: "none", desc: "", fill: "#c8e6c9", stroke: "#2e7d32", font: "#1a1a1a" }); drawCats();
   setTimeout(() => { const el = $(`#cat-name-${catDraft.length - 1}`); if (el) { el.focus(); el.select(); } }, 20); };
 $("#cat-save").onclick = () => {
   const moves = { ...catMoves };
-  const d = clone(catDraft).filter(c => moves[c.id] === undefined).map(c => ({ ...c, name: c.name.trim() || "Unnamed" }));
+  const d = clone(catDraft).filter(c => moves[c.id] === undefined).map(c => ({ ...c, name: c.name.trim() || "Unnamed", nameTr: trObj(c.nameTr) }));
   if (!d.length) return toast("Keep at least one category.");
   $("#m-cats").hidden = true;
   commit(() => {
@@ -1458,6 +1894,158 @@ $("#cat-save").onclick = () => {
   });
   catAssign = null;
   toast("Colour key updated. Ctrl Z to undo.");
+};
+
+/* ================= Tag editor ================= */
+let tagDraft = null;
+function openTags() {
+  if (VIEWER) return;
+  tagDraft = { groups: clone(doc.tagGroups), tags: clone(doc.tags) };
+  drawTags(); $("#m-tags").hidden = false;
+}
+function drawTags() {
+  const L = doc.languages, counts = {}; doc.nodes.forEach(n => (n.tags || []).forEach(x => (counts[x] = (counts[x] || 0) + 1)));
+  const trInputs = (o, kind, i) => L.slice(1).map(l => `<label class="trin"><b>${esc(l.toUpperCase())}</b><input type="text" data-k="${kind}" data-i="${i}" data-trl="${esc(l)}" value="${esc((o.nameTr || {})[l] || "")}" placeholder="${esc(langName(l))}"></label>`).join("");
+  $("#tag-rows").innerHTML = (tagDraft.tags.length ? "" : `<div class="tagempty"><p class="muted">No tags yet. Start from the stages of a fresh-produce export chain (culture care → harvest → calyx drying → sorting → packing → storage → transport → port → sea freight, plus monitoring and communication), or add your own.</p><button class="btn" id="tag-template">Add the example stage set</button></div>`) +
+    tagDraft.groups.map((g, gi) => `<div class="tgroup">
+      <div class="tg-head"><input type="text" class="tg-name" data-k="g" data-i="${gi}" value="${esc(g.name)}" placeholder="Group name" aria-label="Group name">${trInputs(g, "g", gi)}</div>
+      ${tagDraft.tags.map((tg, i) => tg.group !== g.id ? "" : `<div class="trow">
+        <span class="emo"><input type="text" class="emoji-in" data-k="emoji" data-i="${i}" value="${esc(tg.emoji)}" aria-label="Emoji"><button type="button" class="btn small icon" data-epal="${i}" title="Pick an emoji" aria-label="Pick an emoji">▾</button></span>
+        <input type="text" data-k="name" data-i="${i}" value="${esc(tg.name)}" placeholder="Name" aria-label="Tag name">
+        ${trInputs(tg, "t", i)}
+        <input type="text" class="tdesc" data-k="desc" data-i="${i}" value="${esc(tg.desc || "")}" placeholder="What it covers (only for you)" aria-label="Description">
+        <select data-k="group" data-i="${i}" aria-label="Group">${tagDraft.groups.map(o => `<option value="${esc(o.id)}"${o.id === tg.group ? " selected" : ""}>${esc(o.name)}</option>`).join("")}</select>
+        <span class="tcount">${counts[tg.id] || 0}</span>
+        <span class="catacts"><button class="btn small icon" data-tup="${i}" title="Move earlier in the chain" aria-label="Move up">↑</button><button class="btn small icon" data-tdown="${i}" title="Move later in the chain" aria-label="Move down">↓</button><button class="btn small icon" data-tdel="${i}" title="Delete tag" aria-label="Delete tag">×</button></span>
+      </div>`).join("")}
+      <button class="btn small" data-tadd="${esc(g.id)}">＋ Add a tag to ${esc(g.name || "this group")}</button></div>`).join("");
+  $("#tag-template") && ($("#tag-template").onclick = () => {
+    const tpl = stageTags(doc.languages); const have = new Set(tagDraft.tags.map(x => x.id));
+    tagDraft.groups.forEach(g => { if (!g.name) { const d = groupsFor(doc.languages).find(x => x.id === g.id); if (d) Object.assign(g, d); } });
+    tpl.forEach(x => { if (!have.has(x.id)) tagDraft.tags.push(x); }); drawTags();
+  });
+}
+$("#tag-rows").addEventListener("input", e => {
+  const el = e.target, k = el.dataset.k, i = +el.dataset.i; if (!k) return;
+  if (k === "g") { const g = tagDraft.groups[i]; if (el.dataset.trl) { g.nameTr = g.nameTr || {}; g.nameTr[el.dataset.trl] = el.value.trim(); } else g.name = el.value; return; }
+  const tg = tagDraft.tags[i];
+  if (el.dataset.trl) { tg.nameTr = tg.nameTr || {}; tg.nameTr[el.dataset.trl] = el.value.trim(); }
+  else if (k !== "group") tg[k] = el.value;
+});
+$("#tag-rows").addEventListener("change", e => { const el = e.target; if (el.dataset.k === "group") { tagDraft.tags[+el.dataset.i].group = el.value; drawTags(); } });
+$("#tag-rows").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  const T = tagDraft.tags;
+  if (b.dataset.tadd) { T.push({ id: uid("t"), emoji: "🏷️", name: "", nameTr: {}, group: b.dataset.tadd, desc: "" }); drawTags(); setTimeout(() => { const el = $(`#tag-rows input[data-k="name"][data-i="${T.length - 1}"]`); el && el.focus(); }, 20); }
+  if (b.dataset.tdel !== undefined) { const i = +b.dataset.tdel, used = doc.nodes.filter(n => (n.tags || []).includes(T[i].id)).length;
+    if (!used || confirm(`Remove “${T[i].name}” from ${used} box${used > 1 ? "es" : ""} and delete it?`)) { T.splice(i, 1); drawTags(); } }
+  const move = (i, dir) => { // swap with the neighbour in the same group
+    const g = T[i].group; let j = i + dir; while (j >= 0 && j < T.length && T[j].group !== g) j += dir;
+    if (j >= 0 && j < T.length) { [T[i], T[j]] = [T[j], T[i]]; drawTags(); } };
+  if (b.dataset.tup !== undefined) move(+b.dataset.tup, -1);
+  if (b.dataset.tdown !== undefined) move(+b.dataset.tdown, 1);
+  if (b.dataset.epal !== undefined) openEmojiPalette(b, +b.dataset.epal);
+});
+function openEmojiPalette(anchor, i) {
+  const pop = $("#emoji-pop"); const r = anchor.getBoundingClientRect(), box = $("#m-tags .modal").getBoundingClientRect();
+  pop.innerHTML = EMOJI_PALETTE.map(em => `<button type="button" data-em="${em}">${em}</button>`).join("") + `<p class="muted">Or type any emoji in the box (Windows: Win + . · Mac: Ctrl + Cmd + Space).</p>`;
+  pop.style.left = Math.max(8, r.left - box.left - 8) + "px"; pop.style.top = (r.bottom - box.top + $("#m-tags .modal").scrollTop + 4) + "px";
+  pop.hidden = false; pop.dataset.i = i;
+}
+$("#emoji-pop").addEventListener("click", e => {
+  const b = e.target.closest("[data-em]"); if (!b) return;
+  const pop = $("#emoji-pop"); tagDraft.tags[+pop.dataset.i].emoji = b.dataset.em; pop.hidden = true; drawTags();
+});
+document.addEventListener("pointerdown", e => { const pop = $("#emoji-pop"); if (!pop.hidden && !e.target.closest("#emoji-pop") && !e.target.closest("[data-epal]")) pop.hidden = true; });
+$("#tag-save").onclick = () => {
+  const groups = tagDraft.groups.map(g => ({ ...g, name: g.name.trim() || "Group", nameTr: trObj(g.nameTr) }));
+  const tags = tagDraft.tags.filter(tg => tg.name.trim() || tg.emoji.trim()).map(tg => ({ ...tg, name: tg.name.trim() || tg.emoji, emoji: tg.emoji.trim() || "🏷️", nameTr: trObj(tg.nameTr) }));
+  const ids = new Set(tags.map(tg => tg.id));
+  $("#m-tags").hidden = true;
+  commit(() => {
+    doc.tagGroups = groups; doc.tags = tags;
+    doc.nodes.forEach(n => { n.tags = tags.filter(tg => (n.tags || []).includes(tg.id)).map(tg => tg.id); });
+    [...view.tagFilter].forEach(x => { if (!ids.has(x)) view.tagFilter.delete(x); });
+  });
+  toast("Tags updated. Ctrl Z to undo.");
+};
+
+/* ================= Languages ================= */
+function openLangs() {
+  if (VIEWER) return;
+  const L = doc.languages, miss = missingSummary();
+  const free = Object.keys(LANG_NAMES).filter(l => !L.includes(l));
+  $("#lang-body").innerHTML = `
+    <div class="langlist">${L.map((l, i) => `<div class="langrow">
+      <span class="lcode">${esc(l.toUpperCase())}</span><span class="lname">${esc(langName(l))}${i === 0 ? ` <span class="pill">main</span>` : ""}</span>
+      ${i === 0 ? `${(m => m && (m.boxes || m.other) ? `<span class="lmiss">${m.boxes} box${m.boxes === 1 ? "" : "es"} and ${m.other} other text${m.other === 1 ? "" : "s"} missing</span>${m.boxes ? `<button class="btn small" data-trpass="${esc(l)}">Translate one by one</button>` : ""}` : "")(miss.find(m => m.l === l))}<label class="relabel">The main text is written in <select id="lang-relabel">${[l, ...Object.keys(LANG_NAMES).filter(x => !L.includes(x))].map(x => `<option value="${esc(x)}"${x === l ? " selected" : ""}>${esc(langName(x))}</option>`).join("")}</select></label>`
+        : `<span class="lmiss">${(m => m && (m.boxes || m.other) ? `${m.boxes} box${m.boxes === 1 ? "" : "es"} and ${m.other} other text${m.other === 1 ? "" : "s"} missing` : "")(miss.find(m => m.l === l))}</span>
+           <span class="row">${(miss.find(m => m.l === l) || {}).boxes ? `<button class="btn small" data-trpass="${esc(l)}">Translate one by one</button>` : ""}<button class="btn small" data-lmain="${esc(l)}">Make main</button><button class="btn small danger" data-ldel="${esc(l)}">Remove</button></span>`}
+    </div>`).join("")}</div>
+    <div class="row"><select id="lang-add-sel" aria-label="Language to add">${free.map(l => `<option value="${l}">${esc(langName(l))}</option>`).join("")}<option value="__other">Other (type a code)…</option></select><button class="btn" id="lang-add">Add language</button></div>
+    <h4>Title</h4>
+    <div class="titlerows">${L.map(l => `<label class="trin wide"><b>${esc(l.toUpperCase())}</b><input type="text" data-title="${esc(l)}" value="${esc(txRaw(doc, "title", l))}" placeholder="${esc(langName(l))} title"></label>`).join("")}</div>
+    <p class="muted">Box texts are asked for in each language as you type them: Enter moves on to the next language. Category and tag names have one field per language in their editors. Notes stay in one language; they are only for you.</p>`;
+  $("#m-langs").hidden = false;
+}
+$("#lang-body").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  if (b.id === "lang-add") {
+    let l = $("#lang-add-sel").value;
+    if (l === "__other") { l = (prompt("Two-letter language code, for example pt or zh") || "").trim().toLowerCase(); if (!/^[a-z]{2,3}(-[a-z0-9]+)?$/.test(l)) return l && toast("That is not a language code."); }
+    if (doc.languages.includes(l)) return;
+    commit(() => { doc.languages.push(l); }).then(openLangs);
+    toast(`${langName(l)} added. New boxes now ask for it; use Translate one by one for the existing ones.`, 5000);
+  }
+  if (b.dataset.lmain) makeMainLang(b.dataset.lmain).then(openLangs);
+  if (b.dataset.ldel) { const l = b.dataset.ldel;
+    if (!confirm(`Remove ${langName(l)} and all its translations? Ctrl Z brings them back.`)) return;
+    commit(() => { everyTranslatable(doc, (o, f) => { if (o[f + "Tr"]) delete o[f + "Tr"][l]; }); doc.languages = doc.languages.filter(x => x !== l); }).then(openLangs);
+    if (view.lang === l) view.lang = null; }
+  if (b.dataset.trpass) translatePass(b.dataset.trpass);
+});
+$("#lang-body").addEventListener("change", e => {
+  if (e.target.id === "lang-relabel") { const l = e.target.value; commit(() => { doc.languages[0] = l; }).then(openLangs); toast(`The main text is now marked as ${langName(l)}.`); }
+  if (e.target.dataset.title) { const l = e.target.dataset.title, v = e.target.value.trim(); commit(() => txSet(doc, "title", l, v)); }
+});
+function makeMainLang(l) { // the chosen language becomes the main field everywhere; the old main moves into the translations
+  const old = mainLang(); if (l === old) return Promise.resolve();
+  const r = commit(() => {
+    everyTranslatable(doc, (o, f) => {
+      const tr = o[f + "Tr"] = o[f + "Tr"] || {}; const nv = tr[l] || "", ov = o[f] || "";
+      if (!nv && ov && neutralText(ov)) return; // "?" boxes read the same in every language
+      delete tr[l]; if (ov) tr[old] = ov; o[f] = nv;
+    });
+    doc.languages = [l, ...doc.languages.filter(x => x !== l)];
+  });
+  toast(`${langName(l)} is now the main language.`); return r;
+}
+
+/* ================= New RCA ================= */
+function openNew() {
+  if (dirty && !confirm("You have unsaved changes. Start a new RCA anyway?")) return;
+  $("#new-main").innerHTML = Object.keys(LANG_NAMES).map(l => `<option value="${l}">${esc(langName(l))}</option>`).join("");
+  $("#new-main").value = "en"; drawNewExtra(); $("#new-title").value = ""; $("#m-new").hidden = false; $("#new-title").focus();
+}
+function drawNewExtra() {
+  const main = $("#new-main").value;
+  $("#new-extra").innerHTML = Object.keys(LANG_NAMES).filter(l => l !== main).map(l => `<label class="chk"><input type="checkbox" value="${l}"> ${esc(langName(l))}</label>`).join("");
+}
+$("#new-main").onchange = drawNewExtra;
+$("#new-form").onsubmit = e => {
+  e.preventDefault();
+  const langs = [$("#new-main").value, ...$$("#new-extra input:checked").map(i => i.value)];
+  const d = emptyDoc(); d.languages = langs; d.title = $("#new-title").value.trim() || (langs[0] === "es" ? "Nuevo análisis de causa raíz" : "New root-cause analysis");
+  d.tagGroups = groupsFor(langs); d.tags = [];
+  const cats = clone(DEFAULT_CATS);
+  const ES = { problem: "Problema raíz", cause: "Causa intermedia", fact: "Causa raíz", plant: "Incierto", question: "Pregunta abierta" };
+  cats.forEach(c => { c.nameTr = {}; if (langs[0] === "es") { const en = c.name; c.name = ES[c.id]; if (langs.includes("en")) c.nameTr.en = en; } else if (langs.includes("es")) c.nameTr.es = ES[c.id]; });
+  d.categories = cats;
+  const root = newNode(langs[0] === "es" ? "Problema observado" : "Problem observed", "problem", 0, 0); d.nodes = [root];
+  d.versions = [mkVersion(d, "Started", "")];
+  $("#m-new").hidden = true;
+  setDoc(d, "new-rca.json", null); view.lang = null;
+  setTimeout(() => { selRef = root.id; selCopy = root.id; multi = [root.id]; applySelection(); renderPanel(); inlineEdit(root.id, false); }, 400);
 };
 
 /* ================= Paste draw.io ================= */
@@ -1601,10 +2189,510 @@ function attachBibComplete(ta) {
   pop.addEventListener("mousedown", e => { const o = e.target.closest(".opt"); if (o) { e.preventDefault(); pick(+o.dataset.i); } });
 }
 
+/* ================= Publishing: public copy, share links, deep links ================= */
+const LS_BASE = "uchuva-rca:site";
+function bytesToB64url(bytes) { let s = ""; for (let i = 0; i < bytes.length; i += 0x8000) s += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000)); return btoa(s).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, ""); }
+function b64urlToBytes(str) { str = str.replace(/-/g, "+").replace(/_/g, "/"); while (str.length % 4) str += "="; return Uint8Array.from(atob(str), c => c.charCodeAt(0)); }
+async function deflateRawText(text) { const cs = new CompressionStream("deflate-raw"); return new Uint8Array(await new Response(new Blob([new TextEncoder().encode(text)]).stream().pipeThrough(cs)).arrayBuffer()); }
+function compactForLink(d) { // shorter ids and no arrow ids: the link carries less, the diagram is the same
+  const map = new Map(d.nodes.map((n, i) => [n.id, i.toString(36)]));
+  const c = clone(d);
+  c.nodes.forEach(n => { n.id = map.get(n.id); });
+  c.edges = c.edges.map(e => [map.get(e.source), map.get(e.target)]);
+  c.edgeList = 1; delete c.meta;
+  return c;
+}
+async function encodeShare(obj) { return "1" + bytesToB64url(await deflateRawText(JSON.stringify(compactForLink(obj)))); }
+async function decodeShare(str) {
+  if (str[0] !== "1") throw new Error("This link was made by a newer version of the tool.");
+  const d = JSON.parse(await inflateRaw(b64urlToBytes(str.slice(1))));
+  if (d.edgeList) { d.edges = d.edges.map(([s, t], i) => ({ id: "e" + i, source: s, target: t })); delete d.edgeList; }
+  return d;
+}
+function publishedDoc(o) { // a copy for the public: strips what is only for the researcher, drops empty fields
+  const d = { format: "uchuva-rca", schema: 2, app: APP_VERSION, ...clone(coreOf(doc)) };
+  d.nodes = d.nodes.map(n => {
+    const r = { ...n }; delete r.origin;
+    if (!o.notes || !r.notes) delete r.notes;
+    if (!o.sources || !(r.sources || []).length) delete r.sources;
+    if (!o.status || r.status === "unassessed") delete r.status;
+    if (!Object.keys(r.textTr || {}).length) delete r.textTr;
+    if (!(r.tags || []).length) delete r.tags;
+    return r;
+  });
+  d.categories = d.categories.map(c => { const r = { ...c }; if (!o.notes) r.desc = ""; return r; });
+  d.tags = d.tags.map(tg => ({ ...tg, desc: o.notes ? tg.desc : "" }));
+  d.versions = o.versions ? clone(doc.versions) : [];
+  if (o.sources && bib.entries.length) {
+    const keys = new Set(); doc.nodes.forEach(n => (n.sources || []).forEach(x => { const r = bibLookup(x); if (r && r.entry) keys.add(r.entry.key); }));
+    if (keys.size) d.bib = bib.entries.filter(e => keys.has(e.key)).map(({ key, author, year, title, venue }) => ({ key, author, year, title, venue }));
+  }
+  d.viewDefaults = { lang: o.lang, mode: o.mode };
+  d.meta = { published: nowISO() };
+  return d;
+}
+const pageBase = () => location.href.split(/[?#]/)[0];
+function siteBase() { const v = ($("#pub-base") && $("#pub-base").value.trim()) || lsGet(LS_BASE) || ""; return v || (location.protocol.startsWith("http") ? pageBase() : ""); }
+function deepLink(extra = {}) {
+  const q = new URLSearchParams();
+  const src = new URLSearchParams(location.search).get("src"); if (src) q.set("src", src);
+  if (doc.languages.length > 1) q.set("lang", curLang());
+  if (view.mode === "untangle") q.set("mode", "untangle");
+  if (view.split) q.set("split", "1");
+  if (view.branch) q.set("branch", view.branch);
+  if (view.focusR) q.set("radius", view.focusR);
+  if (view.tagFilter.size) q.set("tags", [...view.tagFilter].join(","));
+  Object.entries(extra).forEach(([k, v]) => q.set(k, v));
+  const hash = location.hash.startsWith("#d=") ? location.hash : "";
+  return pageBase() + "?" + q.toString() + hash;
+}
+function copyText(text, msg) {
+  const done = () => toast(msg || "Copied");
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, () => prompt("Copy this:", text));
+  else prompt("Copy this:", text);
+}
+function pubOpts() {
+  return { notes: $("#pub-notes").checked, sources: $("#pub-sources").checked, status: $("#pub-status").checked, versions: $("#pub-versions").checked,
+    lang: $("#pub-lang").value, mode: $("#pub-mode").value };
+}
+function openPublish() {
+  if (VIEWER) return;
+  $("#pub-lang").innerHTML = doc.languages.map(l => `<option value="${esc(l)}"${l === curLang() ? " selected" : ""}>${esc(langName(l))}</option>`).join("");
+  $("#pub-mode").value = view.mode;
+  $("#pub-base").value = lsGet(LS_BASE) || (location.protocol.startsWith("http") ? pageBase() : "");
+  $("#m-publish").hidden = false; updatePublishInfo();
+}
+let pubTimer = null;
+async function updatePublishInfo() {
+  const d = publishedDoc(pubOpts()); const json = JSON.stringify(d); const link = await encodeShare(d);
+  const base = siteBase(), url = (base || pageBase()) + "#d=" + link;
+  const miss = missingSummary().filter(m => m.boxes || m.other);
+  $("#pub-info").innerHTML = `Public file: <b>${(json.length / 1024).toFixed(1)} KB</b> · share link: <b>${url.length.toLocaleString()}</b> characters` +
+    (url.length > 30000 ? `<br><span class="ckwarn">Long links get cut by some chat and email apps. Prefer publishing the file on GitHub Pages.</span>` : "") +
+    (!base ? `<br><span class="ckwarn">No viewer address yet: the link would only open on this computer.</span>` : "") +
+    (miss.length ? `<br><span class="ckwarn">Missing translations: ${miss.map(m => `${m.l.toUpperCase()} ${m.boxes + m.other}`).join(", ")}. Viewers see those texts in another language, in italics.</span>` : "");
+  return { d, url, link };
+}
+["pub-notes", "pub-sources", "pub-status", "pub-versions", "pub-lang", "pub-mode"].forEach(id => $("#" + id).addEventListener("change", () => updatePublishInfo()));
+$("#pub-base").addEventListener("input", () => { clearTimeout(pubTimer); pubTimer = setTimeout(() => { lsSet(LS_BASE, $("#pub-base").value.trim()); updatePublishInfo(); }, 300); });
+$("#pub-download").onclick = async () => { const { d } = await updatePublishInfo(); download("rca.json", JSON.stringify(d) + "\n", "application/json"); toast("rca.json downloaded. Put it in the docs folder of your repository and push."); };
+$("#pub-copy").onclick = async () => { const { url } = await updatePublishInfo(); copyText(url, "Share link copied. Anyone who opens it sees this diagram, read-only."); };
+$("#pub-preview").onclick = async () => { const { link } = await updatePublishInfo(); window.open(pageBase() + "#d=" + link, "_blank"); };
+async function openFromUrl() {
+  const u = (prompt("Address of an RCA file (.json), a raw GitHub or Gist link, or a share link") || "").trim(); if (!u) return;
+  if (dirty && !confirm("You have unsaved changes. Open the linked RCA anyway?")) return;
+  try {
+    const h = u.indexOf("#d=");
+    if (h >= 0) { const d = await decodeShare(u.slice(h + 3)); await loadText(JSON.stringify(d), "shared-rca.json", null); dirty = true; updateChrome(); return; }
+    const r = await fetch(u); if (!r.ok) throw new Error(`The server answered ${r.status}.`);
+    await loadText(await r.text(), decodeURIComponent(u.split("/").pop().split("?")[0]) || "linked-rca.json", null); dirty = true; updateChrome();
+  } catch (e) { toast("Could not open that link: " + (e.message || e), 6000); }
+}
+
+/* ================= Viewer mode ================= */
+async function viewerSource() {
+  const q = new URLSearchParams(location.search);
+  const hash = location.hash.startsWith("#d=") ? location.hash.slice(3) : "";
+  const meta = document.querySelector('meta[name="rca-publish"]');
+  if (q.has("edit")) return { edit: true, hash };
+  if (hash) return { data: await decodeShare(hash) };
+  if (q.get("src")) { const r = await fetch(q.get("src")); if (!r.ok) throw new Error(`Could not load ${q.get("src")} (${r.status})`); return { data: await r.json() }; }
+  if (meta && meta.content) { const r = await fetch(meta.content, { cache: "no-cache" }); if (!r.ok) throw new Error(`Could not load ${meta.content} (${r.status})`); return { data: await r.json() }; }
+  return null;
+}
+function enterViewer(d) {
+  VIEWER = true; document.body.classList.add("viewer");
+  doc = normalizeDoc(d); delete doc.meta._guessedLang; dirty = false;
+  if (doc.bib) setBib("", doc.bib);
+  const q = new URLSearchParams(location.search), vd = doc.viewDefaults || {};
+  Object.assign(view, DEFAULT_VIEW);
+  let pref = {}; try { pref = JSON.parse(lsGet(LS_VPREF) || "{}"); } catch (e) {}
+  const lang = [q.get("lang"), pref.lang, vd.lang].find(l => l && doc.languages.includes(l)); view.lang = lang || null;
+  if (pref.tagChips === false) view.tagChips = false;
+  view.mode = (q.get("mode") || vd.mode) === "untangle" ? "untangle" : "manual";
+  view.split = q.get("split") === "1";
+  if (q.get("branch") && nodeById(q.get("branch"))) view.branch = q.get("branch");
+  const box = q.get("box"); if (box && nodeById(box)) { selRef = box; selCopy = box; multi = [box]; }
+  const r = +q.get("radius"); if (r > 0 && selRef) view.focusR = Math.min(6, r);
+  (q.get("tags") || "").split(",").filter(x => tagById(x)).forEach(x => view.tagFilter.add(x));
+
+  applyUI();
+}
+
+/* ================= Interviews: scales, grading, interview files ================= */
+function normScale(x) {
+  let min = Number.isFinite(+x.min) ? Math.round(+x.min) : 0, max = Number.isFinite(+x.max) ? Math.round(+x.max) : 5;
+  if (max <= min) max = min + 1;
+  return { id: String(x.id), name: String(x.name ?? "Scale"), nameTr: trObj(x.nameTr), min, max,
+    low: String(x.low || ""), lowTr: trObj(x.lowTr), high: String(x.high || ""), highTr: trObj(x.highTr),
+    gate: x.gate && x.gate.scale ? { scale: String(x.gate.scale), min: Math.round(+x.gate.min || 0) } : null };
+}
+function normSession(x) {
+  const obj = o => (o && typeof o === "object" ? o : {});
+  return { id: String(x.id), code: String(x.code || "Interview"), role: String(x.role || ""), lang: String(x.lang || ""),
+    startedAt: String(x.startedAt || nowISO()), t0: String(x.t0 || x.startedAt || nowISO()), endedAt: x.endedAt ? String(x.endedAt) : null,
+    nodesAtStart: Array.isArray(x.nodesAtStart) ? x.nodesAtStart.map(String) : [], discussed: Array.isArray(x.discussed) ? x.discussed.map(String) : [],
+    grades: obj(x.grades), notes: obj(x.notes), memo: String(x.memo || "") };
+}
+function defaultScales(langs) {
+  const main = langs[0];
+  const mk = (id, en, es, min, max, lo, loEs, hi, hiEs, gate) => {
+    const s = { id, name: main === "es" ? es : en, nameTr: {}, min, max, low: main === "es" ? loEs : lo, lowTr: {}, high: main === "es" ? hiEs : hi, highTr: {}, gate };
+    langs.slice(1).forEach(l => { if (l === "es") { s.nameTr.es = es; s.lowTr.es = loEs; s.highTr.es = hiEs; } if (l === "en") { s.nameTr.en = en; s.lowTr.en = lo; s.highTr.en = hi; } });
+    return s;
+  };
+  return [mk("relevance", "Relevance", "Relevancia", 0, 5, "Not relevant", "No es relevante", "Critical", "Crítico", null),
+    mk("feasibility", "Feasibility", "Factibilidad", 1, 5, "Very hard to act on", "Muy difícil de abordar", "Easy to act on", "Fácil de abordar", { scale: "relevance", min: 3 })];
+}
+const activeSession = () => (doc.activeSession && doc.sessions.find(x => x.id === doc.activeSession)) || null;
+const scaleById = id => doc.scales.find(x => x.id === id);
+const scaleRange = sc => Array.from({ length: sc.max - sc.min + 1 }, (_, i) => sc.min + i);
+function gradeOf(sess, nodeId, scaleId) { const g = sess.grades[nodeId]; return g && g[scaleId] ? g[scaleId].v : null; }
+function gateOpen(sess, nodeId, sc) { if (!sc.gate) return true; const v = gradeOf(sess, nodeId, sc.gate.scale); return v != null && v >= sc.gate.min; }
+function isDiscussed(sess, D, id) { return sess.discussed.includes(id) || (D.idom.has(id) && D.ancestors(id).some(a => sess.discussed.includes(a))); }
+const isGraded = (sess, id) => !!(sess.grades[id] && Object.keys(sess.grades[id]).length);
+const fmtClock = sec => { sec = Math.max(0, Math.round(sec)); const h = Math.floor(sec / 3600), m = Math.floor(sec / 60) % 60, ss = sec % 60; return (h ? h + ":" + String(m).padStart(2, "0") : m) + ":" + String(ss).padStart(2, "0"); };
+function gradeChipLabel(n) {
+  const sess = activeSession(); if (!sess) return null;
+  const parts = doc.scales.map(sc => { const v = gradeOf(sess, n.id, sc.id); if (v == null) return null;
+    return (tx(sc, "name")[0] || "?").toUpperCase() + v + (gateOpen(sess, n.id, sc) ? "" : "*"); }).filter(Boolean);
+  if (!parts.length) return null;
+  const label = parts.join(" ");
+  return { label, w: label.length * 7 + 14 };
+}
+function applyGradeVisuals() {
+  const sess = activeSession(), sc = doc.scales[0];
+  cy.batch(() => cy.nodes().forEach(el => {
+    if (el.hasClass("badge")) return;
+    const v = GRADING && view.shade && sess && sc ? gradeOf(sess, el.data("ref"), sc.id) : null;
+    if (v == null) { if (el.hasClass("shade")) { el.removeClass("shade"); el.removeStyle("underlay-opacity"); } return; }
+    el.addClass("shade"); el.style("underlay-opacity", .1 + .6 * (v - sc.min) / (sc.max - sc.min));
+  }));
+}
+function refreshGrades() { // grades change no positions: redraw chips, shading, panel and bar only
+  cy.batch(() => {
+    cy.nodes(".gradechip").remove();
+    if (GRADING) cy.nodes().forEach(el => {
+      if (el.hasClass("badge")) return;
+      const g = gradeChipLabel(nodeById(el.data("ref")) || {}); if (!g) return; const p = el.position();
+      cy.add({ group: "nodes", data: { id: "g:" + el.id(), owner: el.id(), label: g.label, w: g.w, h: 19 }, classes: "badge gradechip",
+        position: { x: p.x + el.data("w") / 2 - g.w / 2 + 6, y: p.y + el.data("h") / 2 + 2 } });
+    });
+  });
+  applyGradeVisuals(); applySelection(); applyTagFilter(); renderPanel(); renderGradebar(); updateChrome(true);
+}
+function gradeCommit(fn) { if (!activeSession()) return; pushUndo(snap()); fn(activeSession()); touch(); refreshGrades(); }
+function setGrade(nodeId, scaleId, v) {
+  gradeCommit(sess => {
+    const g = sess.grades[nodeId] = sess.grades[nodeId] || {};
+    if (v == null) delete g[scaleId]; else g[scaleId] = { v, at: nowISO() };
+    if (!Object.keys(g).length) delete sess.grades[nodeId];
+  });
+}
+function toggleDiscussed(id) {
+  gradeCommit(sess => { sess.discussed = sess.discussed.includes(id) ? sess.discussed.filter(x => x !== id) : [...sess.discussed, id]; });
+}
+function gradeOrder() { // depth-first through the visible tree, top to bottom, skipping "?" boxes
+  if (!lastRender) return [];
+  const { A, V } = lastRender, yOf = new Map(doc.nodes.map(n => [n.id, n.y])), seen = new Set(), out = [];
+  const visit = id => { if (seen.has(id) || !V.vis.has(id)) return; seen.add(id); const n = nodeById(id); if (n && !isQ(n)) out.push(id);
+    A.out.get(id).slice().sort((a, b) => yOf.get(a) - yOf.get(b)).forEach(visit); };
+  A.roots.slice().sort((a, b) => yOf.get(a) - yOf.get(b)).forEach(visit);
+  [...V.vis].forEach(visit);
+  return out;
+}
+function gradeStep(dir) {
+  const order = gradeOrder(); if (!order.length) return;
+  const i = order.indexOf(selRef);
+  const next = order[i < 0 ? 0 : (i + dir + order.length) % order.length];
+  goTo(next);
+}
+function gradeKey(e) {
+  if (e.ctrlKey || e.metaKey) return false;
+  const m = /^(Digit|Numpad)(\d)$/.exec(e.code);
+  if (m && selRef) {
+    const sc = doc.scales[e.altKey ? 2 : e.shiftKey ? 1 : 0]; if (!sc) return false;
+    e.preventDefault();
+    const v = +m[2], sess = activeSession();
+    if (v < sc.min || v > sc.max) { toast(t("outOfRange", tx(sc, "name"), sc.min, sc.max)); return true; }
+    if (!gateOpen(sess, selRef, sc)) { toast(t("gatedNote", tx(scaleById(sc.gate.scale), "name"), sc.gate.min)); return true; }
+    setGrade(selRef, sc.id, v); return true;
+  }
+  const k = e.key.toLowerCase();
+  if (k === "n" || e.key === "ArrowDown") { e.preventDefault(); gradeStep(1); return true; }
+  if (k === "p" || e.key === "ArrowUp") { e.preventDefault(); gradeStep(-1); return true; }
+  if (k === "b" && selRef) { e.preventDefault(); toggleDiscussed(selRef); return true; }
+  if (k === "a" && selRef) { e.preventDefault(); quickAdd(); return true; }
+  return false;
+}
+function quickAdd() {
+  const sess = activeSession(); if (!sess || !selRef) return;
+  addChild(selRef, { session: sess.code, at: nowISO() });
+}
+function setGrading(on) {
+  GRADING = on; document.body.classList.toggle("grading", on);
+  $("#work-edit").setAttribute("aria-pressed", !on); $("#work-grade").setAttribute("aria-pressed", on);
+  if (on) { const sess = activeSession(); if (sess && sess.lang && doc.languages.includes(sess.lang)) view.lang = sess.lang; openSide(true); }
+  applyUI(); syncControls(); render();
+}
+function renderGradebar() {
+  const bar = $("#gradebar"), sess = activeSession();
+  if (!GRADING || !sess) { bar.hidden = true; return; }
+  const { D } = lastRender, branches = D.top;
+  const graded = doc.nodes.filter(n => isGraded(sess, n.id)).length, gradable = doc.nodes.filter(n => !isQ(n)).length;
+  const disc = branches.filter(b => isDiscussed(sess, D, b)).length;
+  bar.hidden = false;
+  bar.innerHTML = `<span class="gb-live" aria-hidden="true">●</span><b>${esc(sess.code)}</b>${sess.role ? `<span class="muted">${esc(sess.role)}</span>` : ""}
+    <span class="gb-clock" id="gb-clock" title="${esc(t("clockTip"))}">${fmtClock((Date.now() - Date.parse(sess.t0)) / 1000)}</span><button class="btn small icon" id="gb-reset" title="${esc(t("clockReset"))}" aria-label="${esc(t("clockReset"))}">↺</button>
+    <span class="gb-sep"></span><span>${t("gradedOf", graded, gradable)}</span>
+    <button class="btn small" id="gb-disc">${t("discussedBranches")} ${disc}/${branches.length} ▾</button>
+    ${doc.scales[0] ? `<label class="chk"><input type="checkbox" id="gb-shade"${view.shade ? " checked" : ""}> ${esc(t("shadeBy", tx(doc.scales[0], "name")))}</label>` : ""}
+    <button class="btn small primary" id="gb-end">${t("endInterview")}</button>`;
+  $("#gb-reset").onclick = () => gradeCommit(x => { x.t0 = nowISO(); }) || toast(t("clockWasReset"));
+  $("#gb-disc").onclick = e => { e.stopPropagation(); toggleDiscPop(); };
+  $("#gb-shade") && ($("#gb-shade").onchange = e => { view.shade = e.target.checked; saveView(); applyGradeVisuals(); });
+  $("#gb-end").onclick = openEndInterview;
+}
+setInterval(() => { const el = $("#gb-clock"), sess = GRADING && activeSession(); if (el && sess) el.textContent = fmtClock((Date.now() - Date.parse(sess.t0)) / 1000); }, 1000);
+function branchList(D) { // top branches, plus sub-branches of big ones (same list as the branch picker)
+  const out = [];
+  D.top.forEach(id => { out.push([id, 0]); if (D.sub(id).size > 15) (D.kids.get(id) || []).filter(k => D.sub(k).size >= 3).sort((a, b) => D.sub(b).size - D.sub(a).size).forEach(k => out.push([k, 1])); });
+  return out;
+}
+function toggleDiscPop() {
+  const pop = $("#disc-pop");
+  if (!pop.hidden) { pop.hidden = true; return; }
+  drawDiscPop(); pop.hidden = false;
+}
+function drawDiscPop() {
+  const pop = $("#disc-pop"), sess = activeSession(); if (!sess) return;
+  const { D } = lastRender;
+  pop.innerHTML = `<p class="muted">${esc(t("discussedHelp"))}</p>` + branchList(D).map(([id, ind]) => {
+    const n = nodeById(id), sub = [...D.sub(id)], g = sub.filter(x => isGraded(sess, x)).length;
+    const own = sess.discussed.includes(id), cov = !own && isDiscussed(sess, D, id);
+    return `<label class="chk${ind ? " sub" : ""}"><input type="checkbox" data-disc="${esc(id)}"${own || cov ? " checked" : ""}${cov ? " disabled" : ""}> <span>${esc(short(tx(n), 52))} <span class="muted">${g}/${sub.length}</span></span></label>`;
+  }).join("");
+  pop.querySelectorAll("[data-disc]").forEach(cb => cb.onchange = () => { toggleDiscussed(cb.dataset.disc); drawDiscPop(); });
+}
+document.addEventListener("pointerdown", e => { const pop = $("#disc-pop"); if (!pop.hidden && !e.target.closest("#disc-pop") && !e.target.closest("#gb-disc")) pop.hidden = true; });
+
+function renderGradePanel() {
+  const p = $("#panel"), sess = activeSession(); if (!sess || !lastRender) return;
+  const { D } = lastRender;
+  const n = selRef && nodeById(selRef);
+  if (!n) {
+    const top = D.top;
+    p.innerHTML = `<div class="sec"><h2>${esc(t("interview"))} ${esc(sess.code)}${sess.role ? " · " + esc(sess.role) : ""}</h2>
+      <p class="muted">${esc(t("pickBox"))}</p>
+      <p class="muted keys">${t("keysHelp", doc.scales.map(sc => tx(sc, "name")))}</p></div>
+      <div class="sec"><h2>${esc(t("branches"))}</h2><ul class="list">${top.map(id => { const sub = [...D.sub(id)], g = sub.filter(x => isGraded(sess, x)).length;
+        return `<li><button data-go="${esc(id)}">${swatch(nodeById(id))}<span>${esc(tx(nodeById(id)))}</span><span class="cnt">${isDiscussed(sess, D, id) ? "✓ " : ""}${g}/${sub.length}</span></button></li>`; }).join("")}</ul></div>`;
+    return;
+  }
+  const disc = isDiscussed(sess, D, n.id), own = sess.discussed.includes(n.id);
+  const coverBy = !own && disc ? D.ancestors(n.id).find(a => sess.discussed.includes(a)) : null;
+  p.innerHTML = `<div class="sec">
+      <p class="sel-title">${isQ(n) ? esc(t("open")) : esc(tx(n))}</p>
+      ${n.origin ? `<span class="chip">${esc(t("proposedBy", n.origin.session))}</span>` : ""}
+      ${doc.scales.length ? doc.scales.map(sc => {
+        const cur = gradeOf(sess, n.id, sc.id), open = gateOpen(sess, n.id, sc), gs = sc.gate && scaleById(sc.gate.scale);
+        return `<div class="scale" data-scale="${esc(sc.id)}"><div class="sc-head"><b>${esc(tx(sc, "name"))}</b><span class="sc-ends">${sc.min} ${esc(tx(sc, "low"))} · ${sc.max} ${esc(tx(sc, "high"))}</span></div>
+          <div class="sc-btns">${scaleRange(sc).map(v => `<button type="button" data-sv="${v}" aria-pressed="${cur === v}"${open ? "" : " disabled"}>${v}</button>`).join("")}<button type="button" class="sc-clear" data-sclear title="${esc(t("clearGrade"))}" aria-label="${esc(t("clearGrade"))}"${cur == null ? " disabled" : ""}>×</button></div>
+          ${!open && gs ? `<p class="muted small">${esc(t("gatedNote", tx(gs, "name"), sc.gate.min))}</p>` : ""}
+          ${cur != null && !open ? `<p class="ckwarn small">${esc(t("gatedOut"))}</p>` : ""}</div>`; }).join("") : `<p class="muted">${esc(t("noScales"))}</p>`}
+      <label class="field"><span>${esc(t("whyNote"))}</span><textarea id="g-note" rows="3" placeholder="${esc(t("whyPlaceholder"))}">${esc(sess.notes[n.id] || "")}</textarea></label>
+      <label class="chk"><input type="checkbox" id="g-disc"${disc ? " checked" : ""}${coverBy ? " disabled" : ""}> ${esc(coverBy ? t("coveredBy", short(tx(nodeById(coverBy)), 40)) : t("everythingBelow", D.sub(n.id).size))}</label>
+      <div class="row"><button class="btn small" id="g-prev">← ${esc(t("prev"))}</button><button class="btn small" id="g-next">${esc(t("next"))} →</button><button class="btn small" id="g-add">＋ ${esc(t("addCauseHere"))}</button></div>
+      <p class="muted keys">${t("keysHelp", doc.scales.map(sc => tx(sc, "name")))}</p>
+    </div>`;
+  const ref = n.id;
+  p.querySelectorAll(".scale").forEach(box => {
+    const sc = scaleById(box.dataset.scale);
+    box.querySelectorAll("[data-sv]").forEach(b => b.onclick = () => setGrade(ref, sc.id, +b.dataset.sv));
+    box.querySelector("[data-sclear]").onclick = () => setGrade(ref, sc.id, null);
+  });
+  let noteTimer = null;
+  $("#g-note").addEventListener("input", e => { clearTimeout(noteTimer); const v = e.target.value; noteTimer = setTimeout(() => {
+    const s2 = activeSession(); if (!s2) return; if (v.trim()) s2.notes[ref] = v; else delete s2.notes[ref]; touch(); }, 400); });
+  $("#g-disc").onchange = () => toggleDiscussed(ref);
+  $("#g-prev").onclick = () => gradeStep(-1); $("#g-next").onclick = () => gradeStep(1); $("#g-add").onclick = quickAdd;
+}
+
+/* starting, resuming and ending an interview */
+function openStartInterview() {
+  if (VIEWER) return;
+  $("#is-lang").innerHTML = doc.languages.map(l => `<option value="${esc(l)}"${l === curLang() ? " selected" : ""}>${esc(langName(l))}</option>`).join("");
+  drawStartScales();
+  const prev = doc.sessions.slice().reverse();
+  $("#istart-resume").innerHTML = prev.length ? `<div class="field"><span>Continue an interview stored in this file</span><div class="row">${prev.map(x =>
+    `<button type="button" class="btn small" data-resume="${esc(x.id)}">${esc(x.code)}${x.role ? " · " + esc(x.role) : ""} · ${Object.keys(x.grades).length} graded${x.endedAt ? " · ended" : ""}</button>`).join("")}</div></div>` : "";
+  $("#istart-resume").querySelectorAll("[data-resume]").forEach(b => b.onclick = () => { $("#m-istart").hidden = true; doc.activeSession = b.dataset.resume; touch(); setGrading(true); });
+  $("#is-code").value = ""; $("#m-istart").hidden = false; $("#is-code").focus();
+}
+function drawStartScales() {
+  const sc = doc.scales.length ? doc.scales : defaultScales(doc.languages);
+  $("#is-scales").innerHTML = (doc.scales.length ? "" : `<p class="muted">No scales yet. These will be created:</p>`) + `<ul class="sclist">${sc.map(x =>
+    `<li><b>${esc(x.name)}</b> ${x.min}–${x.max} <span class="muted">(${x.min} ${esc(x.low)} · ${x.max} ${esc(x.high)})${x.gate ? ` · asked when ${esc((sc.find(o => o.id === x.gate.scale) || {}).name || "?")} ≥ ${x.gate.min}` : ""}</span></li>`).join("")}</ul>`;
+}
+$("#istart-form").onsubmit = e => {
+  e.preventDefault();
+  const code = $("#is-code").value.trim(); if (!code) return;
+  const sess = normSession({ id: uid("i"), code, role: $("#is-role").value.trim(), lang: $("#is-lang").value, startedAt: nowISO(), t0: nowISO(),
+    nodesAtStart: doc.nodes.map(n => n.id) });
+  const keepVersion = $("#is-version").checked;
+  $("#m-istart").hidden = true;
+  commit(() => {
+    if (!doc.scales.length) doc.scales = defaultScales(doc.languages);
+    if (keepVersion) doc.versions.push(mkVersion(doc, `Before interview ${code}`, "Saved automatically when the interview started"));
+    doc.sessions.push(sess); doc.activeSession = sess.id;
+  }).then(() => { setGrading(true); toast(t("started", code), 4000); });
+};
+function openEndInterview() {
+  const sess = activeSession(); if (!sess) return;
+  const graded = Object.keys(sess.grades).filter(id => nodeById(id)).length, added = doc.nodes.filter(n => n.origin && n.origin.session === sess.code).length;
+  const mins = Math.round((Date.now() - Date.parse(sess.startedAt)) / 60000);
+  $("#iend-sum").textContent = `${sess.code}: ${graded} box${graded === 1 ? "" : "es"} graded, ${sess.discussed.length} branch${sess.discussed.length === 1 ? "" : "es"} marked as discussed, ${added} cause${added === 1 ? "" : "s"} added, ${mins} min since it started.`;
+  $("#iend-memo").value = sess.memo || ""; $("#iend-after").hidden = true; $("#iend-save").disabled = false;
+  $("#m-iend").hidden = false; $("#iend-memo").focus();
+}
+const slug = s => String(s).normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^A-Za-z0-9_-]+/g, "-").replace(/^-+|-+$/g, "") || "interview";
+function interviewFileName(sess) { return `${baseName()}-${slug(sess.code)}-${sess.startedAt.slice(0, 10)}.json`; }
+$("#iend-save").onclick = async () => {
+  const sess = activeSession(); if (!sess) return;
+  gradeCommit(x => { x.memo = $("#iend-memo").value.trim(); x.endedAt = nowISO(); });
+  const out = clone(doc); out.sessions = [clone(activeSession())]; out.activeSession = null; out.app = APP_VERSION;
+  const text = JSON.stringify(out, null, 2) + "\n", name = interviewFileName(sess);
+  let saved = false;
+  if (FSA && window.showSaveFilePicker) {
+    try { const h = await window.showSaveFilePicker({ suggestedName: name, types: [{ description: "Interview file", accept: { "application/json": [".json"] } }] });
+      const w = await h.createWritable(); await w.write(text); await w.close(); saved = h.name; }
+    catch (e) { if (e.name === "AbortError") return; }
+  }
+  if (!saved) { download(name, text, "application/json"); saved = name; }
+  try { const bk = JSON.parse(lsGet("uchuva-rca:interview-backups") || "[]"); bk.push({ savedAt: nowISO(), file: saved, session: clone(activeSession()) }); lsSet("uchuva-rca:interview-backups", JSON.stringify(bk.slice(-30))); } catch (e) {}
+  $("#iend-file").textContent = saved; $("#iend-after").hidden = false; $("#iend-save").disabled = true;
+};
+$("#iend-finish").onclick = () => {
+  const sess = activeSession(); if (!sess) return;
+  $("#m-iend").hidden = true;
+  commit(() => { doc.sessions = doc.sessions.filter(x => x.id !== sess.id); doc.activeSession = null; });
+  setGrading(false);
+  toast(`Interview ${sess.code} is in its own file. Its grades left this working file; boxes added during it stay, marked as proposed by ${sess.code}.`, 7000);
+};
+
+/* scale editor */
+let scaleDraft = [];
+function openScales() {
+  scaleDraft = clone(doc.scales.length ? doc.scales : defaultScales(doc.languages));
+  drawScales(); $("#m-scales").hidden = false;
+}
+function drawScales() {
+  const L = doc.languages;
+  const trs = (o, f, i, ph) => L.slice(1).map(l => `<label class="trin"><b>${esc(l.toUpperCase())}</b><input type="text" data-i="${i}" data-f="${f}" data-trl="${esc(l)}" value="${esc((o[f + "Tr"] || {})[l] || "")}" placeholder="${esc(ph)}"></label>`).join("");
+  $("#scale-rows").innerHTML = scaleDraft.map((sc, i) => `<div class="scard" data-i="${i}">
+    <div class="srow"><input type="text" class="sname" data-i="${i}" data-f="name" value="${esc(sc.name)}" placeholder="Scale name" aria-label="Scale name">${trs(sc, "name", i, "Name")}
+      <label class="num">from <input type="number" data-i="${i}" data-f="min" value="${sc.min}" step="1"></label><label class="num">to <input type="number" data-i="${i}" data-f="max" value="${sc.max}" step="1"></label>
+      <span class="catacts"><button class="btn small icon" data-sup="${i}" ${i ? "" : "disabled"} title="Move up" aria-label="Move up">↑</button><button class="btn small icon" data-sdel="${i}" title="Delete scale" aria-label="Delete scale">×</button></span></div>
+    <div class="srow"><span class="lab lab-min">${sc.min} means</span><input type="text" data-i="${i}" data-f="low" value="${esc(sc.low)}" placeholder="e.g. Not relevant">${trs(sc, "low", i, "Meaning of the lowest value")}</div>
+    <div class="srow"><span class="lab lab-max">${sc.max} means</span><input type="text" data-i="${i}" data-f="high" value="${esc(sc.high)}" placeholder="e.g. Critical">${trs(sc, "high", i, "Meaning of the highest value")}</div>
+    <div class="srow"><span class="lab">Ask it</span><select data-i="${i}" data-f="gate"><option value="">always</option>${scaleDraft.filter(o => o.id !== sc.id).map(o => `<option value="${esc(o.id)}"${sc.gate && sc.gate.scale === o.id ? " selected" : ""}>only when ${esc(o.name)} is at least</option>`).join("")}</select>
+      ${sc.gate ? `<input type="number" class="gmin" data-i="${i}" data-f="gmin" value="${sc.gate.min}" step="1" aria-label="Threshold">` : ""}</div>
+  </div>`).join("");
+}
+$("#scale-rows").addEventListener("input", e => {
+  const el = e.target, i = +el.dataset.i, f = el.dataset.f; if (!f) return; const sc = scaleDraft[i];
+  if (el.dataset.trl) { sc[f + "Tr"] = sc[f + "Tr"] || {}; sc[f + "Tr"][el.dataset.trl] = el.value.trim(); return; }
+  if (f === "min" || f === "max") { sc[f] = Math.round(+el.value); const card = el.closest(".scard"); card.querySelector(".lab-" + f).textContent = `${sc[f]} means`; return; }
+  if (f === "gmin") { if (sc.gate) sc.gate.min = Math.round(+el.value); return; }
+  if (f !== "gate") sc[f] = el.value;
+});
+$("#scale-rows").addEventListener("change", e => {
+  const el = e.target; if (el.dataset.f === "gate") { const sc = scaleDraft[+el.dataset.i]; const o = scaleDraft.find(x => x.id === el.value);
+    sc.gate = el.value ? { scale: el.value, min: sc.gate ? sc.gate.min : Math.ceil((o.min + o.max) / 2) } : null; drawScales(); }
+});
+$("#scale-rows").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  if (b.dataset.sdel !== undefined) { const i = +b.dataset.sdel, id = scaleDraft[i].id; scaleDraft.splice(i, 1); scaleDraft.forEach(x => { if (x.gate && x.gate.scale === id) x.gate = null; }); drawScales(); }
+  if (b.dataset.sup !== undefined) { const i = +b.dataset.sup; [scaleDraft[i - 1], scaleDraft[i]] = [scaleDraft[i], scaleDraft[i - 1]]; drawScales(); }
+});
+$("#scale-add").onclick = () => { scaleDraft.push({ id: uid("s"), name: "", nameTr: {}, min: 1, max: 5, low: "", lowTr: {}, high: "", highTr: {}, gate: null }); drawScales(); };
+$("#scale-save").onclick = () => {
+  for (const sc of scaleDraft) {
+    if (!sc.name.trim()) return toast("Every scale needs a name.");
+    if (!Number.isInteger(sc.min) || !Number.isInteger(sc.max) || sc.max <= sc.min) return toast(`${sc.name}: “to” must be a whole number above “from”.`);
+    if (sc.max - sc.min > 10) return toast(`${sc.name}: keep it to 11 values at most, so the buttons stay usable.`);
+  }
+  const d = scaleDraft.map(normScale);
+  $("#m-scales").hidden = true;
+  commit(() => { doc.scales = d; }).then(() => { if (!$("#m-istart").hidden) drawStartScales(); refreshGrades(); });
+  toast("Scales updated. Ctrl Z to undo.");
+};
+
+/* exports: one row per interview and box */
+function interviewRows(d) {
+  const keep = doc; doc = d;
+  try {
+    const A = analyze(d), D = dominatorTree(A), rows = [];
+    d.sessions.forEach(sess => {
+      d.nodes.forEach(n => {
+        if (isQ(n)) return;
+        const shown = sess.nodesAtStart.includes(n.id), added = !!(n.origin && n.origin.session === sess.code);
+        const graded = isGraded(sess, n.id), disc = graded || isDiscussed(sess, D, n.id), br = branchOf(D, n.id);
+        const r = { interview: sess.code, role: sess.role, date: sess.startedAt.slice(0, 10), interview_language: sess.lang, box_id: n.id };
+        d.languages.forEach(l => (r["text_" + l] = txRaw(n, "text", l)));
+        Object.assign(r, { category: catById(n.cat).name, tags: orderedTags(n.tags || []).map(x => x.name).join(" | "),
+          branch: br ? (nodeById(br) || {}).text || "" : "(trunk)", level: A.depth.get(n.id) || "",
+          in_diagram_at_start: shown ? "yes" : "no", added_in_interview: added ? "yes" : "no", branch_discussed: disc ? "yes" : "no" });
+        d.scales.forEach(sc => {
+          const g = sess.grades[n.id] && sess.grades[n.id][sc.id], open = gateOpen(sess, n.id, sc);
+          r[sc.id] = g ? g.v : "";
+          r[sc.id + "_state"] = g ? (open ? "graded" : "gated out") : (!shown && !added) ? "not in diagram" : !disc ? "not discussed" : (sc.gate && !open) ? "gated out" : "not graded (branch discussed)";
+          r[sc.id + "_minute"] = g ? fmtClock((Date.parse(g.at) - Date.parse(sess.t0)) / 1000) : "";
+        });
+        r.note = sess.notes[n.id] || "";
+        r.interview_memo = sess.memo || "";
+        rows.push(r);
+      });
+    });
+    return { rows, scales: d.scales, langs: d.languages };
+  } finally { doc = keep; }
+}
+function rowsToCSV(parts) {
+  const langs = [...new Set(parts.flatMap(p => p.langs))];
+  const scales = []; parts.forEach(p => p.scales.forEach(sc => { if (!scales.some(x => x.id === sc.id)) scales.push(sc); }));
+  const cols = ["interview", "role", "date", "interview_language", "box_id", ...langs.map(l => "text_" + l), "category", "tags", "branch", "level",
+    "in_diagram_at_start", "added_in_interview", "branch_discussed", ...scales.flatMap(sc => [sc.id, sc.id + "_state", sc.id + "_minute"]), "note", "interview_memo"];
+  const head = cols.map(c => { const sc = scales.find(x => x.id === c || x.id + "_state" === c || x.id + "_minute" === c);
+    return sc ? c.replace(sc.id, slug(sc.name).toLowerCase() || sc.id) : c; });
+  const lines = [head, ...parts.flatMap(p => p.rows).map(r => cols.map(c => r[c] ?? ""))];
+  return "﻿" + lines.map(r => r.map(csvCell).join(",")).join("\r\n") + "\r\n";
+}
+function exportInterviewsCSV() {
+  if (!doc.sessions.length) return toast("This file has no interviews. Start one with Grade, or open an interview file.", 5000);
+  download(`${baseName()}-grades.csv`, rowsToCSV([interviewRows(doc)]), "text/csv");
+  toast("Grades exported: one row per interview and box.");
+}
+function combineInterviewFiles() {
+  const inp = document.createElement("input"); inp.type = "file"; inp.accept = ".json"; inp.multiple = true;
+  inp.onchange = async () => {
+    const parts = []; let n = 0, skipped = 0;
+    for (const f of inp.files) {
+      try { const d = normalizeDoc(JSON.parse(await f.text())); if (!d.sessions.length) { skipped++; continue; } parts.push(interviewRows(d)); n += d.sessions.length; }
+      catch (e) { skipped++; }
+    }
+    if (!parts.length) return toast("None of those files holds an interview.", 5000);
+    download(`interviews-combined-${nowISO().slice(0, 10)}.csv`, rowsToCSV(parts), "text/csv");
+    toast(`Combined ${n} interview${n === 1 ? "" : "s"} from ${parts.length} file${parts.length === 1 ? "" : "s"}${skipped ? `; ${skipped} file${skipped === 1 ? "" : "s"} skipped` : ""}.`, 6000);
+  };
+  inp.click();
+}
+
 /* ================= Menu actions & keyboard ================= */
 const ACTIONS = {
   bib: loadBib, cats: () => openCats(),
-  open: openFile, save: () => saveFile(false), saveas: () => saveFile(true), new: newEmpty,
+  open: openFile, save: () => saveFile(false), saveas: () => saveFile(true), new: openNew,
+  tags: () => openTags(), langs: openLangs, publish: openPublish, "open-url": openFromUrl,
+  scales: openScales, "exp-grades": exportInterviewsCSV, "combine-interviews": combineInterviewFiles,
   "paste-drawio": () => { $("#paste-err").hidden = true; $("#m-paste").hidden = false; $("#paste-text").focus(); },
   "exp-svg": () => { download(baseName() + ".svg", exportSVG().svg, "image/svg+xml"); toast("SVG exported. It shows what is on screen now."); },
   "exp-png": exportPNG, "exp-drawio": exportDrawio, "exp-json": () => download(fileName, docText(), "application/json"),
@@ -1629,14 +2717,26 @@ document.addEventListener("keydown", e => {
   const typing = e.target.closest && e.target.closest("input, textarea, select, [contenteditable]");
   const modal = $$(".overlay").find(o => !o.hidden);
   if (e.key === "Escape" && modal) { modal.hidden = true; return; }
+  if (VIEWER) {
+    if (e.key === "Escape" && modal) { modal.hidden = true; return; }
+    if (mod && k === "f") { e.preventDefault(); $("#q").focus(); return; }
+    if (typing || mod || modal) return;
+    if (k === "l") setMode(view.mode === "manual" ? "untangle" : "manual");
+    else if (k === "f" && selRef) toggleFold(selRef);
+    else if (e.key === "?") $("#m-help").hidden = false;
+    else if (e.key === "Escape") clearSelection();
+    return;
+  }
   if (mod && k === "s") { e.preventDefault(); saveFile(e.shiftKey); return; }
   if (mod && k === "o") { e.preventDefault(); openFile(); return; }
+  if (GRADING && !modal && !typing && gradeKey(e)) return;
   if (modal) return;
   if (mod && k === "f") { e.preventDefault(); $("#q").focus(); $("#q").select(); return; }
   if (typing) return;
   if (mod && k === "z") { e.preventDefault(); e.shiftKey ? redo() : undo(); return; }
   if (mod && k === "y") { e.preventDefault(); redo(); return; }
   if (mod) return;
+  if (GRADING) { if (k === "l") setMode(view.mode === "manual" ? "untangle" : "manual"); else if (e.key === "?") $("#m-help").hidden = false; else if (e.key === "Escape") clearSelection(); return; }
   if (e.key === "Delete" || e.key === "Backspace") { e.preventDefault(); deleteSelection(); }
   else if (e.key === "Tab" && selRef) { e.preventDefault(); addChild(selRef); }
   else if (e.key === "Enter" && selRef) { e.preventDefault(); inlineEdit(selCopy || selRef, false); }
@@ -1646,7 +2746,7 @@ document.addEventListener("keydown", e => {
   else if (e.key === "?") $("#m-help").hidden = false;
   else if (e.key === "Escape") clearSelection();
 });
-window.addEventListener("beforeunload", e => { if (dirty) { autosave(); e.preventDefault(); e.returnValue = ""; } });
+window.addEventListener("beforeunload", e => { if (dirty && !VIEWER) { autosave(); e.preventDefault(); e.returnValue = ""; } });
 
 /* ================= Boot ================= */
 function initCy() {
@@ -1655,7 +2755,7 @@ function initCy() {
   cy.on("tap", "node", e => { if (e.target.hasClass("badge")) return; selectNode(e.target.data("ref"), e.target.id(), e.originalEvent && (e.originalEvent.shiftKey || e.originalEvent.metaKey || e.originalEvent.ctrlKey)); });
   cy.on("tap", "edge", e => selectEdge(e.target.data("ref")));
   cy.on("tap", e => { if (e.target === cy) clearSelection(); });
-  cy.on("dbltap", "node", e => { if (!e.target.hasClass("badge")) inlineEdit(e.target.id(), false); });
+  cy.on("dbltap", "node", e => { if (!e.target.hasClass("badge") && !GRADING) inlineEdit(e.target.id(), false); });
   cy.on("dbltap", e => { if (e.target === cy) addNodeAt(e.position.x, e.position.y, null); });
   cy.on("mouseover", "node", e => { if (e.target.hasClass("badge")) return; clearTimeout(hoverTimer); hoverCopy = e.target.id(); updateOverlays(); });
   cy.on("mouseout", "node", () => { clearTimeout(hoverTimer); hoverTimer = setTimeout(() => { hoverCopy = null; updateOverlays(); }, 450); });
@@ -1681,6 +2781,12 @@ function initCy() {
   h.addEventListener("pointerdown", e => startDrag("connect", e, { copy: h.dataset.copy }));
   $("#grip-s").addEventListener("pointerdown", e => startDrag("rewire-source", e, { edge: $("#grip-s").dataset.edge }));
   $("#grip-t").addEventListener("pointerdown", e => startDrag("rewire-target", e, { edge: $("#grip-t").dataset.edge }));
+  let ro = null;
+  new ResizeObserver(() => { cancelAnimationFrame(ro); ro = requestAnimationFrame(() => { cy.resize(); updateOverlays(); }); }).observe($("#cy"));
+  $("#work-edit").onclick = () => { if (GRADING) setGrading(false); };
+  $("#work-grade").onclick = () => { if (GRADING) return; if (activeSession()) setGrading(true); else openStartInterview(); };
+  $("#side-close").onclick = () => openSide(false);
+  $("#side-open").onclick = () => openSide(true);
   const restyle = () => cy.style(styleSheet());
   matchMedia("(prefers-color-scheme: dark)").addEventListener("change", restyle);
   new MutationObserver(restyle).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
@@ -1689,16 +2795,40 @@ function initCy() {
 (async function boot() {
   try { await Promise.all([document.fonts.load(`${FONT_PX}px "IBM Plex Sans"`), document.fonts.load(`600 12px "IBM Plex Sans Condensed"`)]); } catch (e) {}
   initCy();
-  let d = null, restored = false;
-  const saved = lsGet(LS_DOC);
-  if (saved) { try { d = normalizeDoc(JSON.parse(saved)); restored = true; } catch (e) { d = null; } }
-  if (!d) d = builtinDoc();
-  let fmeta = {}; try { fmeta = JSON.parse(lsGet(LS_FILE) || "{}"); } catch (e) {}
-  doc = d; fileName = fmeta.fileName || "uchuva-rca.json"; dirty = restored ? !!fmeta.dirty : false;
-  syncControls();
-  await render({ fit: true, readable: true });
-  if (doc.meta.migratedKey) { delete doc.meta.migratedKey; dirty = true; updateChrome(); autosave();
-    toast("Colour key updated to your meanings: root problem, intermediate cause, root cause, unsure. Save to keep it in the file.", 6000); }
-  else if (restored) toast("Picked up where you left off. Use File → Open to load a different RCA file.", 4200);
-  window.__rca = { parseBib, setBib, get doc() { return doc; }, render, cy: () => cy, view, analyze, exportSVG, commit, nodeById, lastRender: () => lastRender };
+  let src = null;
+  try { src = await viewerSource(); } catch (e) { src = { error: e.message || String(e) }; }
+  if (src && src.data) {
+    enterViewer(src.data);
+    syncControls();
+    await render({ fit: true });
+    if (selRef) goTo(selRef);
+  } else {
+    let d = null, restored = false;
+    const saved = lsGet(LS_DOC);
+    if (saved) { try { d = normalizeDoc(JSON.parse(saved)); restored = true; } catch (e) { d = null; } }
+    const hosted = location.protocol.startsWith("http");
+    if (!d) { d = emptyDoc(); d.nodes = [newNode("Problem observed", "problem", 0, 0)]; }
+    let fmeta = {}; try { fmeta = JSON.parse(lsGet(LS_FILE) || "{}"); } catch (e) {}
+    doc = d; fileName = fmeta.fileName || "uchuva-rca.json"; dirty = restored ? !!fmeta.dirty : false;
+    applyUI(); syncControls();
+    await render({ fit: true, readable: true });
+    if (src && src.edit && src.hash) { // a share link opened in the editor: take it in as a new, unsaved file
+      try {
+        if (!dirty || confirm("Open the shared RCA from the link? Your current unsaved changes stay recoverable with File → Open only if you saved them.")) {
+          await loadText(JSON.stringify(await decodeShare(src.hash)), "shared-rca.json", null); dirty = true; updateChrome();
+          history.replaceState(null, "", pageBase() + "?edit");
+        }
+      } catch (e) { toast("Could not read the shared link: " + e.message, 6000); }
+    } else if (src && src.error) toast(src.error, 7000);
+    else if (doc.meta._guessedLang) {
+      delete doc.meta._guessedLang;
+      toast(`This file is now marked as written in ${langName(mainLang())}. Change that or add languages in File → Languages.`, 6500);
+    } else if (doc.meta.migratedKey) { delete doc.meta.migratedKey; dirty = true; updateChrome(); autosave();
+      toast("Colour key updated to your meanings: root problem, intermediate cause, root cause, unsure. Save to keep it in the file.", 6000); }
+    else if (restored && activeSession()) { setGrading(true); toast(`Interview ${activeSession().code} is still running; grading resumed where you left it.`, 6000); }
+    else if (restored) toast("Picked up where you left off. Use File → Open to load a different RCA file.", 4200);
+    else openNew();
+  }
+  window.__rca = { parseBib, setBib, get doc() { return doc; }, render, cy: () => cy, view, analyze, exportSVG, commit, nodeById, lastRender: () => lastRender,
+    publishedDoc, encodeShare, decodeShare, setGrade, activeSession, interviewRows, rowsToCSV, setGrading, toggleDiscussed, gradeStep, makeMainLang, translatePass, normalizeDoc, loadText, get VIEWER() { return VIEWER; } };
 })();
