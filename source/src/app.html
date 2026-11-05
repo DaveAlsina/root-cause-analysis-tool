@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Uchuva RCA Workbench</title>
+<title>RCA Workbench</title>
 <style>
 /*FONTS*/
 </style>
@@ -15,93 +15,115 @@
 <div class="app">
   <header>
     <div class="brand">
-      <h1 id="doc-title" title="Double-click to rename">Rejected uchuva: why?</h1>
-      <div class="fileline"><span id="file-name">uchuva-rca.json</span><span id="dirty" class="dirty" hidden>● unsaved changes</span></div>
+      <h1 id="doc-title" title="Double-click to rename">Root-cause analysis</h1>
+      <div class="fileline edit-only"><span id="file-name">uchuva-rca.json</span><span id="dirty" class="dirty" hidden>● unsaved changes</span><span id="saved-at" class="savedat" hidden></span></div>
+      <div class="fileline view-only" id="viewer-line"></div>
     </div>
     <div class="toolbar">
       <div class="group">
-        <details class="menu" id="menu-file"><summary class="btn">File</summary>
+        <details class="menu edit-only" id="menu-file"><summary class="btn">File</summary>
           <div class="menu-list">
             <button data-act="open">Open… <kbd>Ctrl O</kbd></button>
             <button data-act="save">Save <kbd>Ctrl S</kbd></button>
             <button data-act="saveas">Save as… <kbd>Ctrl Shift S</kbd></button>
             <hr>
+            <button data-act="open-url">Open from a link… <small>raw GitHub, Gist, share link</small></button>
+            <button data-act="new">New RCA… <small>choose its languages</small></button>
             <button data-act="paste-drawio">Replace with pasted draw.io diagram…</button>
-            <button data-act="new">New empty RCA</button>
             <hr>
+            <button data-act="langs">Languages and title…</button>
             <button data-act="bib">Load bibliography… <small>.bib, for @ citations</small></button>
+            <hr>
+            <button data-act="publish">Publish copy… <small>for GitHub Pages or a link</small></button>
+            <hr>
+            <button data-act="scales">Grading scales…</button>
+            <button data-act="combine-interviews">Combine interview files… <small>one table, .csv</small></button>
           </div>
         </details>
-        <details class="menu" id="menu-export"><summary class="btn">Export</summary>
+        <details class="menu" id="menu-export"><summary class="btn"><span data-ui="export">Export</span></summary>
           <div class="menu-list">
             <button data-act="exp-svg">SVG picture <small>vector, for Typst</small></button>
             <button data-act="exp-png">PNG picture <small>2× resolution</small></button>
-            <button data-act="exp-drawio">draw.io diagram <small>.drawio</small></button>
-            <hr>
-            <button data-act="exp-json">RCA file with history <small>.json</small></button>
-            <button data-act="exp-graphml">GraphML <small>networkx, Gephi, yEd</small></button>
-            <button data-act="exp-nodes">Boxes table <small>.csv</small></button>
-            <button data-act="exp-edges">Arrows table <small>.csv</small></button>
+            <button data-act="exp-drawio" class="edit-only">draw.io diagram <small>.drawio, current language</small></button>
+            <hr class="edit-only">
+            <button data-act="exp-json" class="edit-only">RCA file with history <small>.json</small></button>
+            <button data-act="exp-graphml" class="edit-only">GraphML <small>networkx, Gephi, yEd</small></button>
+            <button data-act="exp-nodes" class="edit-only">Boxes table <small>.csv</small></button>
+            <button data-act="exp-edges" class="edit-only">Arrows table <small>.csv</small></button>
+            <button data-act="exp-grades" class="edit-only">Interview grades <small>.csv</small></button>
           </div>
         </details>
-        <button class="btn" data-act="cats">Categories</button>
-        <button class="btn" data-act="versions">Versions <span id="ver-count" class="pill"></span></button>
+        <button class="btn edit-only nograde" data-act="cats">Categories</button>
+        <button class="btn edit-only nograde" data-act="tags">Tags</button>
+        <button class="btn edit-only nograde" data-act="versions">Versions <span id="ver-count" class="pill"></span></button>
       </div>
-      <div class="group">
+      <div class="seg edit-only" id="workseg" role="group" aria-label="Work mode">
+        <button id="work-edit" aria-pressed="true" title="Build and change the diagram">Edit</button>
+        <button id="work-grade" aria-pressed="false" title="Interview mode: the diagram is locked and boxes get scores">Grade</button>
+      </div>
+      <div class="seg" id="langseg" role="group" aria-label="Language" hidden></div>
+      <div class="group edit-only">
         <button class="btn icon" data-act="undo" id="b-undo" title="Undo (Ctrl Z)" aria-label="Undo">↶</button>
         <button class="btn icon" data-act="redo" id="b-redo" title="Redo (Ctrl Shift Z)" aria-label="Redo">↷</button>
       </div>
       <div class="seg" role="group" aria-label="Layout">
-        <button id="mode-manual" aria-pressed="true" title="Your own arrangement. Drag boxes to move them.">My layout</button>
-        <button id="mode-untangle" aria-pressed="false" title="Automatic layered layout that minimises crossings">Untangle</button>
+        <button id="mode-manual" aria-pressed="true" title="The arrangement as drawn"><span class="edit-only" data-ui="manual">My layout</span><span class="view-only" data-ui="manualV">As drawn</span></button>
+        <button id="mode-untangle" aria-pressed="false" title="Automatic layered layout that minimises crossings" data-ui="untangle">Untangle</button>
       </div>
+      <select id="branch" class="btn" aria-label="Branch shown" title="Show one branch of the tree"></select>
       <select id="depth" class="btn" aria-label="Levels shown">
-        <option value="all">All levels</option><option value="2">2 levels</option><option value="3">3 levels</option><option value="4">4 levels</option><option value="5">5 levels</option><option value="6">6 levels</option><option value="7">7 levels</option>
+        <option value="all" data-ui="allLevels">All levels</option><option value="2">2 levels</option><option value="3">3 levels</option><option value="4">4 levels</option><option value="5">5 levels</option><option value="6">6 levels</option><option value="7">7 levels</option>
       </select>
       <label class="search" for="q"><svg viewBox="0 0 16 16" stroke-width="1.8" aria-hidden="true"><circle cx="7" cy="7" r="5"/><path d="M11 11l4 4"/></svg>
         <input id="q" type="search" placeholder="Search text, notes, sources" autocomplete="off" aria-label="Search"><span class="count" id="qcount"></span></label>
       <button class="btn icon" data-act="help" title="Shortcuts and help (?)" aria-label="Help">?</button>
     </div>
-    <div class="stats" id="stats"></div>
+    <div class="stats edit-only" id="stats"></div>
   </header>
-  <main>
+  <div class="tagbar" id="tagbar" hidden></div>
+  <main class="side-closed">
     <div id="cy">
-      <div class="hint" id="hint">Double-click: new box · drag <span class="dot"></span> onto a cause: connect · Tab: add cause · <kbd>?</kbd> all shortcuts</div>
+      <div class="gradebar" id="gradebar" hidden></div>
+      <div class="disc-pop" id="disc-pop" hidden></div>
+      <div class="hint edit-only nograde" id="hint">Double-click: new box · drag <span class="dot"></span> onto a cause: connect · Tab: add cause · <kbd>?</kbd> all shortcuts</div>
       <div class="diffbar" id="diffbar" hidden></div>
-      <details class="viewpanel" id="viewpanel" open>
-        <summary><span>View</span><span class="xnum" id="xnum" title="Arrow crossings in what you see now">–</span></summary>
+      <div class="diffbar branchbar" id="branchbar" hidden></div>
+      <details class="viewpanel" id="viewpanel">
+        <summary><span data-ui="view">View</span><span class="xnum" id="xnum" title="Arrow crossings in what you see now">–</span></summary>
         <div class="vp-body">
           <div class="xline" id="xline"></div>
-          <div class="ctl"><label for="v-focus">Focus radius <output id="o-focus"></output></label><input type="range" id="v-focus" min="0" max="6" step="1"></div>
-          <label class="chk"><input type="checkbox" id="v-trace"> Highlight the chain of the selected box</label>
-          <div class="ctl"><span class="lbl">Redundant arrows <output id="o-red"></output></span>
-            <div class="seg small" role="group" aria-label="Redundant arrows"><button data-red="show">Show</button><button data-red="dashed">Dashed</button><button data-red="hide">Hide</button></div></div>
-          <div id="manual-only"><button class="btn small" data-act="tidy">Tidy overlapping boxes</button></div>
+          <div class="ctl"><label for="v-focus"><span data-ui="focus">Focus radius</span> <output id="o-focus"></output></label><input type="range" id="v-focus" min="0" max="6" step="1"></div>
+          <label class="chk"><input type="checkbox" id="v-trace"> <span data-ui="trace">Highlight the chain of the selected box</span></label>
+          <div class="ctl"><span class="lbl"><span data-ui="redundant">Redundant arrows</span> <output id="o-red" class="edit-only"></output></span>
+            <div class="seg small" role="group" aria-label="Redundant arrows"><button data-red="show" data-ui="show">Show</button><button data-red="dashed" data-ui="dashed">Dashed</button><button data-red="hide" data-ui="hide">Hide</button></div></div>
+          <div id="manual-only" class="edit-only nograde"><button class="btn small" data-act="tidy">Tidy overlapping boxes</button></div>
           <fieldset id="untangle-set">
-            <legend>Untangle settings</legend>
-            <p class="note" id="untangle-note">Switch to <b>Untangle</b> to use these.</p>
-            <div class="ctl"><label for="v-effort">Effort <output id="o-effort"></output></label><input type="range" id="v-effort" min="1" max="5" step="1"></div>
-            <div class="ctl"><label for="v-place">Box placement <output id="o-place"></output></label><input type="range" id="v-place" min="0" max="2" step="1"></div>
-            <div class="ctl"><label for="v-level">Level spacing <output id="o-level"></output></label><input type="range" id="v-level" min="30" max="220" step="5"></div>
-            <div class="ctl"><label for="v-node">Box spacing <output id="o-node"></output></label><input type="range" id="v-node" min="4" max="60" step="2"></div>
-            <div class="ctl"><span class="lbl">Arrow style</span>
-              <div class="seg small" role="group" aria-label="Arrow style"><button data-route="ORTHOGONAL">Right-angled</button><button data-route="POLYLINE">Angled</button><button data-route="STRAIGHT">Straight</button></div></div>
-            <label class="chk"><input type="checkbox" id="v-order"> Respect my vertical order</label>
-            <label class="chk"><input type="checkbox" id="v-split"> Split shared causes into copies</label>
-            <label class="chk sub"><input type="checkbox" id="v-repeat"> Repeat the full branch under every copy</label>
-            <div class="row"><button class="btn small" data-act="keep">Keep these positions</button><button class="btn small" data-act="reset-view">Reset settings</button></div>
+            <legend data-ui="untangleSet">Untangle settings</legend>
+            <p class="note" id="untangle-note" data-ui="switchUntangle">Switch to <b>Untangle</b> to use these.</p>
+            <div class="ctl"><label for="v-effort"><span data-ui="effort">Effort</span> <output id="o-effort"></output></label><input type="range" id="v-effort" min="1" max="5" step="1"></div>
+            <div class="ctl"><label for="v-place"><span data-ui="placement">Box placement</span> <output id="o-place"></output></label><input type="range" id="v-place" min="0" max="2" step="1"></div>
+            <div class="ctl"><label for="v-level"><span data-ui="levelSp">Level spacing</span> <output id="o-level"></output></label><input type="range" id="v-level" min="30" max="220" step="5"></div>
+            <div class="ctl"><label for="v-node"><span data-ui="boxSp">Box spacing</span> <output id="o-node"></output></label><input type="range" id="v-node" min="4" max="60" step="2"></div>
+            <div class="ctl"><span class="lbl" data-ui="arrows">Arrow style</span>
+              <div class="seg small" role="group" aria-label="Arrow style"><button data-route="ORTHOGONAL" data-ui="rightAngled">Right-angled</button><button data-route="POLYLINE" data-ui="angled">Angled</button><button data-route="STRAIGHT" data-ui="straight">Straight</button></div></div>
+            <label class="chk"><input type="checkbox" id="v-order"> <span data-ui="keepOrder">Respect my vertical order</span></label>
+            <label class="chk"><input type="checkbox" id="v-split"> <span data-ui="split">Split shared causes into copies</span></label>
+            <label class="chk sub"><input type="checkbox" id="v-repeat"> <span data-ui="repeat">Repeat the full branch under every copy</span></label>
+            <div class="row"><button class="btn small edit-only" data-act="keep">Keep these positions</button><button class="btn small" data-act="reset-view" data-ui="reset">Reset settings</button></div>
           </fieldset>
         </div>
       </details>
       <div class="legend" id="legend"></div>
+      <button class="btn side-open" id="side-open"><span data-ui="details">Details</span> ◂</button>
       <div class="zoom"><button id="zin" aria-label="Zoom in">+</button><button id="zout" aria-label="Zoom out">−</button><button id="zfit" aria-label="Fit to screen" title="Fit to screen">⤢</button></div>
       <div class="handle" id="handle" hidden title="Drag onto the cause that explains this box"></div>
       <div class="grip" id="grip-s" hidden title="Drag to rewire the start of this arrow"></div>
       <div class="grip" id="grip-t" hidden title="Drag to rewire the end of this arrow"></div>
       <svg class="dragline" id="dragline" hidden><defs><marker id="dl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="dl-head"/></marker></defs><line id="dl" x1="0" y1="0" x2="0" y2="0" marker-end="url(#dl-arrow)"/></svg>
+      <div id="inline-lang" class="inline-lang" hidden></div>
       <textarea id="inline" class="inline" hidden aria-label="Edit box text"></textarea>
     </div>
-    <aside id="panel" aria-live="polite"></aside>
+    <aside id="side"><div class="side-head"><button class="btn icon" id="side-close" title="Close the panel" aria-label="Close the panel">×</button></div><div id="panel" aria-live="polite"></div></aside>
   </main>
 </div>
 
@@ -137,16 +159,19 @@
   <div class="help">
     <p>Arrows run from an effect to the cause that explains it, so each step to the right answers “why?”.</p>
     <table>
-      <tr><th>Add a box</th><td>Double-click empty space, or select a box and press <kbd>Tab</kbd> to add a cause under it</td></tr>
-      <tr><th>Edit text</th><td>Double-click a box, or press <kbd>Enter</kbd>. Notes, sources and status are in the side panel</td></tr>
-      <tr><th>Connect</th><td>Hover a box and drag the green dot onto its cause. Drop on empty space to create the cause there</td></tr>
-      <tr><th>Rewire</th><td>Click an arrow, then drag either round end to another box. <kbd>R</kbd> reverses it</td></tr>
-      <tr><th>Delete</th><td><kbd>Del</kbd> or <kbd>Backspace</kbd>. The rest of the chain stays as it is</td></tr>
+      <tr class="edit-only"><th>Add a box</th><td>Double-click empty space, or select a box and press <kbd>Tab</kbd> to add a cause under it</td></tr>
+      <tr><th>Edit text</th><td>Double-click a box, or press <kbd>Enter</kbd>. With several languages, <kbd>Enter</kbd> moves on to the next language; <kbd>Shift Tab</kbd> goes back. Notes, sources, tags and status are in the side panel</td></tr>
+      <tr><th>Tags</th><td>Pick them in the side panel. Click a tag in the row above the diagram to highlight its boxes, or search <code>#harvest</code></td></tr>
+      <tr class="edit-only"><th>Connect</th><td>Hover a box and drag the green dot onto its cause. Drop on empty space to create the cause there</td></tr>
+      <tr class="edit-only"><th>Rewire</th><td>Click an arrow, then drag either round end to another box. <kbd>R</kbd> reverses it</td></tr>
+      <tr class="edit-only"><th>Delete</th><td><kbd>Del</kbd> or <kbd>Backspace</kbd>. The rest of the chain stays as it is</td></tr>
       <tr><th>Select several</th><td><kbd>Shift</kbd>-click</td></tr>
       <tr><th>Fold a branch</th><td><kbd>F</kbd>, or the button in the side panel</td></tr>
       <tr><th>Undo / redo</th><td><kbd>Ctrl Z</kbd> / <kbd>Ctrl Shift Z</kbd> or <kbd>Ctrl Y</kbd></td></tr>
       <tr><th>Open / save</th><td><kbd>Ctrl O</kbd> / <kbd>Ctrl S</kbd>. <kbd>Ctrl Shift S</kbd> saves under a new name</td></tr>
       <tr><th>Cite a source</th><td>Load your .bib once (File → Load bibliography), then type <kbd>@</kbd> in Sources. Arrow keys and <kbd>Enter</kbd> pick a reference. The key is stored as <code>@key</code>, the same as a Typst citation</td></tr>
+      <tr class="edit-only"><th>Interviews</th><td><b>Grade</b> locks the diagram. Number keys grade the first scale, <kbd>Shift</kbd> + number the second; <kbd>N</kbd>/<kbd>P</kbd> move between boxes, <kbd>B</kbd> marks a branch as discussed, <kbd>A</kbd> adds a cause the interviewee proposes</td></tr>
+      <tr><th>Branches</th><td>Pick one in the toolbar, or <b>Show only this branch</b> on a box. A box belongs to a branch when every chain from the top problem passes through it</td></tr>
       <tr><th>Search</th><td><kbd>Ctrl F</kbd>, then <kbd>Enter</kbd> jumps between matches</td></tr>
       <tr><th>Switch layout</th><td><kbd>L</kbd></td></tr>
     </table>
@@ -154,6 +179,81 @@
     <p><b>Outline = status.</b> Dashed amber: hypothesis. Solid green: supported by evidence. Dotted red and faded: refuted. A red glow marks boxes caught in a loop (circular reasoning).</p>
     <p><b>Roman numerals</b> appear in Untangle when shared causes are split: the number says how many times that box appears.</p>
   </div>
+</div></div>
+
+
+<div class="overlay" id="m-tags" hidden><div class="modal wide" role="dialog" aria-modal="true" aria-labelledby="mt-h">
+  <div class="mhead"><h3 id="mt-h">Tags</h3><button class="btn icon" data-close aria-label="Close">×</button></div>
+  <p class="muted">Tags say <b>where in the chain</b> a cause happens. A box can carry several. Their order here is the order shown everywhere, so keep the product-flow tags in chain order. Each box shows its tags as emojis in its top-left corner; the tag row above the diagram highlights them.</p>
+  <div id="tag-rows" class="tagrows"></div>
+  <div class="emoji-pop" id="emoji-pop" hidden></div>
+  <div class="foot"><span class="grow"></span><button class="btn" data-close>Cancel</button><button class="btn primary" id="tag-save">Apply</button></div>
+</div></div>
+
+<div class="overlay" id="m-langs" hidden><div class="modal" role="dialog" aria-modal="true" aria-labelledby="ml-h">
+  <div class="mhead"><h3 id="ml-h">Languages and title</h3><button class="btn icon" data-close aria-label="Close">×</button></div>
+  <p class="muted">Everything a reader sees (box texts, category and tag names, the title) is kept once per language, in one file. The main language is the one you write in first.</p>
+  <div id="lang-body" class="langbody"></div>
+</div></div>
+
+<div class="overlay" id="m-new" hidden><div class="modal" role="dialog" aria-modal="true" aria-labelledby="mn-h">
+  <div class="mhead"><h3 id="mn-h">New root-cause analysis</h3><button class="btn icon" data-close aria-label="Close">×</button></div>
+  <form id="new-form" class="newform">
+    <label class="field"><span>Title</span><input id="new-title" maxlength="120" placeholder="e.g. Rejected shipments: why?"></label>
+    <label class="field"><span>Main language, the one you write in</span><select id="new-main"></select></label>
+    <div class="field"><span>Will you share this diagram in other languages too? Every box text will be asked for in each one.</span><div id="new-extra" class="newextra"></div></div>
+    <div class="foot"><span class="grow"></span><button type="button" class="btn" data-close>Cancel</button><button class="btn primary" type="submit">Create</button></div>
+  </form>
+</div></div>
+
+<div class="overlay" id="m-publish" hidden><div class="modal" role="dialog" aria-modal="true" aria-labelledby="mpub-h">
+  <div class="mhead"><h3 id="mpub-h">Publish copy</h3><button class="btn icon" data-close aria-label="Close">×</button></div>
+  <p class="muted">Makes a read-only copy for other people. Readers can zoom, search, focus on branches, filter by tag and switch language, but cannot edit. Everything you include here is public.</p>
+  <div class="pubopts">
+    <label class="chk"><input type="checkbox" id="pub-notes"> Include notes and the meanings of colours and tags</label>
+    <label class="chk"><input type="checkbox" id="pub-sources" checked> Include sources (with author, year and title from your .bib)</label>
+    <label class="chk"><input type="checkbox" id="pub-status" checked> Include status (hypothesis, supported, refuted)</label>
+    <label class="chk"><input type="checkbox" id="pub-versions"> Include version history</label>
+    <div class="row"><label class="field"><span>Opens in</span><select id="pub-lang"></select></label>
+      <label class="field"><span>Layout</span><select id="pub-mode"><option value="manual">As drawn</option><option value="untangle">Untangled</option></select></label></div>
+    <label class="field"><span>Viewer address (your GitHub Pages site)</span><input id="pub-base" placeholder="https://your-name.github.io/root-cause-analysis-tool/" spellcheck="false"></label>
+  </div>
+  <p class="pubinfo" id="pub-info"></p>
+  <div class="foot"><button class="btn" id="pub-preview">Preview</button><span class="grow"></span><button class="btn" id="pub-copy">Copy share link</button><button class="btn primary" id="pub-download">Download rca.json</button></div>
+  <p class="muted"><b>GitHub Pages:</b> put <code>rca.json</code> in the <code>docs</code> folder of the repository and push; the site shows it. <b>Share link:</b> the whole diagram travels inside the link, nothing is stored on a server.</p>
+</div></div>
+
+<div class="overlay" id="m-istart" hidden><div class="modal" role="dialog" aria-modal="true" aria-labelledby="mis-h">
+  <div class="mhead"><h3 id="mis-h">Start an interview</h3><button class="btn icon" data-close aria-label="Close">×</button></div>
+  <p class="muted">The diagram locks: you can only grade boxes, note why, mark branches as discussed and add causes the interviewee proposes. Every click is saved in this browser. Edit mode is one click away and keeps the grades.</p>
+  <div id="istart-resume"></div>
+  <form id="istart-form" class="newform">
+    <label class="field"><span>Interviewee code: a pseudonym, not a name</span><input id="is-code" required maxlength="40" placeholder="e.g. EXP-03" autocomplete="off"></label>
+    <label class="field"><span>Role</span><input id="is-role" list="is-roles" maxlength="60" placeholder="e.g. Exporter"><datalist id="is-roles"><option value="Exporter"><option value="Grower"><option value="Importer"><option value="Technical adviser"><option value="Logistics"><option value="Inspector"></datalist></label>
+    <label class="field"><span>Language of the interview</span><select id="is-lang"></select></label>
+    <div class="field"><span>Scales</span><div id="is-scales"></div><div><button type="button" class="btn small" data-act="scales">Edit scales…</button></div></div>
+    <label class="chk"><input type="checkbox" id="is-version" checked> Save a version of the diagram first, so you can later see exactly what this person was shown</label>
+    <div class="foot"><span class="grow"></span><button type="button" class="btn" data-close>Cancel</button><button class="btn primary" type="submit">Start interview</button></div>
+  </form>
+</div></div>
+
+<div class="overlay" id="m-iend" hidden><div class="modal" role="dialog" aria-modal="true" aria-labelledby="mie-h">
+  <div class="mhead"><h3 id="mie-h">End interview</h3><button class="btn icon" data-close aria-label="Close">×</button></div>
+  <p id="iend-sum"></p>
+  <label class="field"><span>General memo (optional)</span><textarea id="iend-memo" rows="4" placeholder="Overall impressions, follow-ups"></textarea></label>
+  <div class="foot"><button class="btn" data-close>Keep grading</button><span class="grow"></span><button class="btn primary" id="iend-save">Save interview file</button></div>
+  <div id="iend-after" class="iend-after" hidden>
+    <p>Saved as <b id="iend-file"></b>. It holds the diagram as it is now plus this interview's grades, notes and times. A copy also stays in this browser.</p>
+    <p class="muted">Finishing removes the grades from this working file, so the next interview starts clean. Boxes added during the interview stay, marked as proposed by it.</p>
+    <div class="foot"><span class="grow"></span><button class="btn primary" id="iend-finish">Finish and return to editing</button></div>
+  </div>
+</div></div>
+
+<div class="overlay" id="m-scales" hidden><div class="modal wide" role="dialog" aria-modal="true" aria-labelledby="msc-h">
+  <div class="mhead"><h3 id="msc-h">Grading scales</h3><button class="btn icon" data-close aria-label="Close">×</button></div>
+  <p class="muted">Each scale is a whole-number range, for example 1–3 or 0–5. The first scale gets the number keys, the second <kbd>Shift</kbd> + number, the third <kbd>Alt</kbd> + number. A scale can be asked only when another one is high enough, for example feasibility only when relevance is 3 or more.</p>
+  <div id="scale-rows" class="scalerows"></div>
+  <div class="foot"><button class="btn" id="scale-add">Add scale</button><span class="grow"></span><button class="btn" data-close>Cancel</button><button class="btn primary" id="scale-save">Apply</button></div>
 </div></div>
 
 <input type="file" id="file-input" accept=".json,.drawio,.xml,.dio,.txt" hidden>

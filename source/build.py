@@ -42,4 +42,14 @@ for k, v in parts.items():
     assert k in html, k
     html = html.replace(k, v)
 (DIST / "uchuva-rca.html").write_text(html, encoding="utf-8")
+
+# The same app, published as a GitHub Pages site in ../docs: index.html opens docs/rca.json read-only,
+# index.html?edit opens the editor (work stays in the visitor's browser and files).
+REPO = ROOT.parent
+(REPO / "uchuva-rca.html").write_text(html, encoding="utf-8")
+DOCS = REPO / "docs"; DOCS.mkdir(exist_ok=True)
+site = html.replace('<meta name="viewport"', '<meta name="rca-publish" content="rca.json">\n<meta name="viewport"', 1)
+site = site.replace("<title>Uchuva RCA Workbench</title>", "<title>Root-cause analysis viewer</title>", 1)
+(DOCS / "index.html").write_text(site, encoding="utf-8")
+(DOCS / ".nojekyll").write_text("", encoding="utf-8")
 print("dist/uchuva-rca.html", round(len(html) / 1024), "KB")
