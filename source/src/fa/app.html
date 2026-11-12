@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>System and Function Analysis</title>
+<style>
+/*FONTS*/
+</style>
+<style>
+/*CSS*/
+</style>
+</head>
+<body class="fa">
+<div class="app">
+  <header>
+    <div class="brand">
+      <nav class="modenav" id="modenav" aria-label="Workbench"></nav>
+      <h1 id="doc-title" title="Double-click to rename">Function analysis</h1>
+      <div class="fileline"><span id="file-name">function-analysis.json</span><span id="dirty" class="dirty" hidden>● unsaved changes</span><span id="saved-at" class="savedat" hidden></span></div>
+    </div>
+    <div class="toolbar">
+      <div class="seg modeseg" id="modeseg" role="group" aria-label="Mode"><button data-mode="system" title="The system map: levels, elements, boundaries">System</button><button data-mode="functions" title="Function structures inside a boundary">Functions</button></div>
+      <div class="group">
+        <details class="menu" id="menu-file"><summary class="btn">File</summary>
+          <div class="menu-list">
+            <button data-act="open">Open… <kbd>Ctrl O</kbd></button>
+            <button data-act="save">Save <kbd>Ctrl S</kbd></button>
+            <button data-act="saveas">Save as… <kbd>Ctrl Shift S</kbd></button>
+            <hr>
+            <button data-act="new">New file… <small>languages, overall function, boundary</small></button>
+            <button data-act="example">Open the worked example</button>
+            <hr>
+            <button data-act="langs">Languages and title…</button>
+            <button data-act="bib">Load bibliography… <small>.bib, for @ citations</small></button>
+            <button data-act="link-rca">Link an RCA file… <small>its causes and tags</small></button>
+            <button data-act="unlink-rca">Forget the linked RCA</button>
+          </div>
+        </details>
+        <details class="menu" id="menu-export"><summary class="btn">Export</summary>
+          <div class="menu-list">
+            <button data-act="exp-svg">SVG picture <small>what is on screen, vector, for Typst</small></button>
+            <button data-act="exp-png">PNG picture <small>2× resolution</small></button>
+            <hr>
+            <button data-act="exp-json">The whole file <small>.json, system, every variant and version</small></button>
+            <button data-act="exp-elements">Elements table <small>the system map, .csv</small></button>
+            <button data-act="exp-functions">Functions table <small>the catalogue, .csv</small></button>
+            <button data-act="exp-flows">Flows table <small>open variant, .csv</small></button>
+            <button data-act="exp-morph">Morphological chart starter <small>one row per function, .csv</small></button>
+          </div>
+        </details>
+        <button class="btn" data-act="variants" data-only="fa">Variants</button>
+        <button class="btn" data-act="flowtypes" data-only="fa">Flow types</button>
+        <button class="btn" data-act="levels" data-only="sys">Levels</button>
+        <button class="btn" data-act="tags">Tags</button>
+        <button class="btn" data-act="versions">Versions <span id="ver-count" class="pill"></span></button>
+      </div>
+      <select id="variant" class="btn" aria-label="Variant shown" title="The variant on screen" data-only="fa"></select>
+      <div class="seg" id="langseg" role="group" aria-label="Language" hidden></div>
+      <div class="group">
+        <button class="btn icon" data-act="undo" id="b-undo" title="Undo (Ctrl Z)" aria-label="Undo">↶</button>
+        <button class="btn icon" data-act="redo" id="b-redo" title="Redo (Ctrl Shift Z)" aria-label="Redo">↷</button>
+      </div>
+      <select id="depth" class="btn" aria-label="Levels shown" title="Close every box below a level (keys 0–9)" data-only="fa"></select>
+      <select id="flowtype" class="btn" aria-label="Type of new flows" title="The type new flows get" data-only="fa"></select>
+      <label class="search" for="q"><svg viewBox="0 0 16 16" stroke-width="1.8" aria-hidden="true"><circle cx="7" cy="7" r="5"/><path d="M11 11l4 4"/></svg>
+        <input id="q" type="search" placeholder="Search text, notes, sources, #tag" autocomplete="off" aria-label="Search"><span class="count" id="qcount"></span></label>
+      <button class="btn icon" data-act="help" title="Shortcuts and help (?)" aria-label="Help">?</button>
+    </div>
+    <div class="stats" id="stats"></div>
+  </header>
+  <div class="tagbar" id="tagbar" hidden></div>
+  <main>
+    <div id="cy">
+      <div class="hint" id="hint">Double-click: new box · drag <span class="dot"></span> onto a box: flow · <kbd>?</kbd> help</div>
+      <div class="diffbar" id="diffbar" hidden></div>
+      <div class="diffbar sysbar" id="sysbar" hidden></div>
+      <svg class="sysover" id="sysover" aria-hidden="true"><g id="sysover-g"></g></svg>
+      <details class="viewpanel" id="viewpanel" data-only="fa">
+        <summary><span>View</span></summary>
+        <div class="vp-body">
+          <label class="chk"><input type="checkbox" id="v-labels"> Show flow labels</label>
+          <div class="row"><button class="btn small" data-act="arrange" title="ELK layered layout, left to right, keeps boxes inside their containers">Auto-arrange left to right</button></div>
+          <p class="note">Levels: <kbd>0</kbd> black box, <kbd>1</kbd>–<kbd>9</kbd> down to that level. Click a flow type in the key to hide it.</p>
+        </div>
+      </details>
+      <div class="legend" id="legend"></div>
+      <button class="btn side-open" id="side-open">Details ◂</button>
+      <div class="zoom"><button id="zin" aria-label="Zoom in">+</button><button id="zout" aria-label="Zoom out">−</button><button id="zfit" aria-label="Fit to screen" title="Fit to screen">⤢</button></div>
+      <div class="handle" id="handle" hidden title="Drag onto another box to draw a flow"></div>
+      <div class="grip" id="grip-s" hidden title="Drag to rewire the start of this flow"></div>
+      <div class="grip" id="grip-t" hidden title="Drag to rewire the end of this flow"></div>
+      <div class="glabel" id="lab-box" hidden></div>
+      <div class="gtab" id="grip-l" hidden title="Drag to move the label">✥</div>
+      <div class="grip gbend" id="grip-m" hidden title="Drag to bend this flow"></div>
+      <div class="gwidth" id="grip-w" hidden title="Drag to set the width of this box · double-click: automatic width"></div>
+      <svg class="dragline" id="dragline" hidden><defs><marker id="dl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="dl-head"/></marker></defs><line id="dl" x1="0" y1="0" x2="0" y2="0" marker-end="url(#dl-arrow)"/></svg>
+      <div id="inline-lang" class="inline-lang" hidden></div>
+      <textarea id="inline" class="inline" hidden aria-label="Edit text"></textarea>
+      <div id="verbs" class="verbs" hidden></div>
+    </div>
+    <aside id="side"><div class="side-head"><button class="btn icon" id="side-close" title="Close the panel" aria-label="Close the panel">×</button></div><div id="panel" aria-live="polite"></div></aside>
+  </main>
+</div>
+
+<!--INCLUDE core/modals.html-->
+
+<div class="overlay" id="m-new" hidden><div class="modal" role="dialog" aria-modal="true" aria-labelledby="mn-h">
+  <div class="mhead"><h3 id="mn-h">New function analysis</h3><button class="btn icon" data-close aria-label="Close">×</button></div>
+  <p class="muted">A function analysis describes <b>what</b> a system must do, apart from <b>how</b>. It starts by deciding where the system ends.</p>
+  <form id="new-form" class="newform">
+    <label class="field"><span>Title</span><input id="new-title" maxlength="120" placeholder="e.g. Postharvest chain, uchuva to the Netherlands"></label>
+    <label class="field"><span>Main language, the one you write in</span><select id="new-main"></select></label>
+    <div class="field"><span>Other languages: every box will be asked for in each one</span><div id="new-extra" class="newextra"></div></div>
+    <label class="field"><span>Overall function: one verb + noun for the whole system</span><input id="new-root" maxlength="120" placeholder="e.g. Deliver sound uchuva"></label>
+    <label class="field"><span>System boundary: where it starts and ends</span><input id="new-boundary" maxlength="200" placeholder="e.g. Farm gate → importer's distribution centre"></label>
+    <label class="field"><span>Name of this first variant</span><input id="new-variant" maxlength="60" placeholder="Variant A"></label>
+    <div class="foot"><span class="grow"></span><button type="button" class="btn" data-close>Cancel</button><button class="btn primary" type="submit">Create</button></div>
+  </form>
+</div></div>
+
+<div class="overlay" id="m-variants" hidden><div class="modal wide" role="dialog" aria-modal="true" aria-labelledby="mva-h">
+  <div class="mhead"><h3 id="mva-h">Variants</h3><button class="btn icon" data-close aria-label="Close">×</button></div>
+  <p class="muted">Each variant is one function structure: its own boundary, decomposition, externals and flows. Functions are shared, so a function's text, notes, sources and tags are the same in every variant. Compare variants by moving the boundary, reordering subfunctions, or splitting and merging them.</p>
+  <div id="var-rows" class="varrows"></div>
+  <form id="var-form" class="varform">
+    <h4>New variant</h4>
+    <div class="row"><input id="var-name" maxlength="60" placeholder="Name, e.g. B: boundary at the packhouse" aria-label="New variant name">
+      <select id="var-root" aria-label="Start from"></select></div>
+    <input id="var-newroot" maxlength="120" placeholder="New overall function, e.g. Pack sound uchuva" aria-label="New overall function" hidden>
+    <select id="var-sysb" aria-label="System boundary of the new variant" title="For an empty variant: the boundary from the system map it works in. A copy keeps the boundary of the original."></select>
+    <div class="foot"><span class="grow"></span><button class="btn primary" type="submit">Create and open</button></div>
+  </form>
+</div></div>
+
+<div class="overlay" id="m-flows" hidden><div class="modal wide" role="dialog" aria-modal="true" aria-labelledby="mf-h">
+  <div class="mhead"><h3 id="mf-h">Flow types</h3><button class="btn icon" data-close aria-label="Close">×</button></div>
+  <p class="muted">Every flow has a type, shown by its colour <b>and</b> its line pattern, so the diagram still reads when printed in black and white. The classic three are material, energy and signal; unwanted flows (inoculum, waste) keep their type and are drawn red with a hollow head.</p>
+  <div id="ft-rows" class="ftrows"></div>
+  <div class="foot"><button class="btn" id="ft-add">Add flow type</button><span class="grow"></span><button class="btn" data-close>Cancel</button><button class="btn primary" id="ft-save">Apply</button></div>
+</div></div>
+
+<div class="overlay" id="m-levels" hidden><div class="modal wide" role="dialog" aria-modal="true" aria-labelledby="ml-h">
+  <div class="mhead"><h3 id="ml-h">Levels of the system</h3><button class="btn icon" data-close aria-label="Close">×</button></div>
+  <p class="muted">Levels are nested rings, outermost first, as in Moreira et al. (2023): landscape, farm, field, pathogen. They show scale; where an element acts along the process is its stage tag. Elements keep their level and their place in its ring when you rename, reorder or add levels; the elements of a deleted level move to the next level inwards.</p>
+  <div id="lv-rows" class="lvrows"></div>
+  <div class="foot"><button class="btn" id="lv-add">Add level inside</button><span class="grow"></span><button class="btn" data-close>Cancel</button><button class="btn primary" id="lv-save">Apply</button></div>
+</div></div>
+
+<div class="overlay" id="m-help" hidden><div class="modal" role="dialog" aria-modal="true" aria-labelledby="mh-h">
+  <div class="mhead"><h3 id="mh-h">How it works</h3><button class="btn icon" data-close aria-label="Close">×</button></div>
+  <div class="help">
+    <p>The file has two modes. <b>System</b> maps what is there: elements on nested levels, groups, and boundaries drawn through them. <b>Functions</b> works out what must happen inside a boundary: boxes are <b>functions</b> (verb + noun), arrows are <b>flows</b> (material, energy, signal). The dashed box is the overall function and the system boundary; anything outside it is an external.</p>
+    <h4>System</h4>
+    <table>
+      <tr><th>Add an element</th><td>Double-click where it belongs: the ring you click in is its level. Drag it into another ring to change the level</td></tr>
+      <tr><th>Kinds</th><td>Actor (thick outline, with needs), organism, object, condition. Set it in the side panel</td></tr>
+      <tr><th>On several levels</th><td>Side panel → <b>Also on</b>: one more circle for the same element. Circles are numbered I, II… from the outermost level; each has its own tags, group and boundaries, the name is shared. <b>Split</b> makes a circle its own element</td></tr>
+      <tr><th>Merge</th><td>Shift-click elements that are the same thing, then pick the name to keep. Elements sharing a name are listed in the side panel</td></tr>
+      <tr><th>Group</th><td>Shift-click several elements, then <kbd>G</kbd>. A group is a dotted outline, such as a pathogen's sexual reproduction</td></tr>
+      <tr><th>Boundary</th><td>Side panel → <b>New boundary</b>, or click one in the list to focus on it; the rest fades. <b>Edit members</b>, then click elements, a group or a level name to include or exclude them</td></tr>
+      <tr><th>Chain of stages</th><td>Side panel → <b>Draw the stages as a chain</b>. The stages are the tags of one tag group, in their order; ↑ ↓ reorder them. An element's stage is its tag</td></tr>
+      <tr><th>Levels</th><td><b>Levels</b> in the toolbar, or double-click a level's name</td></tr>
+    </table>
+    <h4>Functions</h4>
+    <table>
+      <tr><th>Add a function</th><td>Double-click inside the boundary, or inside an open box to add a subfunction there. <kbd>Tab</kbd> adds a subfunction to the selected box</td></tr>
+      <tr><th>Add an external</th><td>Double-click outside the boundary</td></tr>
+      <tr><th>Draw a flow</th><td>Hover a box and drag the green dot onto another box. Drop inside a box to create a subfunction there, outside the boundary to create an external. The type comes from <b>New flows</b> in the toolbar</td></tr>
+      <tr><th>Edit text</th><td>Double-click a box or a flow, or press <kbd>Enter</kbd>. With several languages, <kbd>Enter</kbd> moves on to the next one</td></tr>
+      <tr><th>Levels</th><td>A box's colour is its level. Change a box's parent under <b>Part of</b>. Keys <kbd>0</kbd> (black box) to <kbd>9</kbd> close every box below that level; flows into a closed box attach to it</td></tr>
+      <tr><th>Auxiliary</th><td><kbd>A</kbd>, or Kind in the side panel. Auxiliary functions get a double border</td></tr>
+      <tr><th>Key function</th><td><kbd>K</kbd>, or the checkbox in the side panel: a ★ before its name</td></tr>
+      <tr><th>System map</th><td>Pick the variant's boundary in the side panel. Functions say what they <b>act on</b>; externals and flows can be elements. The side panel then lists the gaps: elements inside nobody acts on, functions acting outside, externals that are inside</td></tr>
+      <tr><th>Rewire</th><td>Click a flow, then drag either round end to another box. <kbd>R</kbd> reverses it</td></tr>
+      <tr><th>Shape a flow</th><td>Click it. Drag the dot in its middle to bend it, a round end along its own box to move where it attaches, the ✥ tab to move its label. The side panel has Auto, Straight, Curved, Angled and Elbow. <kbd>Esc</kbd> while dragging cancels</td></tr>
+      <tr><th>Box width</th><td>Click a box and drag the square on its bottom-right corner; double-click the square for the automatic width</td></tr>
+      <tr><th>New line</th><td><kbd>Shift</kbd>+<kbd>Enter</kbd> while editing a box or a flow label</td></tr>
+      <tr><th>Remove</th><td><kbd>Del</kbd>. In System, <kbd>Del</kbd> on an element that is on several levels removes only that circle. A removed function stays in the catalogue with its notes; place it again from the side panel</td></tr>
+      <tr><th>Variants</th><td>The toolbar menu switches between them. <b>Variants</b> duplicates one or starts a new one with another boundary</td></tr>
+      <tr><th>Cite a source</th><td>Load your .bib once (File → Load bibliography), then type <kbd>@</kbd> in Sources</td></tr>
+      <tr><th>RCA</th><td>File → Link an RCA file brings its causes (and, if you like, its stage tags). A function then lists the root causes it addresses</td></tr>
+      <tr><th>Undo / redo</th><td><kbd>Ctrl Z</kbd> / <kbd>Ctrl Shift Z</kbd> or <kbd>Ctrl Y</kbd></td></tr>
+      <tr><th>Open / save</th><td><kbd>Ctrl O</kbd> / <kbd>Ctrl S</kbd>. In Chrome and Edge, later changes are written to the file automatically</td></tr>
+    </table>
+    <p><b>The method</b>, in the side panel when nothing is selected: set the boundary, describe the black box, decompose, check the wording, add auxiliary functions, make variants. Steps tick themselves when the diagram shows they are done; you can also tick them yourself.</p>
+    <p><b>Wording check.</b> A box should start with a function verb. The list holds the terms of the functional basis (Hirtz et al. 2002), their synonyms, and everyday postharvest and systems-analysis verbs, in English and Spanish. Suggestions show which basis term a synonym belongs to. Accept your own verbs from the method panel.</p>
+  </div>
+</div></div>
+
+<input type="file" id="file-input" accept=".json" hidden>
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script>
+/*CYTOSCAPE*/
+</script>
+<script>
+/*ELK*/
+</script>
+<script>
+/*APP*/
+</script>
+</body>
+</html>

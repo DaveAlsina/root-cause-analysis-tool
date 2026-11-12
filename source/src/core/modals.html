@@ -1,0 +1,27 @@
+<!-- Dialogs shared by every tool: versions, tags, languages -->
+<div class="overlay" id="m-versions" hidden><div class="modal wide" role="dialog" aria-modal="true" aria-labelledby="mv-h">
+  <div class="mhead"><h3 id="mv-h">Versions</h3><button class="btn icon" data-close aria-label="Close">×</button></div>
+  <p class="muted">A version is a named snapshot stored inside this RCA file. Save one after each meaningful step, such as an interview or a literature pass. Restoring a version can be undone.</p>
+  <form id="ver-form" class="verform">
+    <input id="ver-name" required maxlength="80" placeholder="Version name, e.g. After interview EXP-01" aria-label="Version name">
+    <input id="ver-note" maxlength="300" placeholder="What changed (optional)" aria-label="Version note">
+    <button class="btn primary" type="submit">Save version</button>
+  </form>
+  <div id="ver-list" class="verlist"></div>
+  <div id="ver-diff" class="verdiff" hidden></div>
+</div></div>
+
+<div class="overlay" id="m-tags" hidden><div class="modal wide" role="dialog" aria-modal="true" aria-labelledby="mt-h">
+  <div class="mhead"><h3 id="mt-h">Tags</h3><button class="btn icon" data-close aria-label="Close">×</button></div>
+  <p class="muted">Tags say <b>where in the chain</b> a cause happens. A box can carry several. Their order here is the order shown everywhere, so keep the product-flow tags in chain order. Each box shows its tags as emojis in its top-left corner; the tag row above the diagram highlights them.</p>
+  <div id="tag-rows" class="tagrows"></div>
+  <div class="emoji-pop" id="emoji-pop" hidden></div>
+  <div class="foot"><span class="grow"></span><button class="btn" data-close>Cancel</button><button class="btn primary" id="tag-save">Apply</button></div>
+</div></div>
+
+<div class="overlay" id="m-langs" hidden><div class="modal" role="dialog" aria-modal="true" aria-labelledby="ml-h">
+  <div class="mhead"><h3 id="ml-h">Languages and title</h3><button class="btn icon" data-close aria-label="Close">×</button></div>
+  <p class="muted">Everything a reader sees (box texts, category and tag names, the title) is kept once per language, in one file. The main language is the one you write in first.</p>
+  <div id="lang-body" class="langbody"></div>
+</div></div>
+

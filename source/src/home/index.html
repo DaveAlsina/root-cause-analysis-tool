@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Design Workbench</title>
+<style>
+/*FONTS*/
+</style>
+<style>
+/*CSS*/
+</style>
+</head>
+<body class="home">
+<div class="wrap" role="main">
+  <div class="intro">
+    <p class="kicker">Design workbench</p>
+    <h1>Why it fails, what is there, what it must do</h1>
+    <p class="lead">Three views of one design problem. Trace the causes, map the system and choose its boundary, then work out the functions the system must perform inside that boundary.</p>
+  </div>
+
+  <ol class="modes">
+    <li class="mode" data-key="uchuva-rca" data-count="nodes" data-unit="box,boxes">
+      <svg class="glyph" viewBox="0 0 120 72" aria-hidden="true">
+        <rect class="g-fill-hi" x="44" y="4" width="32" height="12" rx="3"/>
+        <path class="g-line" d="M60 16v8M28 24h64M28 24v6M60 24v6M92 24v6M28 42v6M18 48h20M18 48v6M38 48v6M92 42v12"/>
+        <rect class="g-fill" x="14" y="30" width="28" height="12" rx="3"/><rect class="g-fill" x="46" y="30" width="28" height="12" rx="3"/><rect class="g-fill" x="78" y="30" width="28" height="12" rx="3"/>
+        <rect class="g-soft" x="8" y="54" width="20" height="10" rx="3"/><rect class="g-soft" x="30" y="54" width="20" height="10" rx="3"/><rect class="g-soft" x="82" y="54" width="20" height="10" rx="3"/>
+      </svg>
+      <p class="step"><span>1</span>Root causes</p>
+      <h2>Why does it go wrong?</h2>
+      <p class="desc">A tree from the problem down to its root causes, with stage tags, sources, translations and grading in stakeholder interviews.</p>
+      <p class="makes"><span>cause tree</span><span>interview grades</span></p>
+      <p class="status" aria-live="polite"></p>
+      <a class="btn primary go" href="uchuva-rca.html">Open root causes</a>
+    </li>
+
+    <li class="mode" data-key="function-analysis" data-count="system.elements" data-unit="element,elements" data-extra="boundaries">
+      <svg class="glyph" viewBox="0 0 120 72" aria-hidden="true">
+        <ellipse class="g-ring" cx="60" cy="38" rx="56" ry="32"/><ellipse class="g-ring" cx="60" cy="45" rx="42" ry="24"/><ellipse class="g-ring" cx="60" cy="52" rx="26" ry="16"/>
+        <circle class="g-dot" cx="20" cy="26" r="3.2"/><circle class="g-dot" cx="98" cy="30" r="3.2"/><circle class="g-dot" cx="38" cy="40" r="3.2"/><circle class="g-dot" cx="84" cy="44" r="3.2"/><circle class="g-dot-hi" cx="52" cy="54" r="3.2"/><circle class="g-dot-hi" cx="68" cy="52" r="3.2"/><circle class="g-dot" cx="60" cy="16" r="3.2"/>
+        <ellipse class="g-bound" cx="64" cy="46" rx="32" ry="22"/>
+      </svg>
+      <p class="step"><span>2</span>System</p>
+      <h2>What is there, and where does the system end?</h2>
+      <p class="desc">The elements of the system on nested levels, from landscape to pathogen, with the chain of stages. Group them and draw boundaries to try in the function analysis.</p>
+      <p class="makes"><span>system map</span><span>boundaries</span></p>
+      <p class="status" aria-live="polite"></p>
+      <a class="btn primary go" href="function-analysis.html#system">Open system</a>
+    </li>
+
+    <li class="mode" data-key="function-analysis" data-count="functions" data-unit="function,functions" data-extra="variants">
+      <svg class="glyph" viewBox="0 0 120 72" aria-hidden="true">
+        <rect class="g-bound" x="22" y="10" width="76" height="52" rx="5"/>
+        <rect class="g-fill" x="30" y="30" width="18" height="12" rx="3"/><rect class="g-fill" x="56" y="22" width="18" height="12" rx="3"/><rect class="g-fill-aux" x="56" y="42" width="18" height="12" rx="3"/><rect class="g-fill" x="80" y="30" width="12" height="12" rx="3"/>
+        <path class="g-flow" d="M8 36h22M48 34l8-4M48 38l8 8M74 28l6 6M92 36h20"/>
+        <circle class="g-ext" cx="6" cy="36" r="4"/><circle class="g-ext" cx="114" cy="36" r="4"/>
+      </svg>
+      <p class="step"><span>3</span>Functions</p>
+      <h2>What must the system do?</h2>
+      <p class="desc">Function structures inside a boundary: functions as boxes, material, energy and signal flows as arrows, in variants you can compare.</p>
+      <p class="makes"><span>function structures</span><span>morphological chart starter</span></p>
+      <p class="status" aria-live="polite"></p>
+      <a class="btn primary go" href="function-analysis.html#functions">Open functions</a>
+    </li>
+  </ol>
+
+  <div class="foot-note">
+    <p>System and functions are two modes of one file, so a function can point at the elements it acts on. Each tool runs offline in your browser and saves to your own <code>.json</code> files. Keep these <code>.html</code> files together in one folder so the links between them work. The bar at the top of each tool brings you back here.</p>
+  </div>
+</div>
+<script>
+"use strict";
+(function () {
+  const rel = iso => {
+    const t = Date.parse(iso); if (!Number.isFinite(t)) return "";
+    const s = (t - Date.now()) / 1000, f = new Intl.RelativeTimeFormat(undefined, { numeric: "auto" });
+    for (const [u, n] of [["year", 31536000], ["month", 2592000], ["week", 604800], ["day", 86400], ["hour", 3600], ["minute", 60]]) if (Math.abs(s) >= n) return f.format(Math.round(s / n), u);
+    return "just now";
+  };
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+  document.querySelectorAll(".mode[data-key]").forEach(card => {
+    const key = card.dataset.key, out = card.querySelector(".status"); if (!key || !out) return;
+    let d = null, f = {};
+    try { d = JSON.parse(localStorage.getItem(key + ":doc") || "null"); f = JSON.parse(localStorage.getItem(key + ":file") || "{}") || {}; } catch (e) { d = null; }
+    const list = card.dataset.count.split(".").reduce((o, k) => o && o[k], d);
+    if (!d || !Array.isArray(list)) { out.innerHTML = `<span class="muted">Nothing open in this browser yet.</span>`; return; }
+    const n = list.length, [one, many] = card.dataset.unit.split(",");
+    const more = card.dataset.extra === "boundaries" ? ((d.system || {}).boundaries || []).length : card.dataset.extra === "variants" ? (d.variants || []).length : 0;
+    const extra = card.dataset.extra === "boundaries" ? ` · ${more} boundar${more === 1 ? "y" : "ies"}` : more > 1 ? ` · ${more} variants` : "";
+    out.innerHTML = `<span class="st-lbl">Open now</span><b>${esc(d.title || "Untitled")}</b>` +
+      `<span class="muted">${n} ${n === 1 ? one : many}${extra}${d.meta && d.meta.modified ? " · edited " + esc(rel(d.meta.modified)) : ""}</span>` +
+      (f.fileName ? `<span class="file">${esc(f.fileName)}${f.dirty ? ` <i>● unsaved changes</i>` : ""}</span>` : "");
+  });
+})();
+</script>
+</body>
+</html>
