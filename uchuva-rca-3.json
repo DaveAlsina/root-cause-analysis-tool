@@ -432,8 +432,8 @@
       "status": "unassessed",
       "notes": "",
       "sources": [],
-      "x": 717,
-      "y": 801
+      "x": 1368,
+      "y": 1475
     },
     {
       "id": "n12",
@@ -499,8 +499,8 @@
       "status": "unassessed",
       "notes": "",
       "sources": [],
-      "x": 1329,
-      "y": -30,
+      "x": 1325,
+      "y": -41,
       "outline": "#000000"
     },
     {
@@ -516,8 +516,8 @@
       "status": "unassessed",
       "notes": "",
       "sources": [],
-      "x": 1335,
-      "y": 41,
+      "x": 1328,
+      "y": 32,
       "outline": "#000000"
     },
     {
@@ -533,8 +533,8 @@
       "status": "unassessed",
       "notes": "",
       "sources": [],
-      "x": 1336,
-      "y": 89,
+      "x": 1332,
+      "y": 82,
       "outline": "#000000"
     },
     {
@@ -1524,8 +1524,8 @@
       "status": "unassessed",
       "notes": "",
       "sources": [],
-      "x": 853,
-      "y": 1482
+      "x": 1227,
+      "y": 1553
     },
     {
       "id": "nmvp55q0gt14o",
@@ -1540,8 +1540,8 @@
       "status": "unassessed",
       "notes": "",
       "sources": [],
-      "x": 1105,
-      "y": 1450
+      "x": 1436,
+      "y": 1645
     },
     {
       "id": "nmvp5jdw4e951",
@@ -1556,8 +1556,8 @@
       "status": "unassessed",
       "notes": "",
       "sources": [],
-      "x": 847,
-      "y": 1569
+      "x": 814,
+      "y": 1603
     },
     {
       "id": "nmvp5k7bp5hhu",
@@ -1572,8 +1572,8 @@
       "status": "unassessed",
       "notes": "",
       "sources": [],
-      "x": 1042,
-      "y": 1541
+      "x": 1026,
+      "y": 1588
     },
     {
       "id": "nmvp5otdguyn5",
@@ -1604,8 +1604,8 @@
       "status": "unassessed",
       "notes": "",
       "sources": [],
-      "x": 1372,
-      "y": 1764
+      "x": 1347,
+      "y": 1791
     },
     {
       "id": "nmvp5uc0d2qq5",
@@ -1621,7 +1621,7 @@
       "notes": "",
       "sources": [],
       "x": 1101,
-      "y": 1846
+      "y": 1874
     },
     {
       "id": "nmvp5w6oanvlz",
@@ -1653,8 +1653,8 @@
       "status": "unassessed",
       "notes": "",
       "sources": [],
-      "x": 1336,
-      "y": 1890
+      "x": 1342,
+      "y": 1906
     },
     {
       "id": "nmvp5yos0azq9",
@@ -2019,8 +2019,8 @@
       "status": "unassessed",
       "notes": "",
       "sources": [],
-      "x": 944,
-      "y": 1694
+      "x": 920,
+      "y": 1714
     },
     {
       "id": "nmw2bctr2peil",
@@ -2036,8 +2036,8 @@
       "status": "unassessed",
       "notes": "",
       "sources": [],
-      "x": 1136,
-      "y": 1700
+      "x": 1102,
+      "y": 1753
     },
     {
       "id": "nmw2bjvijnu0h",
@@ -2230,8 +2230,8 @@
       "status": "unassessed",
       "notes": "",
       "sources": [],
-      "x": 1172,
-      "y": 1633,
+      "x": 1166,
+      "y": 1682,
       "origin": {
         "session": "Carlos Suarez - Ocati",
         "at": "2026-11-17T17:20:17.692Z"
@@ -2278,6 +2278,20 @@
       "sources": [],
       "x": 2215,
       "y": 1181
+    },
+    {
+      "id": "nmwmcq6viwgsl",
+      "text": "the pathogen has enough time to develop",
+      "textTr": {
+        "es": "El patógeno tiene suficiente tiempo para desarrollarse"
+      },
+      "cat": "cause",
+      "tags": [],
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 792,
+      "y": 1456
     }
   ],
   "edges": [
@@ -2320,11 +2334,6 @@
       "id": "ea7",
       "source": "n2",
       "target": "n10"
-    },
-    {
-      "id": "ea8",
-      "source": "n3",
-      "target": "n11"
     },
     {
       "id": "ea9",
@@ -2692,11 +2701,6 @@
       "target": "nmumxsbrq9fat"
     },
     {
-      "id": "emvp54yxg261i",
-      "source": "n3",
-      "target": "nmvp54yxg58u7"
-    },
-    {
       "id": "emvp55q0hphgh",
       "source": "nmvp54yxg58u7",
       "target": "nmvp55q0gt14o"
@@ -2970,6 +2974,21 @@
       "id": "emwm9fbarjorx",
       "source": "nmwkvyu6bsuml",
       "target": "nmwm9fbarz4sa"
+    },
+    {
+      "id": "emwmcqy2p5p7r",
+      "source": "n3",
+      "target": "nmwmcq6viwgsl"
+    },
+    {
+      "id": "emwmcr1bkc7t3",
+      "source": "nmwmcq6viwgsl",
+      "target": "n11"
+    },
+    {
+      "id": "emwmcrwzdwfqd",
+      "source": "nmwmcq6viwgsl",
+      "target": "nmvp54yxg58u7"
     }
   ],
   "versions": [
@@ -5807,7 +5826,7 @@
   "activeSession": null,
   "meta": {
     "created": "2026-11-17T16:03:25.181Z",
-    "modified": "2026-11-18T15:16:18.089Z",
+    "modified": "2026-11-18T16:46:40.338Z",
     "published": "2026-11-04T17:21:38.041Z"
   },
   "viewDefaults": {
