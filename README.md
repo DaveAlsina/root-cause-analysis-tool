@@ -8,6 +8,80 @@ Have a look at the video to see how it works briefly. It shows the app in action
 
 ![GIF of the RCA app](./outputs/rca-tool-on-work.gif)
 
+## Three modes, one workbench
+
+| File | What it is |
+|---|---|
+| `index.html` | **Home page**: the three modes in order, with what is open in each |
+| `uchuva-rca.html` | **Root causes**: why the problem happens, as a tree of causes |
+| `function-analysis.html` | **System** and **Functions**, two modes of one file: the system map with its boundaries, and the function structures that work inside them |
+
+The tools are single offline HTML files with the same look, the same languages, tags, versions and `.bib` citations. They share one code base (see *For developers* at the end). Keep the `.html` files in one folder: the bar above each tool's title switches between modes and leads back to the home page, and `function-analysis.html#system` or `#functions` opens a mode directly. The published viewer on GitHub Pages doesn't show that bar.
+
+## System analysis
+
+The **System** mode of `function-analysis.html` maps what is there before deciding what the system must do, after Fig. 2 of Moreira et al. (2023). It lives in the same file as the function analysis, so functions can point at the elements they act on.
+
+| Element | How it shows |
+|---|---|
+| Level | Nested rings, outermost first (by default landscape, farm, field, pathogen). Rings show **scale**. Edit them with **Levels** |
+| Element | A circle in a ring; the ring is its level. Double-click to add one, drag it into another ring to change its level |
+| On several levels | One element, one circle per level: water in the landscape and on the plant. The circles carry numerals I, II… from the outermost level, and selecting one makes the others glow. The name, kind, needs, notes and sources are shared; each circle has its own group, tags (its stage) and boundaries, and a function acts on one circle. **Also on** in the side panel adds a level; **Split** turns a circle into an element of its own |
+| Merge | Shift-click elements that are the same thing and pick which name to keep: they become one element with all their circles. The side panel also lists elements that share a name in any language (Roads and Carreteras), with **Review** to merge them or **Keep apart** to stop the suggestion |
+| Kind | Actor (thick outline; has a **needs** field, RIO step C), organism, object, condition. Fill colour shows the kind |
+| Group | A dotted outline around elements, such as a pathogen's sexual reproduction. Shift-click several, then **G** |
+| Stage | An element's tag. With **Draw the stages as a chain** on, the tags of one group appear in order under the rings; ↑ ↓ in the side panel reorder them (the tag editor follows) and clicking a stage highlights its elements |
+| Boundary | A named set of elements. Click one in the side panel: the rest fades and a dashed outline goes around its members. **Edit members**, then click elements, a group or a level name to include or exclude them |
+
+Elements keep their level and their place in the ring when you rename, reorder or add levels; deleting a level moves its elements one level in. **Export** gives the map as SVG or PNG (with the boundary in focus, the chain and a key to the kinds) and an elements table with one row per circle (an element on two levels gives two rows with the same id), one column per boundary, the needs, and the functions acting on each circle. Files made before circles existed open with one circle per element, keeping their boundaries and links.
+
+## Function analysis
+
+Open `function-analysis.html`. The first visit shows a small worked example behind the **New function analysis** dialog; cancel to explore it, or fill in the dialog to start your own. The dialog asks for the **overall function** (verb + noun) and the **system boundary** before anything else, because that is where the method starts.
+
+**What you see.** Boxes are functions, arrows are flows. The dashed box is the overall function and the system boundary; boxes outside it are externals (grower, importer, environment). A function you decompose becomes a container holding its subfunctions, so opening a box is literally opening it.
+
+| Element | How it shows |
+|---|---|
+| Level | Box colour, from dark (level 1) to light. The level comes from the decomposition: change a box's parent under **Part of** in the side panel |
+| Auxiliary function | Double border. Toggle with **A** or **Kind** in the side panel |
+| Flow type | Colour **and** line pattern: material solid blue, energy dashed orange, signal dotted purple. Readable in black and white. Edit or add types with **Flow types**: colour, pattern (solid, dashed, dotted, dash-dot), line width, and the spacing between dashes or dots |
+| Unwanted flow | Red with a hollow arrowhead (inoculum, waste, losses), keeping its type's pattern |
+| Tags | Emojis in the box corner, as in the RCA. Functions and flows can both carry tags |
+
+**Variants.** One file holds one catalogue of functions and several variants. A variant is one function structure: its own boundary, decomposition, positions, externals and flows. A function's text, notes, sources, tags and RCA links are shared, so writing a note once reaches every variant. **Variants** duplicates a variant or starts one with another overall function (a moved boundary). Removing a function from a variant keeps it in the catalogue; the side panel lists catalogue functions not in the open variant, ready to place.
+
+**Levels.** The toolbar's level menu, or keys **0**–**9**, closes every box below that level. **0** is the black box: the boundary with only the flows that cross it. Flows into a closed box attach to it; flows that stay inside it disappear.
+
+**The method.** With nothing selected, the side panel shows the variant's boundary (where it starts and ends, what is inside and outside) and six steps: set the boundary, describe the black box, decompose, check the wording, add auxiliary functions, make variants. Steps tick themselves when the diagram shows they are done and list what to look at (a function with no flow in, a flow that never enters the system). You can also tick a step yourself.
+
+**Wording check.** A function should start with a verb that more than one solution could fulfil. The tool checks the first word against the terms of the functional basis of Hirtz et al. (2002), their synonyms (mostly the paper's *correspondents*, e.g. *dampen*, *attenuate* and *minimise* for **decrement**), and everyday postharvest and systems-analysis verbs (keep, dry, cool, sort, monitor, inform…). As you type, it suggests verbs and shows the basis term each synonym belongs to. English forms like *keeps*, *dried* or *removing* count. The Spanish list is a working translation. **Accept verb** adds your own.
+
+**The system map.** With nothing selected, pick the variant's boundary from the system map. Then:
+
+- **Acts on** on each function lists the elements it works on, as Moreira et al. (2023) mark key functions on the pathogen's life cycle. A chip turns amber when the element is outside the boundary.
+- An external can be an element of the map; its name then follows the element. **Add externals from the system map** lists the elements outside the boundary.
+- A flow can name the element that flows (fruit, conidia, cold air); it is the flow's label when the flow has none.
+- **★ Key function** (or **K**) marks the functions critical to the design goals (RIO step F).
+- **Against the system map** lists three gaps: elements inside the boundary that no function acts on (with **+ function** to add one), functions acting on something outside the boundary, and externals that are in fact inside. When you switch the variant to another boundary, it also lists which elements came in and which went out.
+
+**Link to the RCA.** **File → Link an RCA file…** reads your RCA file once: its boxes become choices under **Root causes it addresses** on each function, and its stage tags can come along, so functions and causes share the same stages. The link is stored by box id.
+
+| Action | How |
+|---|---|
+| Add a function | Double-click inside the boundary or inside an open box. **Tab** adds a subfunction to the selected box |
+| Add an external | Double-click outside the boundary |
+| Draw a flow | Drag the green dot onto another box. Drop inside a box to create a subfunction there; outside the boundary to create an external. **New flows** in the toolbar sets the type |
+| Edit text | Double-click a box or a flow, or **Enter**. **Shift+Enter** starts a new line, in boxes and in flow labels |
+| Rewire, reverse, delete | As in the RCA: drag a flow's round ends onto another box, **R**, **Del** |
+| Bend a flow | Click it and drag the dot in its middle. The side panel switches between Auto, Straight, Curved, Angled (one corner) and Elbow (right angles), with **back to automatic**. A bend is stored relative to the two boxes, so it follows when they move |
+| Where a flow attaches | Drag a round end along its own box: it snaps to the outline, and to the middle of a side when close |
+| Move a flow's label | Drag the ✥ tab on the label's corner. Two flows between the same boxes stack their labels on their own |
+| Box width | Click a box and drag the small square on its bottom-right corner: the text wraps to the new width. Double-click the square, or **automatic width** in the panel, to undo it. Widths and flow shapes belong to the variant |
+| Auto-arrange | **View → Auto-arrange left to right** (ELK layered layout, keeps boxes in their containers). It puts hand-shaped flows back to automatic; Ctrl Z undoes it |
+
+**Exports:** SVG and PNG of the open variant; the whole file as JSON; a functions table (the catalogue, with level and parent in the open variant, variants used, key flag, the elements each acts on, RCA causes, verb check); a flows table (type, label, whether it crosses the boundary); and a **morphological chart starter**: one row per function, with empty columns for the means.
+
 ## Online viewer (GitHub Pages)
 
 The `docs/` folder is a ready-made website. Once GitHub Pages is on, anyone can open the diagram in a browser, read-only. They can zoom, search, highlight a stage with the tag row, focus on one branch and switch language, but they can't edit.
@@ -207,12 +281,33 @@ The SVG and PNG show what is on screen, including the layout mode, folds and fil
 
 ## Editing the tool
 
-`source/` holds the app code: `src/app.js`, `src/app.css` and `src/app.html`. To rebuild the single file:
+`source/` holds the code of both tools; see *For developers* below for the layout. To rebuild:
 
 ```
 cd source
 npm install
-python3 build.py      # writes uchuva-rca.html and docs/index.html
+python3 build.py      # writes index.html, uchuva-rca.html, function-analysis.html and docs/index.html
 ```
 
-`docs/index.html` is the same app with one extra line, `<meta name="rca-publish" content="rca.json">`, which makes it open `rca.json` read-only.
+`docs/index.html` is the RCA app with one extra line, `<meta name="rca-publish" content="rca.json">`, which makes it open `rca.json` read-only.
+
+## For developers
+
+```
+source/
+  build.py            builds the home page and both tools into one offline HTML file each (and docs/ for the RCA viewer)
+  src/core/           shared by every tool: helpers, languages, document state with undo and autosave,
+                      open/save, versions, tags, .bib citations, menus, the mode switcher, base.css, shared dialogs
+  src/home/           the home page
+  src/rca/            the root-cause analysis tool
+  src/fa/             the function analysis tool; system.js and syspanel.js hold its System mode
+  tests/              browser tests for both tools (Playwright, Chromium)
+```
+
+Each tool's script is its `config.js`, then the core, then its own files, concatenated in that order. The core calls a few functions each tool defines; they are listed at the top of each core file. The build stops if a name is defined twice at the top level, and checks the syntax with Node.
+
+```
+cd source && npm ci && python3 build.py      # build both tools
+python3 source/tests/run.py                  # run every browser test (pip install playwright)
+python3 source/tests/run.py test_fa          # only the function analysis tests
+```

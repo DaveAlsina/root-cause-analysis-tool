@@ -51,6 +51,12 @@ kbd{font:500 11px var(--mono);border:1px solid var(--line);border-bottom-width:2
 /* header */
 header{display:grid;grid-template-columns:minmax(200px,auto) 1fr;gap:6px 16px;padding:10px 16px 8px;background:var(--panel);border-bottom:1px solid var(--line);align-items:center}
 .brand{min-width:0}
+.modenav{display:flex;gap:2px;align-items:center;margin:-3px 0 3px -2px;font:500 11px var(--mono);letter-spacing:.02em}
+.modenav a,.modenav span{padding:1px 7px;border-radius:9px;color:var(--muted);text-decoration:none;white-space:nowrap}
+.modenav a:hover{background:var(--accent-soft);color:var(--accent)}
+.modenav .mn-cur{background:var(--accent-soft);color:var(--accent)}
+.modenav .mn-off{opacity:.45;cursor:default}
+.modenav .mn-home{font-size:13px;padding:0 5px}
 .brand h1{margin:0;font:600 19px/1.2 var(--cond);letter-spacing:.01em;cursor:text;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .fileline{font:12px var(--mono);color:var(--muted);display:flex;gap:10px}
 .dirty{color:var(--amber)}
@@ -416,6 +422,7 @@ body.grading .branchbar{top:58px}
 <div class="app">
   <header>
     <div class="brand">
+      <nav class="modenav" id="modenav" aria-label="Workbench"></nav>
       <h1 id="doc-title" title="Double-click to rename">Root-cause analysis</h1>
       <div class="fileline edit-only"><span id="file-name">uchuva-rca.json</span><span id="dirty" class="dirty" hidden>● unsaved changes</span><span id="saved-at" class="savedat" hidden></span></div>
       <div class="fileline view-only" id="viewer-line"></div>
@@ -528,6 +535,7 @@ body.grading .branchbar{top:58px}
   </main>
 </div>
 
+<!-- Dialogs shared by every tool: versions, tags, languages -->
 <div class="overlay" id="m-versions" hidden><div class="modal wide" role="dialog" aria-modal="true" aria-labelledby="mv-h">
   <div class="mhead"><h3 id="mv-h">Versions</h3><button class="btn icon" data-close aria-label="Close">×</button></div>
   <p class="muted">A version is a named snapshot stored inside this RCA file. Save one after each meaningful step, such as an interview or a literature pass. Restoring a version can be undone.</p>
@@ -539,6 +547,22 @@ body.grading .branchbar{top:58px}
   <div id="ver-list" class="verlist"></div>
   <div id="ver-diff" class="verdiff" hidden></div>
 </div></div>
+
+<div class="overlay" id="m-tags" hidden><div class="modal wide" role="dialog" aria-modal="true" aria-labelledby="mt-h">
+  <div class="mhead"><h3 id="mt-h">Tags</h3><button class="btn icon" data-close aria-label="Close">×</button></div>
+  <p class="muted">Tags say <b>where in the chain</b> a cause happens. A box can carry several. Their order here is the order shown everywhere, so keep the product-flow tags in chain order. Each box shows its tags as emojis in its top-left corner; the tag row above the diagram highlights them.</p>
+  <div id="tag-rows" class="tagrows"></div>
+  <div class="emoji-pop" id="emoji-pop" hidden></div>
+  <div class="foot"><span class="grow"></span><button class="btn" data-close>Cancel</button><button class="btn primary" id="tag-save">Apply</button></div>
+</div></div>
+
+<div class="overlay" id="m-langs" hidden><div class="modal" role="dialog" aria-modal="true" aria-labelledby="ml-h">
+  <div class="mhead"><h3 id="ml-h">Languages and title</h3><button class="btn icon" data-close aria-label="Close">×</button></div>
+  <p class="muted">Everything a reader sees (box texts, category and tag names, the title) is kept once per language, in one file. The main language is the one you write in first.</p>
+  <div id="lang-body" class="langbody"></div>
+</div></div>
+
+
 
 <div class="overlay" id="m-cats" hidden><div class="modal wide" role="dialog" aria-modal="true" aria-labelledby="mc-h">
   <div class="mhead"><h3 id="mc-h">Categories</h3><button class="btn icon" data-close aria-label="Close">×</button></div>
@@ -582,20 +606,6 @@ body.grading .branchbar{top:58px}
   </div>
 </div></div>
 
-
-<div class="overlay" id="m-tags" hidden><div class="modal wide" role="dialog" aria-modal="true" aria-labelledby="mt-h">
-  <div class="mhead"><h3 id="mt-h">Tags</h3><button class="btn icon" data-close aria-label="Close">×</button></div>
-  <p class="muted">Tags say <b>where in the chain</b> a cause happens. A box can carry several. Their order here is the order shown everywhere, so keep the product-flow tags in chain order. Each box shows its tags as emojis in its top-left corner; the tag row above the diagram highlights them.</p>
-  <div id="tag-rows" class="tagrows"></div>
-  <div class="emoji-pop" id="emoji-pop" hidden></div>
-  <div class="foot"><span class="grow"></span><button class="btn" data-close>Cancel</button><button class="btn primary" id="tag-save">Apply</button></div>
-</div></div>
-
-<div class="overlay" id="m-langs" hidden><div class="modal" role="dialog" aria-modal="true" aria-labelledby="ml-h">
-  <div class="mhead"><h3 id="ml-h">Languages and title</h3><button class="btn icon" data-close aria-label="Close">×</button></div>
-  <p class="muted">Everything a reader sees (box texts, category and tag names, the title) is kept once per language, in one file. The main language is the one you write in first.</p>
-  <div id="lang-body" class="langbody"></div>
-</div></div>
 
 <div class="overlay" id="m-new" hidden><div class="modal" role="dialog" aria-modal="true" aria-labelledby="mn-h">
   <div class="mhead"><h3 id="mn-h">New root-cause analysis</h3><button class="btn icon" data-close aria-label="Close">×</button></div>
@@ -7304,6 +7314,7 @@ module.exports = browser_default;
 
 </script>
 <script>
+/* ---- rca/config.js ---- */
 /* Uchuva RCA Workbench — offline root-cause-analysis editor.
    Data lives in one JSON document (boxes, arrows, colour key, versions). */
 /* global cytoscape, ELK */
@@ -7311,6 +7322,7 @@ module.exports = browser_default;
 
 /* ================= Constants ================= */
 const APP_VERSION = "2.0";
+const MODE = "rca"; // this tool, for the mode switcher
 const FONT_PX = 13, LINE = 17, MAXW = 150, PADX = 11, PADY = 8;
 const FONT_STACK = '"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif';
 const STATUSES = {
@@ -7339,6 +7351,15 @@ const OLD_GUESSES = { problem: "Observed problem", cause: "Cause", fact: "Suppor
 const DEFAULT_VIEW = { lang: null, legendOpen: false, tagChips: true, mode: "manual", focusR: 0, trace: true, redundant: "show", effort: 3, place: 1,
   levelSp: 70, nodeSp: 14, route: "ORTHOGONAL", keepOrder: false, split: false, repeat: true };
 const LS_DOC = "uchuva-rca:doc", LS_VIEW = "uchuva-rca:view", LS_FILE = "uchuva-rca:file";
+// names the shared core uses for this tool
+const FILE_DESC = "RCA file";
+const FILE_OPEN_TYPE = { description: "RCA file or draw.io diagram", accept: { "application/json": [".json"], "application/xml": [".drawio", ".xml", ".dio"] } };
+const TAG_HOLDER = ["box", "boxes"];
+
+/* ---- core/base.js ---- */
+/* Shared core of the design-analysis workbench: helpers, text measuring, languages, tags.
+   Loaded after the app's config.js and before the app's own files. */
+/* ================= Constants shared by every tool ================= */
 const LANG_NAMES = { en: "English", es: "Español", nl: "Nederlands", de: "Deutsch", fr: "Français", pt: "Português", it: "Italiano" };
 const DEFAULT_TAG_GROUPS = [
   { id: "product", name: "Product flow", nameTr: { es: "Flujo de producto" } },
@@ -7359,6 +7380,7 @@ const STAGE_TEMPLATE = [
   { id: "t-comms",    group: "info",    emoji: "💬", name: "Communication",     es: "Comunicación",          desc: "Sharing information and relevant events along the chain, to build trust and improve the process" },
 ];
 const EMOJI_PALETTE = "🌱🌿🌧️☀️🌡️💧🧺✂️🌬️🔍👁️📦🏷️❄️🧊🏭🚚🛃🚢✈️🏬🛒📈📊📡🧪🦠🍄💬📣🤝📋⚠️❓✅❌💰⏱️🔧👷🎓".match(/\p{Extended_Pictographic}\uFE0F?/gu);
+const EMOJI_FONT = '"Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", "Twemoji Mozilla", sans-serif';
 
 /* ================= Small helpers ================= */
 const $ = s => document.querySelector(s);
@@ -7392,39 +7414,33 @@ const lsSet = (k, v) => { try { localStorage.setItem(k, v); return true; } catch
 
 /* ================= Text measuring ================= */
 const mctx = document.createElement("canvas").getContext("2d");
-function wrap(text, maxw = MAXW) {
+function wrap(text, maxw = MAXW) { // a line break the author typed (Shift+Enter) always starts a new line
   mctx.font = `${FONT_PX}px ${FONT_STACK}`;
-  const words = String(text || " ").split(/\s+/); const lines = []; let cur = "";
-  for (const w of words) {
-    const t = cur ? cur + " " + w : w;
-    if (mctx.measureText(t).width <= maxw || !cur) cur = t; else { lines.push(cur); cur = w; }
-  }
-  if (cur) lines.push(cur);
+  const lines = [];
+  String(text || " ").split("\n").forEach(par => {
+    let cur = "";
+    for (const w of par.trim().split(/\s+/)) {
+      const t = cur ? cur + " " + w : w;
+      if (mctx.measureText(t).width <= maxw || !cur) cur = t; else { lines.push(cur); cur = w; }
+    }
+    if (cur) lines.push(cur);
+  });
+  if (!lines.length) lines.push(" ");
   return { lines, w: Math.max(...lines.map(l => mctx.measureText(l).width)) };
 }
+const cleanText = v => String(v || "").replace(/[ \t\r\f\v]+/g, " ").replace(/ *\n */g, "\n").replace(/\n{2,}/g, "\n").trim(); // keeps single line breaks
 const sizeCache = new Map();
-function measureText(text) {
-  if (sizeCache.has(text)) return sizeCache.get(text);
+function measureText(text, boxW = null) { // boxW: a width the author set by dragging the box edge; the text wraps inside it
+  const key = boxW ? boxW + "|" + text : text;
+  if (sizeCache.has(key)) return sizeCache.get(key);
   let r;
   if (text.trim() === "?") r = { w: 30, h: 30, lines: ["?"] };
+  else if (boxW) { const m = wrap(text, boxW - PADX * 2); r = { w: boxW, h: m.lines.length * LINE + PADY * 2, lines: m.lines }; }
   else { const m = wrap(text); r = { w: Math.ceil(Math.min(MAXW, m.w)) + PADX * 2, h: m.lines.length * LINE + PADY * 2, lines: m.lines }; }
-  sizeCache.set(text, r); return r;
+  sizeCache.set(key, r); return r;
 }
 
-/* ================= Document model ================= */
-let doc = null;
-let fileHandle = null, fileName = "uchuva-rca.json", dirty = false;
-const undoStack = [], redoStack = [];
-
-function emptyDoc() {
-  return { format: "uchuva-rca", schema: 2, app: APP_VERSION, title: "New root-cause analysis", titleTr: {}, languages: ["en"],
-    categories: clone(DEFAULT_CATS), tagGroups: clone(DEFAULT_TAG_GROUPS), tags: [], scales: [], nodes: [], edges: [], versions: [], sessions: [], activeSession: null,
-    meta: { created: nowISO(), modified: nowISO() } };
-}
-function newNode(text, cat, x, y) {
-  return { id: uid("n"), text, textTr: {}, cat, tags: [], status: "unassessed", notes: "", sources: [], x: Math.round(x), y: Math.round(y) };
-}
-function coreOf(d) { return { title: d.title, titleTr: d.titleTr, languages: d.languages, categories: d.categories, tagGroups: d.tagGroups, tags: d.tags, scales: d.scales, nodes: d.nodes, edges: d.edges }; }
+/* ================= Small model helpers ================= */
 function stageTags(langs) { // the example stage set, named in the project's languages where the template has them
   const main = langs[0];
   const pick = t => main === "es" ? t.es : t.name;
@@ -7444,7 +7460,478 @@ function guessLang(texts) { // rough stop-word vote, only used for files saved b
   return es > en * 1.2 ? "es" : "en";
 }
 const trObj = o => { const r = {}; if (o && typeof o === "object") Object.entries(o).forEach(([k, v]) => { if (typeof v === "string" && v.trim()) r[k] = v; }); return r; };
+
+/* ================= Languages: main text in `field`, others in `fieldTr[lang]` ================= */
+const langName = c => LANG_NAMES[c] || c.toUpperCase();
+const mainLang = () => doc.languages[0];
+const curLang = () => (doc.languages.includes(view.lang) ? view.lang : mainLang());
+const neutralText = s => /^[\s?¿!.…\-–—]*$/.test(s || "");
+function txRaw(o, f, lang) { return lang === mainLang() ? (o[f] || "") : ((o[f + "Tr"] || {})[lang] || ""); }
+function tx(o, f = "text", lang = curLang()) {
+  if (!o) return "";
+  return txRaw(o, f, lang) || o[f] || Object.values(o[f + "Tr"] || {}).find(Boolean) || "";
+}
+const txAll = (o, f = "text") => [o[f] || "", ...Object.values(o[f + "Tr"] || {})].filter(Boolean);
+function txMissing(o, f = "text", lang = curLang()) {
+  if (txRaw(o, f, lang).trim()) return false;
+  const all = txAll(o, f); return all.length > 0 && !all.every(neutralText);
+}
+function txSet(o, f, lang, v) {
+  if (lang === mainLang()) o[f] = v;
+  else { o[f + "Tr"] = o[f + "Tr"] || {}; if (v) o[f + "Tr"][lang] = v; else delete o[f + "Tr"][lang]; }
+}
+
+const tagById = id => doc.tags.find(t => t.id === id);
+const orderedTags = ids => doc.tags.filter(t => ids.includes(t.id)); // in the order of the tag list = chain order
+
+/* ---- core/store.js ---- */
+/* ================= Document state, undo, autosave ================= */
+/* The app supplies: snap(), restoreCore(s), coreOf(d), render(opts), renderPanel(), updateChrome(full),
+   pruneSelection(), findEditable(ref). */
+let doc = null;
+let fileHandle = null, fileName = "uchuva-rca.json", dirty = false;
+const undoStack = [], redoStack = [];
+let VIEWER = false; // read-only viewer for published diagrams
+
 function mkVersion(d, name, note) { return { id: uid("v"), name, note: note || "", at: nowISO(), snapshot: clone(coreOf(d)) }; }
+
+function pushUndo(s) { undoStack.push(s); if (undoStack.length > 300) undoStack.shift(); redoStack.length = 0; }
+function commit(fn, opts = {}) {
+  if (VIEWER) return Promise.resolve();
+  flushField(true);
+  pushUndo(snap());
+  fn();
+  touch();
+  return render(opts);
+}
+function touch() {
+  doc.meta.modified = nowISO(); dirty = true; autosave(); updateChrome(); fileAutosave();
+}
+let fileTimer = null, fileSavedAt = null, fileNeedsGesture = false;
+function fileAutosave() { // write into the file you opened, a moment after each change
+  if (VIEWER || !fileHandle) return;
+  clearTimeout(fileTimer);
+  fileTimer = setTimeout(async () => {
+    try {
+      if (fileHandle.queryPermission && (await fileHandle.queryPermission({ mode: "readwrite" })) !== "granted") { fileNeedsGesture = true; updateChrome(); return; }
+      const w = await fileHandle.createWritable(); await w.write(docText()); await w.close();
+      dirty = false; fileNeedsGesture = false; fileSavedAt = new Date(); updateChrome(); autosave();
+    } catch (e) { console.warn("Automatic save to file failed", e); }
+  }, 1200);
+}
+function undo() {
+  flushField(true);
+  if (!undoStack.length) return toast("Nothing to undo");
+  redoStack.push(snap()); restoreCore(undoStack.pop()); pruneSelection(); touch(); render({ animate: true });
+}
+function redo() {
+  if (!redoStack.length) return toast("Nothing to redo");
+  undoStack.push(snap()); restoreCore(redoStack.pop()); pruneSelection(); touch(); render({ animate: true });
+}
+let autosaveTimer = null;
+function autosave() {
+  if (VIEWER) return;
+  clearTimeout(autosaveTimer);
+  autosaveTimer = setTimeout(() => {
+    if (!lsSet(LS_DOC, JSON.stringify(doc))) console.warn("Autosave to browser storage failed");
+    lsSet(LS_FILE, JSON.stringify({ fileName, dirty }));
+  }, 300);
+}
+
+/* panel text fields: commit after a pause in typing, keeping focus */
+let fieldTimer = null, fieldPending = null;
+function fieldEdit(ref, apply) { fieldPending = { ref, apply }; clearTimeout(fieldTimer); fieldTimer = setTimeout(() => flushField(), 700); }
+function flushField(inCommit) {
+  clearTimeout(fieldTimer);
+  if (!fieldPending) return;
+  const { ref, apply } = fieldPending; fieldPending = null;
+  const n = findEditable(ref); if (!n) return;
+  const tmp = clone(n); apply(tmp);
+  if (JSON.stringify(tmp) === JSON.stringify(n)) return;
+  pushUndo(snap()); apply(n); touch();
+  if (!inCommit) render({ skipPanel: true });
+}
+
+/* ---- core/files.js ---- */
+/* ================= Files: open and save ================= */
+/* The app supplies: loadText(text, name, handle), and FILE_* names in its config. */
+const FSA = "showOpenFilePicker" in window;
+
+async function openFile() {
+  if (dirty && !confirm("You have unsaved changes. Open another file anyway? (They stay recoverable only until the new file is edited.)")) return;
+  if (FSA) {
+    try {
+      const [h] = await window.showOpenFilePicker({ types: [FILE_OPEN_TYPE] });
+      const f = await h.getFile();
+      await loadText(await f.text(), f.name, f.name.toLowerCase().endsWith(".json") ? h : null);
+    } catch (e) { if (e.name !== "AbortError") toast(e.message || "Could not open that file.", 5000); }
+  } else $("#file-input").click();
+}
+$("#file-input").onchange = async e => {
+  const f = e.target.files[0]; e.target.value = ""; if (!f) return;
+  try { await loadText(await f.text(), f.name, null); } catch (err) { toast(err.message || "Could not open that file.", 5000); }
+};
+function docText() { doc.app = APP_VERSION; return JSON.stringify(doc, null, 2) + "\n"; }
+async function saveFile(as) {
+  flushField(true);
+  if (FSA && fileHandle && !as) {
+    try { const w = await fileHandle.createWritable(); await w.write(docText()); await w.close(); dirty = false; fileNeedsGesture = false; fileSavedAt = new Date(); updateChrome(); autosave(); toast(`Saved to ${fileHandle.name}. Later changes are saved to it automatically.`); return; }
+    catch (e) { if (e.name === "AbortError") return; toast("Could not write to the file. Choose where to save it."); }
+  }
+  if (FSA && window.showSaveFilePicker) {
+    try {
+      const h = await window.showSaveFilePicker({ suggestedName: fileName, types: [{ description: FILE_DESC, accept: { "application/json": [".json"] } }] });
+      const w = await h.createWritable(); await w.write(docText()); await w.close();
+      fileHandle = h; fileName = h.name; dirty = false; fileNeedsGesture = false; fileSavedAt = new Date(); updateChrome(); autosave(); toast(`Saved to ${h.name}. Later changes are saved to it automatically.`); return;
+    } catch (e) { if (e.name === "AbortError") return; }
+  }
+  download(fileName, docText(), "application/json");
+  dirty = false; updateChrome(); autosave();
+  toast(`Downloaded ${fileName}. Replace your old copy with it.`, 4500);
+}
+
+/* ---- core/versions.js ---- */
+/* ================= Versions ================= */
+/* The app supplies: diffCores(a, b), chgLine(d), versionSize(snapshot), versionCompare(version, diff, box). */
+
+function openVersions() {
+  flushField(true);
+  const list = $("#ver-list"); const vs = doc.versions.slice().reverse();
+  list.innerHTML = vs.length ? vs.map(v => {
+    const i = doc.versions.indexOf(v); const prev = doc.versions[i - 1];
+    const d = prev ? diffCores(prev.snapshot, v.snapshot) : null;
+    return `<div class="ver"><span class="nm">${esc(v.name)}</span>
+      <span class="meta">${fmtDate(v.at)} · ${versionSize(v.snapshot)} ${d ? "· " + chgLine(d) : ""}</span>
+      ${v.note ? `<span class="nt">${esc(v.note)}</span>` : ""}
+      <span class="acts"><button class="btn small" data-vcmp="${v.id}">Compare with now</button><button class="btn small" data-vres="${v.id}">Restore</button><button class="btn small icon" data-vdel="${v.id}" title="Delete this version" aria-label="Delete version">×</button></span></div>`;
+  }).join("") : `<p class="muted" style="padding:12px">No versions yet.</p>`;
+  $("#ver-diff").hidden = true;
+  $("#m-versions").hidden = false; $("#ver-name").focus();
+}
+$("#ver-form").onsubmit = e => {
+  e.preventDefault();
+  const name = $("#ver-name").value.trim(); if (!name) return;
+  doc.versions.push(mkVersion(doc, name, $("#ver-note").value.trim()));
+  $("#ver-name").value = ""; $("#ver-note").value = "";
+  touch(); openVersions(); toast(`Version “${name}” saved in the file. Press Ctrl S to write it to disk.`, 4500);
+};
+$("#ver-list").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  if (b.dataset.vdel) {
+    const v = doc.versions.find(x => x.id === b.dataset.vdel);
+    if (v && confirm(`Delete the version “${v.name}”? This cannot be undone.`)) { doc.versions = doc.versions.filter(x => x !== v); touch(); openVersions(); }
+  }
+  if (b.dataset.vres) {
+    const v = doc.versions.find(x => x.id === b.dataset.vres); if (!v) return;
+    commit(() => { restoreCore(JSON.stringify(v.snapshot)); pruneSelection(); }, { animate: true });
+    $("#m-versions").hidden = true; toast(`Restored “${v.name}”. Ctrl Z brings back what you had.`, 4500);
+  }
+  if (b.dataset.vcmp) {
+    const v = doc.versions.find(x => x.id === b.dataset.vcmp); if (!v) return;
+    const d = diffCores(v.snapshot, coreOf(doc));
+    const box = $("#ver-diff"); box.hidden = false;
+    versionCompare(v, d, box);
+    box.scrollIntoView({ block: "nearest" });
+  }
+});
+
+/* ---- core/tags.js ---- */
+/* ================= Tag editor ================= */
+let tagDraft = null;
+function openTags() {
+  if (VIEWER) return;
+  tagDraft = { groups: clone(doc.tagGroups), tags: clone(doc.tags) };
+  drawTags(); $("#m-tags").hidden = false;
+}
+function drawTags() {
+  const L = doc.languages, counts = {}; tagHolders().forEach(n => (n.tags || []).forEach(x => (counts[x] = (counts[x] || 0) + 1)));
+  const trInputs = (o, kind, i) => L.slice(1).map(l => `<label class="trin"><b>${esc(l.toUpperCase())}</b><input type="text" data-k="${kind}" data-i="${i}" data-trl="${esc(l)}" value="${esc((o.nameTr || {})[l] || "")}" placeholder="${esc(langName(l))}"></label>`).join("");
+  $("#tag-rows").innerHTML = (tagDraft.tags.length ? "" : `<div class="tagempty"><p class="muted">No tags yet. Start from the stages of a fresh-produce export chain (culture care → harvest → calyx drying → sorting → packing → storage → transport → port → sea freight, plus monitoring and communication), or add your own.</p><button class="btn" id="tag-template">Add the example stage set</button></div>`) +
+    tagDraft.groups.map((g, gi) => `<div class="tgroup">
+      <div class="tg-head"><input type="text" class="tg-name" data-k="g" data-i="${gi}" value="${esc(g.name)}" placeholder="Group name" aria-label="Group name">${trInputs(g, "g", gi)}</div>
+      ${tagDraft.tags.map((tg, i) => tg.group !== g.id ? "" : `<div class="trow">
+        <span class="emo"><input type="text" class="emoji-in" data-k="emoji" data-i="${i}" value="${esc(tg.emoji)}" aria-label="Emoji"><button type="button" class="btn small icon" data-epal="${i}" title="Pick an emoji" aria-label="Pick an emoji">▾</button></span>
+        <input type="text" data-k="name" data-i="${i}" value="${esc(tg.name)}" placeholder="Name" aria-label="Tag name">
+        ${trInputs(tg, "t", i)}
+        <input type="text" class="tdesc" data-k="desc" data-i="${i}" value="${esc(tg.desc || "")}" placeholder="What it covers (only for you)" aria-label="Description">
+        <select data-k="group" data-i="${i}" aria-label="Group">${tagDraft.groups.map(o => `<option value="${esc(o.id)}"${o.id === tg.group ? " selected" : ""}>${esc(o.name)}</option>`).join("")}</select>
+        <span class="tcount">${counts[tg.id] || 0}</span>
+        <span class="catacts"><button class="btn small icon" data-tup="${i}" title="Move earlier in the chain" aria-label="Move up">↑</button><button class="btn small icon" data-tdown="${i}" title="Move later in the chain" aria-label="Move down">↓</button><button class="btn small icon" data-tdel="${i}" title="Delete tag" aria-label="Delete tag">×</button></span>
+      </div>`).join("")}
+      <button class="btn small" data-tadd="${esc(g.id)}">＋ Add a tag to ${esc(g.name || "this group")}</button></div>`).join("");
+  $("#tag-template") && ($("#tag-template").onclick = () => {
+    const tpl = stageTags(doc.languages); const have = new Set(tagDraft.tags.map(x => x.id));
+    tagDraft.groups.forEach(g => { if (!g.name) { const d = groupsFor(doc.languages).find(x => x.id === g.id); if (d) Object.assign(g, d); } });
+    tpl.forEach(x => { if (!have.has(x.id)) tagDraft.tags.push(x); }); drawTags();
+  });
+}
+$("#tag-rows").addEventListener("input", e => {
+  const el = e.target, k = el.dataset.k, i = +el.dataset.i; if (!k) return;
+  if (k === "g") { const g = tagDraft.groups[i]; if (el.dataset.trl) { g.nameTr = g.nameTr || {}; g.nameTr[el.dataset.trl] = el.value.trim(); } else g.name = el.value; return; }
+  const tg = tagDraft.tags[i];
+  if (el.dataset.trl) { tg.nameTr = tg.nameTr || {}; tg.nameTr[el.dataset.trl] = el.value.trim(); }
+  else if (k !== "group") tg[k] = el.value;
+});
+$("#tag-rows").addEventListener("change", e => { const el = e.target; if (el.dataset.k === "group") { tagDraft.tags[+el.dataset.i].group = el.value; drawTags(); } });
+$("#tag-rows").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  const T = tagDraft.tags;
+  if (b.dataset.tadd) { T.push({ id: uid("t"), emoji: "🏷️", name: "", nameTr: {}, group: b.dataset.tadd, desc: "" }); drawTags(); setTimeout(() => { const el = $(`#tag-rows input[data-k="name"][data-i="${T.length - 1}"]`); el && el.focus(); }, 20); }
+  if (b.dataset.tdel !== undefined) { const i = +b.dataset.tdel, used = tagHolders().filter(n => (n.tags || []).includes(T[i].id)).length;
+    if (!used || confirm(`Remove “${T[i].name}” from ${used} ${used > 1 ? TAG_HOLDER[1] : TAG_HOLDER[0]} and delete it?`)) { T.splice(i, 1); drawTags(); } }
+  const move = (i, dir) => { // swap with the neighbour in the same group
+    const g = T[i].group; let j = i + dir; while (j >= 0 && j < T.length && T[j].group !== g) j += dir;
+    if (j >= 0 && j < T.length) { [T[i], T[j]] = [T[j], T[i]]; drawTags(); } };
+  if (b.dataset.tup !== undefined) move(+b.dataset.tup, -1);
+  if (b.dataset.tdown !== undefined) move(+b.dataset.tdown, 1);
+  if (b.dataset.epal !== undefined) openEmojiPalette(b, +b.dataset.epal);
+});
+function openEmojiPalette(anchor, i) {
+  const pop = $("#emoji-pop"); const r = anchor.getBoundingClientRect(), box = $("#m-tags .modal").getBoundingClientRect();
+  pop.innerHTML = EMOJI_PALETTE.map(em => `<button type="button" data-em="${em}">${em}</button>`).join("") + `<p class="muted">Or type any emoji in the box (Windows: Win + . · Mac: Ctrl + Cmd + Space).</p>`;
+  pop.style.left = Math.max(8, r.left - box.left - 8) + "px"; pop.style.top = (r.bottom - box.top + $("#m-tags .modal").scrollTop + 4) + "px";
+  pop.hidden = false; pop.dataset.i = i;
+}
+$("#emoji-pop").addEventListener("click", e => {
+  const b = e.target.closest("[data-em]"); if (!b) return;
+  const pop = $("#emoji-pop"); tagDraft.tags[+pop.dataset.i].emoji = b.dataset.em; pop.hidden = true; drawTags();
+});
+document.addEventListener("pointerdown", e => { const pop = $("#emoji-pop"); if (!pop.hidden && !e.target.closest("#emoji-pop") && !e.target.closest("[data-epal]")) pop.hidden = true; });
+$("#tag-save").onclick = () => {
+  const groups = tagDraft.groups.map(g => ({ ...g, name: g.name.trim() || "Group", nameTr: trObj(g.nameTr) }));
+  const tags = tagDraft.tags.filter(tg => tg.name.trim() || tg.emoji.trim()).map(tg => ({ ...tg, name: tg.name.trim() || tg.emoji, emoji: tg.emoji.trim() || "🏷️", nameTr: trObj(tg.nameTr) }));
+  const ids = new Set(tags.map(tg => tg.id));
+  $("#m-tags").hidden = true;
+  commit(() => {
+    doc.tagGroups = groups; doc.tags = tags;
+    tagHolders().forEach(n => { n.tags = tags.filter(tg => (n.tags || []).includes(tg.id)).map(tg => tg.id); });
+    if (view.tagFilter) [...view.tagFilter].forEach(x => { if (!ids.has(x)) view.tagFilter.delete(x); });
+  });
+  toast("Tags updated. Ctrl Z to undo.");
+};
+
+/* ---- core/langs.js ---- */
+/* ================= Languages ================= */
+function openLangs() {
+  if (VIEWER) return;
+  const L = doc.languages, miss = missingSummary();
+  const free = Object.keys(LANG_NAMES).filter(l => !L.includes(l));
+  $("#lang-body").innerHTML = `
+    <div class="langlist">${L.map((l, i) => `<div class="langrow">
+      <span class="lcode">${esc(l.toUpperCase())}</span><span class="lname">${esc(langName(l))}${i === 0 ? ` <span class="pill">main</span>` : ""}</span>
+      ${i === 0 ? `${(m => m && (m.boxes || m.other) ? `<span class="lmiss">${m.boxes} box${m.boxes === 1 ? "" : "es"} and ${m.other} other text${m.other === 1 ? "" : "s"} missing</span>${m.boxes ? `<button class="btn small" data-trpass="${esc(l)}">Translate one by one</button>` : ""}` : "")(miss.find(m => m.l === l))}<label class="relabel">The main text is written in <select id="lang-relabel">${[l, ...Object.keys(LANG_NAMES).filter(x => !L.includes(x))].map(x => `<option value="${esc(x)}"${x === l ? " selected" : ""}>${esc(langName(x))}</option>`).join("")}</select></label>`
+        : `<span class="lmiss">${(m => m && (m.boxes || m.other) ? `${m.boxes} box${m.boxes === 1 ? "" : "es"} and ${m.other} other text${m.other === 1 ? "" : "s"} missing` : "")(miss.find(m => m.l === l))}</span>
+           <span class="row">${(miss.find(m => m.l === l) || {}).boxes ? `<button class="btn small" data-trpass="${esc(l)}">Translate one by one</button>` : ""}<button class="btn small" data-lmain="${esc(l)}">Make main</button><button class="btn small danger" data-ldel="${esc(l)}">Remove</button></span>`}
+    </div>`).join("")}</div>
+    <div class="row"><select id="lang-add-sel" aria-label="Language to add">${free.map(l => `<option value="${l}">${esc(langName(l))}</option>`).join("")}<option value="__other">Other (type a code)…</option></select><button class="btn" id="lang-add">Add language</button></div>
+    <h4>Title</h4>
+    <div class="titlerows">${L.map(l => `<label class="trin wide"><b>${esc(l.toUpperCase())}</b><input type="text" data-title="${esc(l)}" value="${esc(txRaw(doc, "title", l))}" placeholder="${esc(langName(l))} title"></label>`).join("")}</div>
+    <p class="muted">Box texts are asked for in each language as you type them: Enter moves on to the next language. Category and tag names have one field per language in their editors. Notes stay in one language; they are only for you.</p>`;
+  $("#m-langs").hidden = false;
+}
+$("#lang-body").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  if (b.id === "lang-add") {
+    let l = $("#lang-add-sel").value;
+    if (l === "__other") { l = (prompt("Two-letter language code, for example pt or zh") || "").trim().toLowerCase(); if (!/^[a-z]{2,3}(-[a-z0-9]+)?$/.test(l)) return l && toast("That is not a language code."); }
+    if (doc.languages.includes(l)) return;
+    commit(() => { doc.languages.push(l); }).then(openLangs);
+    toast(`${langName(l)} added. New boxes now ask for it; use Translate one by one for the existing ones.`, 5000);
+  }
+  if (b.dataset.lmain) makeMainLang(b.dataset.lmain).then(openLangs);
+  if (b.dataset.ldel) { const l = b.dataset.ldel;
+    if (!confirm(`Remove ${langName(l)} and all its translations? Ctrl Z brings them back.`)) return;
+    commit(() => { everyTranslatable(doc, (o, f) => { if (o[f + "Tr"]) delete o[f + "Tr"][l]; }); doc.languages = doc.languages.filter(x => x !== l); }).then(openLangs);
+    if (view.lang === l) view.lang = null; }
+  if (b.dataset.trpass) translatePass(b.dataset.trpass);
+});
+$("#lang-body").addEventListener("change", e => {
+  if (e.target.id === "lang-relabel") { const l = e.target.value; commit(() => { doc.languages[0] = l; }).then(openLangs); toast(`The main text is now marked as ${langName(l)}.`); }
+  if (e.target.dataset.title) { const l = e.target.dataset.title, v = e.target.value.trim(); commit(() => txSet(doc, "title", l, v)); }
+});
+function makeMainLang(l) { // the chosen language becomes the main field everywhere; the old main moves into the translations
+  const old = mainLang(); if (l === old) return Promise.resolve();
+  const r = commit(() => {
+    everyTranslatable(doc, (o, f) => {
+      const tr = o[f + "Tr"] = o[f + "Tr"] || {}; const nv = tr[l] || "", ov = o[f] || "";
+      if (!nv && ov && neutralText(ov)) return; // "?" boxes read the same in every language
+      delete tr[l]; if (ov) tr[old] = ov; o[f] = nv;
+    });
+    doc.languages = [l, ...doc.languages.filter(x => x !== l)];
+  });
+  toast(`${langName(l)} is now the main language.`); return r;
+}
+
+/* ---- core/bib.js ---- */
+/* ================= Bibliography (.bib) ================= */
+const LS_BIB = "uchuva-rca:bib";
+let bib = { name: "", entries: [], byKey: new Map() };
+function setBib(name, entries) {
+  bib = { name, entries, byKey: new Map(entries.map(e => [e.key.toLowerCase(), e])) };
+  const b = $("[data-act=bib]"); if (b) b.innerHTML = name ? `Bibliography: ${esc(name)} <small>${entries.length} refs · reload</small>` : `Load bibliography… <small>.bib, for @ citations</small>`;
+}
+try { const b = JSON.parse(lsGet(LS_BIB) || "null"); if (b && Array.isArray(b.entries)) setBib(b.name, b.entries); } catch (e) {}
+function texClean(v) {
+  return String(v || "")
+    .replace(/\\(?:textit|textbf|emph|textsc|mathrm|textrm)\s*\{([^{}]*)\}/g, "$1")
+    .replace(/\\(['"`^~=.uvHckr])\s*\{?\\?([A-Za-z])\}?/g, (m, a, c) => (c + ({ "'": "́", "`": "̀", "^": "̂", '"': "̈", "~": "̃", "=": "̄", ".": "̇", u: "̆", v: "̌", H: "̋", c: "̧", k: "̨", r: "̊" }[a] || "")).normalize("NFC"))
+    .replace(/\\(ss|o|O|l|L|ae|AE|oe|OE|aa|AA|i|j)\b\s*/g, (m, c) => ({ ss: "ss", o: "o", O: "O", l: "l", L: "L", ae: "ae", AE: "AE", oe: "oe", OE: "OE", aa: "a", AA: "A", i: "i", j: "j" }[c]))
+    .replace(/\\([&%$#_{}])/g, "$1").replace(/~/g, " ").replace(/--/g, "–").replace(/[{}]/g, "").replace(/\s+/g, " ").trim();
+}
+function parseBib(text) {
+  const out = []; let i = 0; const n = text.length;
+  while (i < n) {
+    const at = text.indexOf("@", i); if (at < 0) break;
+    const m = /^@\s*([A-Za-z]+)\s*([{(])/.exec(text.slice(at, at + 60));
+    if (!m) { i = at + 1; continue; }
+    const type = m[1].toLowerCase(); const open = m[2], close = open === "{" ? "}" : ")";
+    let j = at + m[0].length, depth = 1;
+    const start = j;
+    while (j < n && depth > 0) { const c = text[j]; if (c === "{" || (open === "(" && c === "(")) depth++; else if (c === "}" || (open === "(" && c === ")")) depth--; j++; }
+    const body = text.slice(start, j - 1); i = j;
+    if (["comment", "string", "preamble"].includes(type)) continue;
+    const comma = body.indexOf(","); if (comma < 0) continue;
+    const key = body.slice(0, comma).trim(); if (!key) continue;
+    const fields = {}; let k = comma + 1; const B = body;
+    while (k < B.length) {
+      const fm = /^\s*([A-Za-z][\w-]*)\s*=\s*/.exec(B.slice(k)); if (!fm) break;
+      const name = fm[1].toLowerCase(); k += fm[0].length;
+      let val = "";
+      if (B[k] === "{") { let d = 0, s0 = k; do { if (B[k] === "{") d++; else if (B[k] === "}") d--; k++; } while (k < B.length && d > 0); val = B.slice(s0 + 1, k - 1); }
+      else if (B[k] === '"') { let s0 = ++k; while (k < B.length && !(B[k] === '"' && B[k - 1] !== "\\")) k++; val = B.slice(s0, k); k++; }
+      else { const vm = /^[^,]*/.exec(B.slice(k)); val = vm[0]; k += vm[0].length; }
+      fields[name] = val;
+      const cm = /^\s*,?/.exec(B.slice(k)); k += cm[0].length;
+    }
+    const rawA = fields.author || fields.editor || ""; const parts = []; let d = 0, cur = "";
+    for (let q = 0; q < rawA.length; q++) { const ch = rawA[q]; if (ch === "{") d++; if (ch === "}") d--;
+      if (d === 0 && /^\s+and\s+/i.test(rawA.slice(q)) && /\s/.test(ch)) { parts.push(cur); cur = ""; q += /^\s+and\s+/i.exec(rawA.slice(q))[0].length - 1; continue; } cur += ch; }
+    if (cur.trim()) parts.push(cur);
+    const authors = parts.map(a => a.trim()).filter(Boolean).map(a => /^\{.*\}$/.test(a) ? { corp: texClean(a) } : texClean(a));
+    const last = a => a.corp ? a.corp : (a.includes(",") ? a.split(",")[0] : a.split(" ").slice(-1)[0]).trim();
+    const auth = authors.length === 0 ? "" : authors.length === 1 ? last(authors[0]) : authors.length === 2 ? `${last(authors[0])} & ${last(authors[1])}` : `${last(authors[0])} et al.`;
+    const year = (texClean(fields.year || fields.date || "").match(/\d{4}/) || [""])[0];
+    out.push({ key, type, author: auth, authorsAll: authors.map(last).join(" "), year, title: texClean(fields.title || fields.booktitle || ""),
+      venue: texClean(fields.journal || fields.journaltitle || fields.booktitle || fields.publisher || fields.institution || fields.school || "") });
+  }
+  return out;
+}
+async function loadBib() {
+  const handle = async (name, text) => {
+    const entries = parseBib(text);
+    if (!entries.length) return toast("No references found in that file.", 4500);
+    setBib(name, entries); lsSet(LS_BIB, JSON.stringify({ name, entries }));
+    toast(`Loaded ${entries.length} references from ${name}. Type @ in Sources to cite one.`, 4500);
+    renderPanel();
+  };
+  if (FSA) {
+    try { const [h] = await window.showOpenFilePicker({ types: [{ description: "BibTeX", accept: { "text/plain": [".bib"] } }] }); const f = await h.getFile(); await handle(f.name, await f.text()); }
+    catch (e) { if (e.name !== "AbortError") toast(e.message, 4500); }
+  } else {
+    const inp = document.createElement("input"); inp.type = "file"; inp.accept = ".bib,.txt";
+    inp.onchange = async () => { const f = inp.files[0]; if (f) await handle(f.name, await f.text()); }; inp.click();
+  }
+}
+const bibLookup = s => { const m = /^@([^\s]+)$/.exec(String(s).trim()); return m ? { key: m[1], entry: bib.byKey.get(m[1].toLowerCase()) } : null; };
+const bibLabel = e => [e.author, e.year && `(${e.year})`].filter(Boolean).join(" ") || e.type;
+function sourceSearchText(s) { const r = bibLookup(s); return r && r.entry ? `${s} ${r.entry.author} ${r.entry.authorsAll} ${r.entry.year} ${r.entry.title}` : s; }
+function showBibResolved(value) {
+  const ul = $("#bibres"); if (!ul) return;
+  const ta = $("#f-src"); let typing = null;
+  if (ta && document.activeElement === ta) { const before = ta.value.slice(0, ta.selectionStart); const ln = before.split("\n").pop(); if (/^@\S*$/.test(ln.trim()) && ta.value.slice(ta.selectionStart).split("\n")[0].trim() === "") typing = ln.trim(); }
+  const lines = value.split("\n").map(x => x.trim()).filter(Boolean);
+  ul.innerHTML = lines.map(l => {
+    const r = bibLookup(l);
+    if (!r || (l === typing && !r.entry)) return "";
+    if (!r.entry) return `<li class="miss"><code>@${esc(r.key)}</code> ${bib.entries.length ? "is not in " + esc(bib.name) : "· load a .bib to check it"}</li>`;
+    return `<li><code>@${esc(r.entry.key)}</code> <b>${esc(bibLabel(r.entry))}</b> ${esc(r.entry.title)}${r.entry.venue ? ` <i>${esc(r.entry.venue)}</i>` : ""}</li>`;
+  }).join("");
+}
+function attachBibComplete(ta) {
+  const pop = $("#bibpop"); let items = [], active = 0, token = null;
+  const close = () => { pop.hidden = true; items = []; token = null; };
+  const query = () => {
+    const caret = ta.selectionStart; const before = ta.value.slice(0, caret);
+    const m = /(^|\s)@([^\s@]*)$/.exec(before);
+    return m ? { start: caret - m[2].length - 1, end: caret, q: m[2].toLowerCase() } : null;
+  };
+  const draw = () => {
+    token = query(); if (!token) return close();
+    if (!bib.entries.length) {
+      pop.innerHTML = `<div class="empty">No bibliography loaded. <button type="button" class="btn small" id="bib-load-inline">Load .bib…</button></div>`;
+      pop.hidden = false; $("#bib-load-inline").onmousedown = e => { e.preventDefault(); loadBib(); }; items = []; return;
+    }
+    const q = token.q.normalize("NFD").replace(/[\u0300-\u036f]/g, ""), words = q.split(/[\s:_-]+/).filter(Boolean);
+    const score = e => {
+      const k = e.key.toLowerCase(), hay = `${k} ${e.authorsAll} ${e.year} ${e.title} ${e.venue}`.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+      if (!words.every(w => hay.includes(w))) return -1;
+      return (k.startsWith(q) ? 100 : 0) + (k.includes(q) ? 40 : 0) + (e.authorsAll.toLowerCase().includes(q) ? 20 : 0) + (+e.year || 0) / 10000;
+    };
+    items = bib.entries.map(e => [score(e), e]).filter(x => x[0] >= 0).sort((a, b) => b[0] - a[0]).slice(0, 8).map(x => x[1]);
+    active = Math.min(active, Math.max(0, items.length - 1));
+    pop.innerHTML = items.length ? items.map((e, i) => `<div class="opt${i === active ? " on" : ""}" role="option" data-i="${i}"><code>@${esc(e.key)}</code><span class="who">${esc(bibLabel(e))}</span><span class="ttl">${esc(e.title)}</span></div>`).join("")
+      : `<div class="empty">No reference matches “${esc(q)}” in ${esc(bib.name)}.</div>`;
+    pop.hidden = false;
+  };
+  const pick = i => {
+    const e = items[i]; if (!e || !token) return;
+    const v = ta.value; let ins = "@" + e.key; const after = v.slice(token.end);
+    if (!after.startsWith("\n")) ins += "\n";
+    ta.value = v.slice(0, token.start) + ins + after.replace(/^[^\s\n]*/, "");
+    const c = token.start + ins.length; ta.setSelectionRange(c, c); close();
+    ta.dispatchEvent(new Event("input", { bubbles: true })); ta.focus();
+  };
+  ta.addEventListener("input", () => { active = 0; draw(); });
+  ta.addEventListener("click", draw);
+  ta.addEventListener("keydown", e => {
+    if (pop.hidden || !items.length) { if (e.key === "Escape" && !pop.hidden) { e.stopPropagation(); close(); } return; }
+    if (e.key === "ArrowDown") { e.preventDefault(); active = (active + 1) % items.length; draw(); }
+    else if (e.key === "ArrowUp") { e.preventDefault(); active = (active - 1 + items.length) % items.length; draw(); }
+    else if (e.key === "Enter" || e.key === "Tab") { e.preventDefault(); pick(active); }
+    else if (e.key === "Escape") { e.preventDefault(); e.stopPropagation(); close(); }
+  });
+  ta.addEventListener("blur", () => setTimeout(close, 150));
+  pop.addEventListener("mousedown", e => { const o = e.target.closest(".opt"); if (o) { e.preventDefault(); pick(+o.dataset.i); } });
+}
+
+/* ---- core/menus.js ---- */
+/* ================= Menus and dialogs: data-act buttons, data-close, click outside ================= */
+/* The app supplies: ACTIONS. */
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-act]"); if (b && ACTIONS[b.dataset.act]) { $$("details.menu").forEach(d => d.open = false); ACTIONS[b.dataset.act](); return; }
+  if (!e.target.closest("details.menu")) $$("details.menu").forEach(d => d.open = false);
+  const c = e.target.closest("[data-close]"); if (c) c.closest(".overlay").hidden = true;
+});
+$$(".overlay").forEach(o => o.addEventListener("pointerdown", e => { if (e.target === o) o.hidden = true; }));
+
+/* ---- core/modes.js ---- */
+/* ================= Modes: the tools of the workbench ================= */
+/* Each tool is its own HTML file in the same folder; index.html is the home page. The app defines MODE in its config. */
+const MODES = [
+  { id: "rca", file: "uchuva-rca.html", name: "Root causes" },
+  { id: "system", file: "function-analysis.html#system", name: "System" }, // system and functions: two modes of one file
+  { id: "fa", file: "function-analysis.html#functions", name: "Functions" },
+];
+function drawModeNav(current = MODE) {
+  const nav = document.getElementById("modenav"); if (!nav) return;
+  if (document.querySelector('meta[name="rca-publish"]')) { nav.hidden = true; return; } // the published viewer stands alone
+  nav.innerHTML = `<a href="index.html" class="mn-home" title="Workbench home" aria-label="Workbench home">⌂</a>` + MODES.map(m =>
+    m.id === current ? `<span class="mn-cur" aria-current="page">${m.name}</span>`
+      : m.file ? `<a href="${m.file}">${m.name}</a>` : `<span class="mn-off" title="Not built yet">${m.name}</span>`).join("");
+}
+drawModeNav();
+
+/* ---- rca/model.js ---- */
+/* ================= Document model ================= */
+function emptyDoc() {
+  return { format: "uchuva-rca", schema: 2, app: APP_VERSION, title: "New root-cause analysis", titleTr: {}, languages: ["en"],
+    categories: clone(DEFAULT_CATS), tagGroups: clone(DEFAULT_TAG_GROUPS), tags: [], scales: [], nodes: [], edges: [], versions: [], sessions: [], activeSession: null,
+    meta: { created: nowISO(), modified: nowISO() } };
+}
+function newNode(text, cat, x, y) {
+  return { id: uid("n"), text, textTr: {}, cat, tags: [], status: "unassessed", notes: "", sources: [], x: Math.round(x), y: Math.round(y) };
+}
+function coreOf(d) { return { title: d.title, titleTr: d.titleTr, languages: d.languages, categories: d.categories, tagGroups: d.tagGroups, tags: d.tags, scales: d.scales, nodes: d.nodes, edges: d.edges }; }
 
 function normalizeDoc(d) {
   if (!d || typeof d !== "object" || !Array.isArray(d.nodes) || !Array.isArray(d.edges)) throw new Error("This JSON file is not an RCA file.");
@@ -7524,8 +8011,10 @@ function tidyPositions(nodes, gap = 12) {
   nodes.forEach(n => { n.x = Math.round(n.x); n.y = Math.round(n.y); });
 }
 
-/* ================= Undo / commit ================= */
-const snap = () => JSON.stringify({ ...coreOf(doc), sessions: doc.sessions, activeSession: doc.activeSession });
+/* ---- hooks for the shared core ---- */
+function findEditable(ref) { return nodeById(ref); } // what a side-panel field edits
+function tagHolders() { return doc.nodes; } // everything that can carry tags
+function snap() { return JSON.stringify({ ...coreOf(doc), sessions: doc.sessions, activeSession: doc.activeSession }); }
 function restoreCore(s) {
   const c = typeof s === "string" ? JSON.parse(s) : clone(s);
   doc.title = c.title; doc.titleTr = c.titleTr || (c.languages ? {} : doc.titleTr); doc.languages = c.languages || doc.languages;
@@ -7535,78 +8024,15 @@ function restoreCore(s) {
   if (c.scales) doc.scales = c.scales;
   if (c.sessions) { doc.sessions = c.sessions; doc.activeSession = c.activeSession || null; }
 }
-function pushUndo(s) { undoStack.push(s); if (undoStack.length > 300) undoStack.shift(); redoStack.length = 0; }
-function commit(fn, opts = {}) {
-  if (VIEWER) return Promise.resolve();
-  flushField(true);
-  pushUndo(snap());
-  fn();
-  touch();
-  return render(opts);
-}
-function touch() {
-  doc.meta.modified = nowISO(); dirty = true; autosave(); updateChrome(); fileAutosave();
-}
-let fileTimer = null, fileSavedAt = null, fileNeedsGesture = false;
-function fileAutosave() { // write into the file you opened, a moment after each change
-  if (VIEWER || !fileHandle) return;
-  clearTimeout(fileTimer);
-  fileTimer = setTimeout(async () => {
-    try {
-      if (fileHandle.queryPermission && (await fileHandle.queryPermission({ mode: "readwrite" })) !== "granted") { fileNeedsGesture = true; updateChrome(); return; }
-      const w = await fileHandle.createWritable(); await w.write(docText()); await w.close();
-      dirty = false; fileNeedsGesture = false; fileSavedAt = new Date(); updateChrome(); autosave();
-    } catch (e) { console.warn("Automatic save to file failed", e); }
-  }, 1200);
-}
-function undo() {
-  flushField(true);
-  if (!undoStack.length) return toast("Nothing to undo");
-  redoStack.push(snap()); restoreCore(undoStack.pop()); pruneSelection(); touch(); render({ animate: true });
-}
-function redo() {
-  if (!redoStack.length) return toast("Nothing to redo");
-  undoStack.push(snap()); restoreCore(redoStack.pop()); pruneSelection(); touch(); render({ animate: true });
-}
-let autosaveTimer = null;
-function autosave() {
-  if (VIEWER) return;
-  clearTimeout(autosaveTimer);
-  autosaveTimer = setTimeout(() => {
-    if (!lsSet(LS_DOC, JSON.stringify(doc))) console.warn("Autosave to browser storage failed");
-    lsSet(LS_FILE, JSON.stringify({ fileName, dirty }));
-  }, 300);
-}
 const nodeById = id => doc.nodes.find(n => n.id === id);
 const catById = id => doc.categories.find(c => c.id === id) || { id, name: id, fill: "#ffffff", stroke: "#000000", font: "#000000" };
-
-/* ================= Languages: main text in `field`, others in `fieldTr[lang]` ================= */
-const langName = c => LANG_NAMES[c] || c.toUpperCase();
-const mainLang = () => doc.languages[0];
-const curLang = () => (doc.languages.includes(view.lang) ? view.lang : mainLang());
-const neutralText = s => /^[\s?¿!.…\-–—]*$/.test(s || "");
-function txRaw(o, f, lang) { return lang === mainLang() ? (o[f] || "") : ((o[f + "Tr"] || {})[lang] || ""); }
-function tx(o, f = "text", lang = curLang()) {
-  if (!o) return "";
-  return txRaw(o, f, lang) || o[f] || Object.values(o[f + "Tr"] || {}).find(Boolean) || "";
-}
-const txAll = (o, f = "text") => [o[f] || "", ...Object.values(o[f + "Tr"] || {})].filter(Boolean);
-function txMissing(o, f = "text", lang = curLang()) {
-  if (txRaw(o, f, lang).trim()) return false;
-  const all = txAll(o, f); return all.length > 0 && !all.every(neutralText);
-}
-function txSet(o, f, lang, v) {
-  if (lang === mainLang()) o[f] = v;
-  else { o[f + "Tr"] = o[f + "Tr"] || {}; if (v) o[f + "Tr"][lang] = v; else delete o[f + "Tr"][lang]; }
-}
 function everyTranslatable(d, fn) { // visit every visible text: title, categories, tag groups, tags, boxes
   fn(d, "title"); d.categories.forEach(c => fn(c, "name")); d.tagGroups.forEach(g => fn(g, "name"));
   d.tags.forEach(t => fn(t, "name")); d.nodes.forEach(n => fn(n, "text"));
 }
 const isQ = n => (n.text || txAll(n)[0] || "").trim() === "?";
-const tagById = id => doc.tags.find(t => t.id === id);
-const orderedTags = ids => doc.tags.filter(t => ids.includes(t.id)); // in the order of the tag list = chain order
 
+/* ---- rca/canvas.js ---- */
 /* ================= Graph analysis ================= */
 function analyze(d = doc) {
   const ids = d.nodes.map(n => n.id);
@@ -7673,7 +8099,6 @@ const view = Object.assign({}, DEFAULT_VIEW, { folded: new Set(), hiddenCats: ne
 const pins = new Map(); // ref -> {x,y} in Untangle coordinates, for boxes without arrows
 try { Object.assign(view, JSON.parse(lsGet(LS_VIEW) || "{}")); } catch (e) {}
 view.folded = new Set(); view.hiddenCats = new Set(); view.tagFilter = new Set(); view.diff = null;
-let VIEWER = false; // read-only viewer for published diagrams
 let GRADING = false; // interview grading: the diagram is locked, boxes get scores
 const LS_VPREF = "uchuva-rca:viewer";
 function saveViewerPref() { if (VIEWER) lsSet(LS_VPREF, JSON.stringify({ lang: view.lang, tagChips: view.tagChips })); }
@@ -7934,7 +8359,6 @@ function nodeVisual(n, extraLabel) {
   return { label: sz.lines.join("\n"), w: box.w, h: box.h, fill: c.fill, font: c.font, fs: missing ? "italic" : "normal",
     stroke: st.color || n.outline || c.stroke, bw: st.width, bs: st.style };
 }
-const EMOJI_FONT = '"Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", "Twemoji Mozilla", sans-serif';
 function tagChipLabel(n) {
   const ts = orderedTags(n.tags || []); if (!ts.length) return null;
   const shown = ts.slice(0, 3).map(t => t.emoji).join(""), more = ts.length - 3;
@@ -8371,6 +8795,7 @@ function startDrag(kind, ev, info) {
   move(ev);
 }
 
+/* ---- rca/panel.js ---- */
 /* ================= Interface words seen by viewers (the editor stays in English) ================= */
 const UI = {
   en: {
@@ -8623,19 +9048,7 @@ function renderViewerPanel() {
 }
 $("#panel").addEventListener("click", e => { const b = e.target.closest("[data-go]"); if (b) goTo(b.dataset.go); });
 
-/* panel text fields: commit after a pause in typing, keeping focus */
-let fieldTimer = null, fieldPending = null;
-function fieldEdit(ref, apply) { fieldPending = { ref, apply }; clearTimeout(fieldTimer); fieldTimer = setTimeout(() => flushField(), 700); }
-function flushField(inCommit) {
-  clearTimeout(fieldTimer);
-  if (!fieldPending) return;
-  const { ref, apply } = fieldPending; fieldPending = null;
-  const n = nodeById(ref); if (!n) return;
-  const tmp = clone(n); apply(tmp);
-  if (JSON.stringify(tmp) === JSON.stringify(n)) return;
-  pushUndo(snap()); apply(n); touch();
-  if (!inCommit) render({ skipPanel: true });
-}
+
 
 function goTo(ref) {
   if (!nodeById(ref)) return;
@@ -8813,6 +9226,7 @@ $("#q").addEventListener("keydown", e => {
   if (e.key === "Escape") { $("#q").value = ""; doSearch(false); $("#q").blur(); }
 });
 
+/* ---- rca/io.js ---- */
 /* ================= draw.io import ================= */
 async function inflateRaw(bytes) {
   const ds = new DecompressionStream("deflate-raw");
@@ -8870,8 +9284,9 @@ async function parseDrawio(raw) {
   return { categories: cats.filter(c => used.has(c.id) || DEFAULT_CATS.some(d => d.id === c.id)), nodes, edges: edges.filter(e => ids.has(e.source) && ids.has(e.target)) };
 }
 
-/* ================= Files ================= */
-const FSA = "showOpenFilePicker" in window;
+
+/* ================= Files: RCA-specific loading ================= */
+
 function setDoc(d, name, handle) {
   view.branch = null; if (GRADING) { GRADING = false; document.body.classList.remove("grading"); $("#work-edit").setAttribute("aria-pressed", true); $("#work-grade").setAttribute("aria-pressed", false); }
   doc = d; fileName = name; fileHandle = handle || null; dirty = false;
@@ -8899,38 +9314,7 @@ async function loadText(text, name, handle) {
     toast(`Imported ${name}. Save it to create the RCA file.`, 4500);
   }
 }
-async function openFile() {
-  if (dirty && !confirm("You have unsaved changes. Open another file anyway? (They stay recoverable only until the new file is edited.)")) return;
-  if (FSA) {
-    try {
-      const [h] = await window.showOpenFilePicker({ types: [{ description: "RCA file or draw.io diagram", accept: { "application/json": [".json"], "application/xml": [".drawio", ".xml", ".dio"] } }] });
-      const f = await h.getFile();
-      await loadText(await f.text(), f.name, f.name.toLowerCase().endsWith(".json") ? h : null);
-    } catch (e) { if (e.name !== "AbortError") toast(e.message || "Could not open that file.", 5000); }
-  } else $("#file-input").click();
-}
-$("#file-input").onchange = async e => {
-  const f = e.target.files[0]; e.target.value = ""; if (!f) return;
-  try { await loadText(await f.text(), f.name, null); } catch (err) { toast(err.message || "Could not open that file.", 5000); }
-};
-function docText() { doc.app = APP_VERSION; return JSON.stringify(doc, null, 2) + "\n"; }
-async function saveFile(as) {
-  flushField(true);
-  if (FSA && fileHandle && !as) {
-    try { const w = await fileHandle.createWritable(); await w.write(docText()); await w.close(); dirty = false; fileNeedsGesture = false; fileSavedAt = new Date(); updateChrome(); autosave(); toast(`Saved to ${fileHandle.name}. Later changes are saved to it automatically.`); return; }
-    catch (e) { if (e.name === "AbortError") return; toast("Could not write to the file. Choose where to save it."); }
-  }
-  if (FSA && window.showSaveFilePicker) {
-    try {
-      const h = await window.showSaveFilePicker({ suggestedName: fileName, types: [{ description: "RCA file", accept: { "application/json": [".json"] } }] });
-      const w = await h.createWritable(); await w.write(docText()); await w.close();
-      fileHandle = h; fileName = h.name; dirty = false; fileNeedsGesture = false; fileSavedAt = new Date(); updateChrome(); autosave(); toast(`Saved to ${h.name}. Later changes are saved to it automatically.`); return;
-    } catch (e) { if (e.name === "AbortError") return; }
-  }
-  download(fileName, docText(), "application/json");
-  dirty = false; updateChrome(); autosave();
-  toast(`Downloaded ${fileName}. Replace your old copy with it.`, 4500);
-}
+
 function newEmpty() {
   if (dirty && !confirm("You have unsaved changes. Start a new empty RCA anyway?")) return;
   const d = emptyDoc(); d.title = "New root-cause analysis";
@@ -8938,6 +9322,7 @@ function newEmpty() {
   d.versions = [mkVersion(d, "Started", "")];
   setDoc(d, "new-rca.json", null);
 }
+
 
 /* ================= Exports ================= */
 function baseName() { return fileName.replace(/\.json$/i, ""); }
@@ -9034,7 +9419,8 @@ function exportCSV(which) {
   download(`${baseName()}-${which === "nodes" ? "boxes" : "arrows"}.csv`, "﻿" + rows.map(r => r.map(csvCell).join(",")).join("\r\n") + "\r\n", "text/csv");
 }
 
-/* ================= Versions ================= */
+
+/* ================= Versions: what an RCA snapshot holds ================= */
 function diffCores(a, b) { // a = old snapshot, b = new
   const an = new Map(a.nodes.map(n => [n.id, n])), bn = new Map(b.nodes.map(n => [n.id, n]));
   const added = b.nodes.filter(n => !an.has(n.id)), removed = a.nodes.filter(n => !bn.has(n.id));
@@ -9045,58 +9431,23 @@ function diffCores(a, b) { // a = old snapshot, b = new
   return { added, removed, changed, edgesAdded: b.edges.filter(e => !ae.has(k(e))), edgesRemoved: a.edges.filter(e => !be.has(k(e))), an, bn };
 }
 const chgLine = d => `<span class="chg"><span class="p">+${d.added.length}</span> / <span class="m">−${d.removed.length}</span> boxes · <span class="c">${d.changed.length} edited</span> · arrows <span class="p">+${d.edgesAdded.length}</span> / <span class="m">−${d.edgesRemoved.length}</span></span>`;
-function openVersions() {
-  flushField(true);
-  const list = $("#ver-list"); const vs = doc.versions.slice().reverse();
-  list.innerHTML = vs.length ? vs.map(v => {
-    const i = doc.versions.indexOf(v); const prev = doc.versions[i - 1];
-    const d = prev ? diffCores(prev.snapshot, v.snapshot) : null;
-    return `<div class="ver"><span class="nm">${esc(v.name)}</span>
-      <span class="meta">${fmtDate(v.at)} · ${v.snapshot.nodes.length} boxes, ${v.snapshot.edges.length} arrows ${d ? "· " + chgLine(d) : ""}</span>
-      ${v.note ? `<span class="nt">${esc(v.note)}</span>` : ""}
-      <span class="acts"><button class="btn small" data-vcmp="${v.id}">Compare with now</button><button class="btn small" data-vres="${v.id}">Restore</button><button class="btn small icon" data-vdel="${v.id}" title="Delete this version" aria-label="Delete version">×</button></span></div>`;
-  }).join("") : `<p class="muted" style="padding:12px">No versions yet.</p>`;
-  $("#ver-diff").hidden = true;
-  $("#m-versions").hidden = false; $("#ver-name").focus();
+
+function versionSize(s) { return `${s.nodes.length} boxes, ${s.edges.length} arrows`; }
+function versionCompare(v, d, box) { // the comparison shown under the version list
+  const li = arr => arr.length ? `<ul>${arr.slice(0, 40).map(x => `<li>${esc(x)}</li>`).join("")}${arr.length > 40 ? `<li>…and ${arr.length - 40} more</li>` : ""}</ul>` : `<p class="muted">None.</p>`;
+  const et = (e, m) => `${tx(m.get(e.source) || {}) || e.source} → ${tx(m.get(e.target) || {}) || e.target}`;
+  box.innerHTML = `<h4>Now compared with “${esc(v.name)}”</h4>${chgLine(d)}
+    <b>New boxes</b>${li(d.added.map(n => tx(n)))}<b>Edited boxes</b>${li(d.changed.map(n => { const o = d.an.get(n.id); return o.text !== n.text ? `${o.text} ⟶ ${n.text}` : tx(n); }))}
+    <b>Removed boxes</b>${li(d.removed.map(n => tx(n)))}<b>New arrows</b>${li(d.edgesAdded.map(e => et(e, d.bn)))}<b>Removed arrows</b>${li(d.edgesRemoved.map(e => et(e, d.an)))}
+    <div class="row"><button class="btn primary" id="vd-show">Highlight on the graph</button></div>`;
+  $("#vd-show").onclick = () => {
+    view.diff = { added: new Set(d.added.map(n => n.id)), changed: new Set(d.changed.map(n => n.id)), name: v.name };
+    const bar = $("#diffbar"); bar.hidden = false;
+    bar.innerHTML = `Compared with “${esc(v.name)}”: <span class="a">${d.added.length} new</span> <span class="c">${d.changed.length} edited</span> ${d.removed.length ? `· ${d.removed.length} removed (listed in Versions)` : ""}<button class="btn small" id="diff-clear">Clear</button>`;
+    $("#diff-clear").onclick = () => { view.diff = null; bar.hidden = true; render(); };
+    $("#m-versions").hidden = true; render();
+  };
 }
-$("#ver-form").onsubmit = e => {
-  e.preventDefault();
-  const name = $("#ver-name").value.trim(); if (!name) return;
-  doc.versions.push(mkVersion(doc, name, $("#ver-note").value.trim()));
-  $("#ver-name").value = ""; $("#ver-note").value = "";
-  touch(); openVersions(); toast(`Version “${name}” saved in the file. Press Ctrl S to write it to disk.`, 4500);
-};
-$("#ver-list").addEventListener("click", e => {
-  const b = e.target.closest("button"); if (!b) return;
-  if (b.dataset.vdel) {
-    const v = doc.versions.find(x => x.id === b.dataset.vdel);
-    if (v && confirm(`Delete the version “${v.name}”? This cannot be undone.`)) { doc.versions = doc.versions.filter(x => x !== v); touch(); openVersions(); }
-  }
-  if (b.dataset.vres) {
-    const v = doc.versions.find(x => x.id === b.dataset.vres); if (!v) return;
-    commit(() => { restoreCore(JSON.stringify(v.snapshot)); pruneSelection(); }, { animate: true });
-    $("#m-versions").hidden = true; toast(`Restored “${v.name}”. Ctrl Z brings back what you had.`, 4500);
-  }
-  if (b.dataset.vcmp) {
-    const v = doc.versions.find(x => x.id === b.dataset.vcmp); if (!v) return;
-    const d = diffCores(v.snapshot, coreOf(doc));
-    const box = $("#ver-diff"); box.hidden = false;
-    const li = arr => arr.length ? `<ul>${arr.slice(0, 40).map(x => `<li>${esc(x)}</li>`).join("")}${arr.length > 40 ? `<li>…and ${arr.length - 40} more</li>` : ""}</ul>` : `<p class="muted">None.</p>`;
-    const et = (e, m) => `${tx(m.get(e.source) || {}) || e.source} → ${tx(m.get(e.target) || {}) || e.target}`;
-    box.innerHTML = `<h4>Now compared with “${esc(v.name)}”</h4>${chgLine(d)}
-      <b>New boxes</b>${li(d.added.map(n => tx(n)))}<b>Edited boxes</b>${li(d.changed.map(n => { const o = d.an.get(n.id); return o.text !== n.text ? `${o.text} ⟶ ${n.text}` : tx(n); }))}
-      <b>Removed boxes</b>${li(d.removed.map(n => tx(n)))}<b>New arrows</b>${li(d.edgesAdded.map(e => et(e, d.bn)))}<b>Removed arrows</b>${li(d.edgesRemoved.map(e => et(e, d.an)))}
-      <div class="row"><button class="btn primary" id="vd-show">Highlight on the graph</button></div>`;
-    $("#vd-show").onclick = () => {
-      view.diff = { added: new Set(d.added.map(n => n.id)), changed: new Set(d.changed.map(n => n.id)), name: v.name };
-      const bar = $("#diffbar"); bar.hidden = false;
-      bar.innerHTML = `Compared with “${esc(v.name)}”: <span class="a">${d.added.length} new</span> <span class="c">${d.changed.length} edited</span> ${d.removed.length ? `· ${d.removed.length} removed (listed in Versions)` : ""}<button class="btn small" id="diff-clear">Clear</button>`;
-      $("#diff-clear").onclick = () => { view.diff = null; bar.hidden = true; render(); };
-      $("#m-versions").hidden = true; render();
-    };
-    box.scrollIntoView({ block: "nearest" });
-  }
-});
 
 /* ================= Colour key editor ================= */
 let catDraft = [], catMoves = {}, catAssign = null;
@@ -9202,130 +9553,6 @@ $("#cat-save").onclick = () => {
   toast("Colour key updated. Ctrl Z to undo.");
 };
 
-/* ================= Tag editor ================= */
-let tagDraft = null;
-function openTags() {
-  if (VIEWER) return;
-  tagDraft = { groups: clone(doc.tagGroups), tags: clone(doc.tags) };
-  drawTags(); $("#m-tags").hidden = false;
-}
-function drawTags() {
-  const L = doc.languages, counts = {}; doc.nodes.forEach(n => (n.tags || []).forEach(x => (counts[x] = (counts[x] || 0) + 1)));
-  const trInputs = (o, kind, i) => L.slice(1).map(l => `<label class="trin"><b>${esc(l.toUpperCase())}</b><input type="text" data-k="${kind}" data-i="${i}" data-trl="${esc(l)}" value="${esc((o.nameTr || {})[l] || "")}" placeholder="${esc(langName(l))}"></label>`).join("");
-  $("#tag-rows").innerHTML = (tagDraft.tags.length ? "" : `<div class="tagempty"><p class="muted">No tags yet. Start from the stages of a fresh-produce export chain (culture care → harvest → calyx drying → sorting → packing → storage → transport → port → sea freight, plus monitoring and communication), or add your own.</p><button class="btn" id="tag-template">Add the example stage set</button></div>`) +
-    tagDraft.groups.map((g, gi) => `<div class="tgroup">
-      <div class="tg-head"><input type="text" class="tg-name" data-k="g" data-i="${gi}" value="${esc(g.name)}" placeholder="Group name" aria-label="Group name">${trInputs(g, "g", gi)}</div>
-      ${tagDraft.tags.map((tg, i) => tg.group !== g.id ? "" : `<div class="trow">
-        <span class="emo"><input type="text" class="emoji-in" data-k="emoji" data-i="${i}" value="${esc(tg.emoji)}" aria-label="Emoji"><button type="button" class="btn small icon" data-epal="${i}" title="Pick an emoji" aria-label="Pick an emoji">▾</button></span>
-        <input type="text" data-k="name" data-i="${i}" value="${esc(tg.name)}" placeholder="Name" aria-label="Tag name">
-        ${trInputs(tg, "t", i)}
-        <input type="text" class="tdesc" data-k="desc" data-i="${i}" value="${esc(tg.desc || "")}" placeholder="What it covers (only for you)" aria-label="Description">
-        <select data-k="group" data-i="${i}" aria-label="Group">${tagDraft.groups.map(o => `<option value="${esc(o.id)}"${o.id === tg.group ? " selected" : ""}>${esc(o.name)}</option>`).join("")}</select>
-        <span class="tcount">${counts[tg.id] || 0}</span>
-        <span class="catacts"><button class="btn small icon" data-tup="${i}" title="Move earlier in the chain" aria-label="Move up">↑</button><button class="btn small icon" data-tdown="${i}" title="Move later in the chain" aria-label="Move down">↓</button><button class="btn small icon" data-tdel="${i}" title="Delete tag" aria-label="Delete tag">×</button></span>
-      </div>`).join("")}
-      <button class="btn small" data-tadd="${esc(g.id)}">＋ Add a tag to ${esc(g.name || "this group")}</button></div>`).join("");
-  $("#tag-template") && ($("#tag-template").onclick = () => {
-    const tpl = stageTags(doc.languages); const have = new Set(tagDraft.tags.map(x => x.id));
-    tagDraft.groups.forEach(g => { if (!g.name) { const d = groupsFor(doc.languages).find(x => x.id === g.id); if (d) Object.assign(g, d); } });
-    tpl.forEach(x => { if (!have.has(x.id)) tagDraft.tags.push(x); }); drawTags();
-  });
-}
-$("#tag-rows").addEventListener("input", e => {
-  const el = e.target, k = el.dataset.k, i = +el.dataset.i; if (!k) return;
-  if (k === "g") { const g = tagDraft.groups[i]; if (el.dataset.trl) { g.nameTr = g.nameTr || {}; g.nameTr[el.dataset.trl] = el.value.trim(); } else g.name = el.value; return; }
-  const tg = tagDraft.tags[i];
-  if (el.dataset.trl) { tg.nameTr = tg.nameTr || {}; tg.nameTr[el.dataset.trl] = el.value.trim(); }
-  else if (k !== "group") tg[k] = el.value;
-});
-$("#tag-rows").addEventListener("change", e => { const el = e.target; if (el.dataset.k === "group") { tagDraft.tags[+el.dataset.i].group = el.value; drawTags(); } });
-$("#tag-rows").addEventListener("click", e => {
-  const b = e.target.closest("button"); if (!b) return;
-  const T = tagDraft.tags;
-  if (b.dataset.tadd) { T.push({ id: uid("t"), emoji: "🏷️", name: "", nameTr: {}, group: b.dataset.tadd, desc: "" }); drawTags(); setTimeout(() => { const el = $(`#tag-rows input[data-k="name"][data-i="${T.length - 1}"]`); el && el.focus(); }, 20); }
-  if (b.dataset.tdel !== undefined) { const i = +b.dataset.tdel, used = doc.nodes.filter(n => (n.tags || []).includes(T[i].id)).length;
-    if (!used || confirm(`Remove “${T[i].name}” from ${used} box${used > 1 ? "es" : ""} and delete it?`)) { T.splice(i, 1); drawTags(); } }
-  const move = (i, dir) => { // swap with the neighbour in the same group
-    const g = T[i].group; let j = i + dir; while (j >= 0 && j < T.length && T[j].group !== g) j += dir;
-    if (j >= 0 && j < T.length) { [T[i], T[j]] = [T[j], T[i]]; drawTags(); } };
-  if (b.dataset.tup !== undefined) move(+b.dataset.tup, -1);
-  if (b.dataset.tdown !== undefined) move(+b.dataset.tdown, 1);
-  if (b.dataset.epal !== undefined) openEmojiPalette(b, +b.dataset.epal);
-});
-function openEmojiPalette(anchor, i) {
-  const pop = $("#emoji-pop"); const r = anchor.getBoundingClientRect(), box = $("#m-tags .modal").getBoundingClientRect();
-  pop.innerHTML = EMOJI_PALETTE.map(em => `<button type="button" data-em="${em}">${em}</button>`).join("") + `<p class="muted">Or type any emoji in the box (Windows: Win + . · Mac: Ctrl + Cmd + Space).</p>`;
-  pop.style.left = Math.max(8, r.left - box.left - 8) + "px"; pop.style.top = (r.bottom - box.top + $("#m-tags .modal").scrollTop + 4) + "px";
-  pop.hidden = false; pop.dataset.i = i;
-}
-$("#emoji-pop").addEventListener("click", e => {
-  const b = e.target.closest("[data-em]"); if (!b) return;
-  const pop = $("#emoji-pop"); tagDraft.tags[+pop.dataset.i].emoji = b.dataset.em; pop.hidden = true; drawTags();
-});
-document.addEventListener("pointerdown", e => { const pop = $("#emoji-pop"); if (!pop.hidden && !e.target.closest("#emoji-pop") && !e.target.closest("[data-epal]")) pop.hidden = true; });
-$("#tag-save").onclick = () => {
-  const groups = tagDraft.groups.map(g => ({ ...g, name: g.name.trim() || "Group", nameTr: trObj(g.nameTr) }));
-  const tags = tagDraft.tags.filter(tg => tg.name.trim() || tg.emoji.trim()).map(tg => ({ ...tg, name: tg.name.trim() || tg.emoji, emoji: tg.emoji.trim() || "🏷️", nameTr: trObj(tg.nameTr) }));
-  const ids = new Set(tags.map(tg => tg.id));
-  $("#m-tags").hidden = true;
-  commit(() => {
-    doc.tagGroups = groups; doc.tags = tags;
-    doc.nodes.forEach(n => { n.tags = tags.filter(tg => (n.tags || []).includes(tg.id)).map(tg => tg.id); });
-    [...view.tagFilter].forEach(x => { if (!ids.has(x)) view.tagFilter.delete(x); });
-  });
-  toast("Tags updated. Ctrl Z to undo.");
-};
-
-/* ================= Languages ================= */
-function openLangs() {
-  if (VIEWER) return;
-  const L = doc.languages, miss = missingSummary();
-  const free = Object.keys(LANG_NAMES).filter(l => !L.includes(l));
-  $("#lang-body").innerHTML = `
-    <div class="langlist">${L.map((l, i) => `<div class="langrow">
-      <span class="lcode">${esc(l.toUpperCase())}</span><span class="lname">${esc(langName(l))}${i === 0 ? ` <span class="pill">main</span>` : ""}</span>
-      ${i === 0 ? `${(m => m && (m.boxes || m.other) ? `<span class="lmiss">${m.boxes} box${m.boxes === 1 ? "" : "es"} and ${m.other} other text${m.other === 1 ? "" : "s"} missing</span>${m.boxes ? `<button class="btn small" data-trpass="${esc(l)}">Translate one by one</button>` : ""}` : "")(miss.find(m => m.l === l))}<label class="relabel">The main text is written in <select id="lang-relabel">${[l, ...Object.keys(LANG_NAMES).filter(x => !L.includes(x))].map(x => `<option value="${esc(x)}"${x === l ? " selected" : ""}>${esc(langName(x))}</option>`).join("")}</select></label>`
-        : `<span class="lmiss">${(m => m && (m.boxes || m.other) ? `${m.boxes} box${m.boxes === 1 ? "" : "es"} and ${m.other} other text${m.other === 1 ? "" : "s"} missing` : "")(miss.find(m => m.l === l))}</span>
-           <span class="row">${(miss.find(m => m.l === l) || {}).boxes ? `<button class="btn small" data-trpass="${esc(l)}">Translate one by one</button>` : ""}<button class="btn small" data-lmain="${esc(l)}">Make main</button><button class="btn small danger" data-ldel="${esc(l)}">Remove</button></span>`}
-    </div>`).join("")}</div>
-    <div class="row"><select id="lang-add-sel" aria-label="Language to add">${free.map(l => `<option value="${l}">${esc(langName(l))}</option>`).join("")}<option value="__other">Other (type a code)…</option></select><button class="btn" id="lang-add">Add language</button></div>
-    <h4>Title</h4>
-    <div class="titlerows">${L.map(l => `<label class="trin wide"><b>${esc(l.toUpperCase())}</b><input type="text" data-title="${esc(l)}" value="${esc(txRaw(doc, "title", l))}" placeholder="${esc(langName(l))} title"></label>`).join("")}</div>
-    <p class="muted">Box texts are asked for in each language as you type them: Enter moves on to the next language. Category and tag names have one field per language in their editors. Notes stay in one language; they are only for you.</p>`;
-  $("#m-langs").hidden = false;
-}
-$("#lang-body").addEventListener("click", e => {
-  const b = e.target.closest("button"); if (!b) return;
-  if (b.id === "lang-add") {
-    let l = $("#lang-add-sel").value;
-    if (l === "__other") { l = (prompt("Two-letter language code, for example pt or zh") || "").trim().toLowerCase(); if (!/^[a-z]{2,3}(-[a-z0-9]+)?$/.test(l)) return l && toast("That is not a language code."); }
-    if (doc.languages.includes(l)) return;
-    commit(() => { doc.languages.push(l); }).then(openLangs);
-    toast(`${langName(l)} added. New boxes now ask for it; use Translate one by one for the existing ones.`, 5000);
-  }
-  if (b.dataset.lmain) makeMainLang(b.dataset.lmain).then(openLangs);
-  if (b.dataset.ldel) { const l = b.dataset.ldel;
-    if (!confirm(`Remove ${langName(l)} and all its translations? Ctrl Z brings them back.`)) return;
-    commit(() => { everyTranslatable(doc, (o, f) => { if (o[f + "Tr"]) delete o[f + "Tr"][l]; }); doc.languages = doc.languages.filter(x => x !== l); }).then(openLangs);
-    if (view.lang === l) view.lang = null; }
-  if (b.dataset.trpass) translatePass(b.dataset.trpass);
-});
-$("#lang-body").addEventListener("change", e => {
-  if (e.target.id === "lang-relabel") { const l = e.target.value; commit(() => { doc.languages[0] = l; }).then(openLangs); toast(`The main text is now marked as ${langName(l)}.`); }
-  if (e.target.dataset.title) { const l = e.target.dataset.title, v = e.target.value.trim(); commit(() => txSet(doc, "title", l, v)); }
-});
-function makeMainLang(l) { // the chosen language becomes the main field everywhere; the old main moves into the translations
-  const old = mainLang(); if (l === old) return Promise.resolve();
-  const r = commit(() => {
-    everyTranslatable(doc, (o, f) => {
-      const tr = o[f + "Tr"] = o[f + "Tr"] || {}; const nv = tr[l] || "", ov = o[f] || "";
-      if (!nv && ov && neutralText(ov)) return; // "?" boxes read the same in every language
-      delete tr[l]; if (ov) tr[old] = ov; o[f] = nv;
-    });
-    doc.languages = [l, ...doc.languages.filter(x => x !== l)];
-  });
-  toast(`${langName(l)} is now the main language.`); return r;
-}
 
 /* ================= New RCA ================= */
 function openNew() {
@@ -9364,136 +9591,7 @@ $("#paste-go").onclick = async () => {
   } catch (err) { $("#paste-err").textContent = err.message; $("#paste-err").hidden = false; }
 };
 
-/* ================= Bibliography (.bib) ================= */
-const LS_BIB = "uchuva-rca:bib";
-let bib = { name: "", entries: [], byKey: new Map() };
-function setBib(name, entries) {
-  bib = { name, entries, byKey: new Map(entries.map(e => [e.key.toLowerCase(), e])) };
-  const b = $("[data-act=bib]"); if (b) b.innerHTML = name ? `Bibliography: ${esc(name)} <small>${entries.length} refs · reload</small>` : `Load bibliography… <small>.bib, for @ citations</small>`;
-}
-try { const b = JSON.parse(lsGet(LS_BIB) || "null"); if (b && Array.isArray(b.entries)) setBib(b.name, b.entries); } catch (e) {}
-function texClean(v) {
-  return String(v || "")
-    .replace(/\\(?:textit|textbf|emph|textsc|mathrm|textrm)\s*\{([^{}]*)\}/g, "$1")
-    .replace(/\\(['"`^~=.uvHckr])\s*\{?\\?([A-Za-z])\}?/g, (m, a, c) => (c + ({ "'": "́", "`": "̀", "^": "̂", '"': "̈", "~": "̃", "=": "̄", ".": "̇", u: "̆", v: "̌", H: "̋", c: "̧", k: "̨", r: "̊" }[a] || "")).normalize("NFC"))
-    .replace(/\\(ss|o|O|l|L|ae|AE|oe|OE|aa|AA|i|j)\b\s*/g, (m, c) => ({ ss: "ss", o: "o", O: "O", l: "l", L: "L", ae: "ae", AE: "AE", oe: "oe", OE: "OE", aa: "a", AA: "A", i: "i", j: "j" }[c]))
-    .replace(/\\([&%$#_{}])/g, "$1").replace(/~/g, " ").replace(/--/g, "–").replace(/[{}]/g, "").replace(/\s+/g, " ").trim();
-}
-function parseBib(text) {
-  const out = []; let i = 0; const n = text.length;
-  while (i < n) {
-    const at = text.indexOf("@", i); if (at < 0) break;
-    const m = /^@\s*([A-Za-z]+)\s*([{(])/.exec(text.slice(at, at + 60));
-    if (!m) { i = at + 1; continue; }
-    const type = m[1].toLowerCase(); const open = m[2], close = open === "{" ? "}" : ")";
-    let j = at + m[0].length, depth = 1;
-    const start = j;
-    while (j < n && depth > 0) { const c = text[j]; if (c === "{" || (open === "(" && c === "(")) depth++; else if (c === "}" || (open === "(" && c === ")")) depth--; j++; }
-    const body = text.slice(start, j - 1); i = j;
-    if (["comment", "string", "preamble"].includes(type)) continue;
-    const comma = body.indexOf(","); if (comma < 0) continue;
-    const key = body.slice(0, comma).trim(); if (!key) continue;
-    const fields = {}; let k = comma + 1; const B = body;
-    while (k < B.length) {
-      const fm = /^\s*([A-Za-z][\w-]*)\s*=\s*/.exec(B.slice(k)); if (!fm) break;
-      const name = fm[1].toLowerCase(); k += fm[0].length;
-      let val = "";
-      if (B[k] === "{") { let d = 0, s0 = k; do { if (B[k] === "{") d++; else if (B[k] === "}") d--; k++; } while (k < B.length && d > 0); val = B.slice(s0 + 1, k - 1); }
-      else if (B[k] === '"') { let s0 = ++k; while (k < B.length && !(B[k] === '"' && B[k - 1] !== "\\")) k++; val = B.slice(s0, k); k++; }
-      else { const vm = /^[^,]*/.exec(B.slice(k)); val = vm[0]; k += vm[0].length; }
-      fields[name] = val;
-      const cm = /^\s*,?/.exec(B.slice(k)); k += cm[0].length;
-    }
-    const rawA = fields.author || fields.editor || ""; const parts = []; let d = 0, cur = "";
-    for (let q = 0; q < rawA.length; q++) { const ch = rawA[q]; if (ch === "{") d++; if (ch === "}") d--;
-      if (d === 0 && /^\s+and\s+/i.test(rawA.slice(q)) && /\s/.test(ch)) { parts.push(cur); cur = ""; q += /^\s+and\s+/i.exec(rawA.slice(q))[0].length - 1; continue; } cur += ch; }
-    if (cur.trim()) parts.push(cur);
-    const authors = parts.map(a => a.trim()).filter(Boolean).map(a => /^\{.*\}$/.test(a) ? { corp: texClean(a) } : texClean(a));
-    const last = a => a.corp ? a.corp : (a.includes(",") ? a.split(",")[0] : a.split(" ").slice(-1)[0]).trim();
-    const auth = authors.length === 0 ? "" : authors.length === 1 ? last(authors[0]) : authors.length === 2 ? `${last(authors[0])} & ${last(authors[1])}` : `${last(authors[0])} et al.`;
-    const year = (texClean(fields.year || fields.date || "").match(/\d{4}/) || [""])[0];
-    out.push({ key, type, author: auth, authorsAll: authors.map(last).join(" "), year, title: texClean(fields.title || fields.booktitle || ""),
-      venue: texClean(fields.journal || fields.journaltitle || fields.booktitle || fields.publisher || fields.institution || fields.school || "") });
-  }
-  return out;
-}
-async function loadBib() {
-  const handle = async (name, text) => {
-    const entries = parseBib(text);
-    if (!entries.length) return toast("No references found in that file.", 4500);
-    setBib(name, entries); lsSet(LS_BIB, JSON.stringify({ name, entries }));
-    toast(`Loaded ${entries.length} references from ${name}. Type @ in Sources to cite one.`, 4500);
-    renderPanel();
-  };
-  if (FSA) {
-    try { const [h] = await window.showOpenFilePicker({ types: [{ description: "BibTeX", accept: { "text/plain": [".bib"] } }] }); const f = await h.getFile(); await handle(f.name, await f.text()); }
-    catch (e) { if (e.name !== "AbortError") toast(e.message, 4500); }
-  } else {
-    const inp = document.createElement("input"); inp.type = "file"; inp.accept = ".bib,.txt";
-    inp.onchange = async () => { const f = inp.files[0]; if (f) await handle(f.name, await f.text()); }; inp.click();
-  }
-}
-const bibLookup = s => { const m = /^@([^\s]+)$/.exec(String(s).trim()); return m ? { key: m[1], entry: bib.byKey.get(m[1].toLowerCase()) } : null; };
-const bibLabel = e => [e.author, e.year && `(${e.year})`].filter(Boolean).join(" ") || e.type;
-function sourceSearchText(s) { const r = bibLookup(s); return r && r.entry ? `${s} ${r.entry.author} ${r.entry.authorsAll} ${r.entry.year} ${r.entry.title}` : s; }
-function showBibResolved(value) {
-  const ul = $("#bibres"); if (!ul) return;
-  const ta = $("#f-src"); let typing = null;
-  if (ta && document.activeElement === ta) { const before = ta.value.slice(0, ta.selectionStart); const ln = before.split("\n").pop(); if (/^@\S*$/.test(ln.trim()) && ta.value.slice(ta.selectionStart).split("\n")[0].trim() === "") typing = ln.trim(); }
-  const lines = value.split("\n").map(x => x.trim()).filter(Boolean);
-  ul.innerHTML = lines.map(l => {
-    const r = bibLookup(l);
-    if (!r || (l === typing && !r.entry)) return "";
-    if (!r.entry) return `<li class="miss"><code>@${esc(r.key)}</code> ${bib.entries.length ? "is not in " + esc(bib.name) : "· load a .bib to check it"}</li>`;
-    return `<li><code>@${esc(r.entry.key)}</code> <b>${esc(bibLabel(r.entry))}</b> ${esc(r.entry.title)}${r.entry.venue ? ` <i>${esc(r.entry.venue)}</i>` : ""}</li>`;
-  }).join("");
-}
-function attachBibComplete(ta) {
-  const pop = $("#bibpop"); let items = [], active = 0, token = null;
-  const close = () => { pop.hidden = true; items = []; token = null; };
-  const query = () => {
-    const caret = ta.selectionStart; const before = ta.value.slice(0, caret);
-    const m = /(^|\s)@([^\s@]*)$/.exec(before);
-    return m ? { start: caret - m[2].length - 1, end: caret, q: m[2].toLowerCase() } : null;
-  };
-  const draw = () => {
-    token = query(); if (!token) return close();
-    if (!bib.entries.length) {
-      pop.innerHTML = `<div class="empty">No bibliography loaded. <button type="button" class="btn small" id="bib-load-inline">Load .bib…</button></div>`;
-      pop.hidden = false; $("#bib-load-inline").onmousedown = e => { e.preventDefault(); loadBib(); }; items = []; return;
-    }
-    const q = token.q.normalize("NFD").replace(/[\u0300-\u036f]/g, ""), words = q.split(/[\s:_-]+/).filter(Boolean);
-    const score = e => {
-      const k = e.key.toLowerCase(), hay = `${k} ${e.authorsAll} ${e.year} ${e.title} ${e.venue}`.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-      if (!words.every(w => hay.includes(w))) return -1;
-      return (k.startsWith(q) ? 100 : 0) + (k.includes(q) ? 40 : 0) + (e.authorsAll.toLowerCase().includes(q) ? 20 : 0) + (+e.year || 0) / 10000;
-    };
-    items = bib.entries.map(e => [score(e), e]).filter(x => x[0] >= 0).sort((a, b) => b[0] - a[0]).slice(0, 8).map(x => x[1]);
-    active = Math.min(active, Math.max(0, items.length - 1));
-    pop.innerHTML = items.length ? items.map((e, i) => `<div class="opt${i === active ? " on" : ""}" role="option" data-i="${i}"><code>@${esc(e.key)}</code><span class="who">${esc(bibLabel(e))}</span><span class="ttl">${esc(e.title)}</span></div>`).join("")
-      : `<div class="empty">No reference matches “${esc(q)}” in ${esc(bib.name)}.</div>`;
-    pop.hidden = false;
-  };
-  const pick = i => {
-    const e = items[i]; if (!e || !token) return;
-    const v = ta.value; let ins = "@" + e.key; const after = v.slice(token.end);
-    if (!after.startsWith("\n")) ins += "\n";
-    ta.value = v.slice(0, token.start) + ins + after.replace(/^[^\s\n]*/, "");
-    const c = token.start + ins.length; ta.setSelectionRange(c, c); close();
-    ta.dispatchEvent(new Event("input", { bubbles: true })); ta.focus();
-  };
-  ta.addEventListener("input", () => { active = 0; draw(); });
-  ta.addEventListener("click", draw);
-  ta.addEventListener("keydown", e => {
-    if (pop.hidden || !items.length) { if (e.key === "Escape" && !pop.hidden) { e.stopPropagation(); close(); } return; }
-    if (e.key === "ArrowDown") { e.preventDefault(); active = (active + 1) % items.length; draw(); }
-    else if (e.key === "ArrowUp") { e.preventDefault(); active = (active - 1 + items.length) % items.length; draw(); }
-    else if (e.key === "Enter" || e.key === "Tab") { e.preventDefault(); pick(active); }
-    else if (e.key === "Escape") { e.preventDefault(); e.stopPropagation(); close(); }
-  });
-  ta.addEventListener("blur", () => setTimeout(close, 150));
-  pop.addEventListener("mousedown", e => { const o = e.target.closest(".opt"); if (o) { e.preventDefault(); pick(+o.dataset.i); } });
-}
+/* ---- rca/publish.js ---- */
 
 /* ================= Publishing: public copy, share links, deep links ================= */
 const LS_BASE = "uchuva-rca:site";
@@ -9625,6 +9723,7 @@ function enterViewer(d) {
   applyUI();
 }
 
+/* ---- rca/interviews.js ---- */
 /* ================= Interviews: scales, grading, interview files ================= */
 function normScale(x) {
   let min = Number.isFinite(+x.min) ? Math.round(+x.min) : 0, max = Number.isFinite(+x.max) ? Math.round(+x.max) : 5;
@@ -9993,6 +10092,7 @@ function combineInterviewFiles() {
   inp.click();
 }
 
+/* ---- rca/boot.js ---- */
 /* ================= Menu actions & keyboard ================= */
 const ACTIONS = {
   bib: loadBib, cats: () => openCats(),
@@ -10012,12 +10112,7 @@ const ACTIONS = {
   },
   "reset-view": () => { Object.assign(view, { effort: DEFAULT_VIEW.effort, place: DEFAULT_VIEW.place, levelSp: DEFAULT_VIEW.levelSp, nodeSp: DEFAULT_VIEW.nodeSp, route: DEFAULT_VIEW.route, keepOrder: false, split: false, repeat: true }); syncControls(); render({ animate: true, fit: true }); },
 };
-document.addEventListener("click", e => {
-  const b = e.target.closest("[data-act]"); if (b && ACTIONS[b.dataset.act]) { $$("details.menu").forEach(d => d.open = false); ACTIONS[b.dataset.act](); return; }
-  if (!e.target.closest("details.menu")) $$("details.menu").forEach(d => d.open = false);
-  const c = e.target.closest("[data-close]"); if (c) c.closest(".overlay").hidden = true;
-});
-$$(".overlay").forEach(o => o.addEventListener("pointerdown", e => { if (e.target === o) o.hidden = true; }));
+
 document.addEventListener("keydown", e => {
   const mod = e.ctrlKey || e.metaKey, k = e.key.toLowerCase();
   const typing = e.target.closest && e.target.closest("input, textarea, select, [contenteditable]");

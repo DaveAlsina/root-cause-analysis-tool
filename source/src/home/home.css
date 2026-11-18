@@ -1,0 +1,54 @@
+/* Workbench home page */
+body.home{overflow:auto;background-color:var(--ground);background-image:radial-gradient(var(--dot) 1px,transparent 1.2px);background-size:22px 22px}
+.wrap{max-width:1080px;margin:0 auto;padding:56px 24px 40px}
+.intro{max-width:720px;margin-bottom:36px}
+.kicker{margin:0 0 10px;font:600 11px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.intro h1{margin:0 0 12px;font:600 clamp(28px,4.4vw,40px)/1.1 var(--cond);letter-spacing:-.005em}
+.lead{margin:0;font-size:16px;line-height:1.55;color:var(--muted)}
+
+.modes{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;position:relative}
+.mode{position:relative;display:flex;flex-direction:column;gap:8px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 18px 16px;box-shadow:var(--shadow)}
+.mode:not(:last-child)::after{content:"";position:absolute;top:58px;right:-19px;width:20px;height:1px;background:var(--line);z-index:1}
+.mode:not(:last-child)::before{content:"";position:absolute;top:54px;right:-21px;border:4.5px solid transparent;border-left:6px solid var(--muted);z-index:2;opacity:.6}
+.mode.next{background:var(--panel-2);box-shadow:none;border-style:dashed}
+
+.glyph{width:120px;height:72px;margin-bottom:4px}
+.glyph .g-line{fill:none;stroke:var(--edge);stroke-width:1.4}
+.glyph .g-fill{fill:var(--accent);opacity:.75}
+.glyph .g-fill-hi{fill:var(--amber)}
+.glyph .g-soft{fill:var(--accent);opacity:.3}
+.glyph .g-fill-aux{fill:var(--accent);opacity:.75;stroke:var(--ink);stroke-width:1.2}
+.glyph .g-ring{fill:var(--accent);fill-opacity:.07;stroke:var(--accent);stroke-opacity:.45;stroke-width:1}
+.glyph .g-dot{fill:var(--panel);stroke:var(--muted);stroke-width:1}
+.glyph .g-dot-hi{fill:var(--accent)}
+.glyph .g-bound{fill:none;stroke:var(--accent);stroke-width:1.3;stroke-dasharray:4 3}
+.glyph .g-flow{fill:none;stroke:#1F6FB2;stroke-width:1.6}
+.glyph .g-ext{fill:var(--panel);stroke:var(--muted);stroke-width:1}
+
+.step{margin:0;display:flex;align-items:center;gap:8px;font:600 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.step span{width:20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:var(--accent);color:var(--accent-ink);font-size:11px;letter-spacing:0}
+.mode.next .step span{background:transparent;border:1.5px dashed var(--muted);color:var(--muted)}
+.mode h2{margin:0;font:600 20px/1.2 var(--cond)}
+.desc{margin:0;color:var(--muted);line-height:1.5;font-size:13.5px}
+.makes{margin:2px 0 0;display:flex;flex-wrap:wrap;gap:4px}
+.makes span{font:500 11px var(--mono);background:var(--accent-soft);color:var(--accent);border-radius:10px;padding:1px 8px}
+.status{margin:auto 0 0;padding-top:12px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:2px;font-size:13px;min-height:58px}
+.status .st-lbl{font:600 10.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.status b{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.status .file{font:11.5px var(--mono);color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.status .file i{color:var(--amber);font-style:normal}
+.status.soon{color:var(--muted)}
+.muted{color:var(--muted)}
+.go{justify-content:center;text-decoration:none;padding:9px 12px;font-size:14px;margin-top:4px}
+.go[aria-disabled="true"]{opacity:.55;cursor:default}
+.go[aria-disabled="true"]:hover{background:var(--panel-2)}
+
+.foot-note{margin-top:28px;max-width:720px;color:var(--muted);font-size:13px;line-height:1.55}
+.foot-note code{font:12px var(--mono);background:var(--panel-2);border:1px solid var(--line);border-radius:4px;padding:0 4px}
+
+@media (max-width:860px){
+  .modes{grid-template-columns:1fr}
+  .mode:not(:last-child)::after{top:auto;bottom:-19px;right:auto;left:38px;width:1px;height:20px}
+  .mode:not(:last-child)::before{top:auto;bottom:-22px;right:auto;left:33.5px;border:4.5px solid transparent;border-top:6px solid var(--muted)}
+  .wrap{padding:32px 16px}
+}
