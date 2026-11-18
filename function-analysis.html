@@ -415,6 +415,35 @@ body.grading .branchbar{top:58px}
 #workseg button[aria-pressed="true"]#work-grade{background:#3B2F7A;color:#fff}
 @media (max-width:980px){.gradebar{max-width:calc(100% - 24px);top:auto;bottom:60px}}
 
+/* fault-tree logic and kinds (RCA) */
+.lgate{display:inline-block;font:600 10.5px/1 "IBM Plex Sans Condensed",var(--sans,system-ui);padding:2px 5px;border-radius:4px;letter-spacing:.02em;vertical-align:1px}
+.lgate.and{background:var(--ink);color:var(--ground)}
+.lgate.or{border:1.5px solid var(--ink);color:var(--ink);padding:1px 4px}
+.lg-gates{display:block;font-size:12px;color:var(--muted);line-height:1.9;padding:0 2px}
+.logicseg button{min-width:56px}
+/* grading: who could act, don't know, anchors (RCA) */
+.sc-btns{gap:5px}
+.sc-btns button{min-width:36px}
+.sc-btns .sc-dk,.sc-btns .sc-clear{min-width:28px}
+.sc-btns .sc-dk{color:var(--muted)}
+.sc-who{display:flex;flex-direction:column;gap:4px}
+.seg.wrap{flex-wrap:wrap;height:auto}
+.dkpick{align-self:flex-start}
+.scale .anchor{margin:0;background:var(--panel-2);border-radius:8px;padding:8px 10px;font-size:13px;line-height:1.45;min-height:2.9em}
+.scale .anchor b{font:500 13px var(--mono);margin-right:4px}
+.anclist{margin:0;padding-left:22px;font-size:12.5px;line-height:1.45;color:var(--muted)}
+.anclist li::marker,.anchorpin li::marker{font-family:var(--mono);color:var(--ink)}
+.kindline{margin:4px 0 0}
+.linkbtn.small{font-size:12px;align-self:flex-start}
+.anchorpin{position:absolute;right:56px;top:auto;bottom:12px;max-height:55%;overflow:auto;z-index:7;width:min(400px,calc(100% - 24px));background:var(--panel);border:1px solid var(--line);box-shadow:var(--shadow);border-radius:10px;padding:10px 14px;font-size:14px;line-height:1.45;display:flex;flex-direction:column;gap:8px}
+.anchorpin ol{margin:4px 0 0;padding-left:22px}
+.anchorpin p{margin:2px 0 0}
+.dkpick[hidden],.anchorpin[hidden]{display:none}
+.scard .srow.kinds{flex-wrap:wrap;gap:4px 12px}
+.scard .srow-d{margin:4px 0;font-size:12.5px}
+.scard .srow-d summary{cursor:pointer;color:var(--muted);padding:4px 0}
+.scard .srow-d textarea{flex:1;min-width:160px;font:13px var(--sans)}
+
 /* Function Analysis Workbench: what the shared base styles don't cover */
 .sw.aux{border:3.5px double var(--ink)}
 .sw.root{border-style:dashed;border-width:1.5px}

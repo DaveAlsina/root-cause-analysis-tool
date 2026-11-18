@@ -169,11 +169,11 @@ function exportDrawio() {
 }
 function exportGraphML() {
   const L = doc.languages;
-  const keys = [...L.map(l => ["text_" + l, "node"]), ["tags", "node"], ["category", "node"], ["status", "node"], ["notes", "node"], ["sources", "node"], ["x", "node", "double"], ["y", "node", "double"]];
+  const keys = [...L.map(l => ["text_" + l, "node"]), ["tags", "node"], ["category", "node"], ["kind", "node"], ["logic", "node"], ["status", "node"], ["notes", "node"], ["sources", "node"], ["x", "node", "double"], ["y", "node", "double"]];
   const out = [`<?xml version="1.0" encoding="UTF-8"?>`, `<graphml xmlns="http://graphml.graphdrawing.org/xmlns">`,
     ...keys.map(([k, f, t]) => `  <key id="${k}" for="${f}" attr.name="${k}" attr.type="${t || "string"}"/>`),
     `  <graph id="rca" edgedefault="directed">`];
-  doc.nodes.forEach(n => out.push(`    <node id="${xmlEsc(n.id)}">${L.map(l => `<data key="text_${l}">${xmlEsc(txRaw(n, "text", l))}</data>`).join("")}<data key="tags">${xmlEsc(orderedTags(n.tags || []).map(x => x.name).join(" | "))}</data><data key="category">${xmlEsc(catById(n.cat).name)}</data><data key="status">${n.status}</data><data key="notes">${xmlEsc(n.notes)}</data><data key="sources">${xmlEsc(n.sources.join(" | "))}</data><data key="x">${n.x}</data><data key="y">${n.y}</data></node>`));
+  doc.nodes.forEach(n => out.push(`    <node id="${xmlEsc(n.id)}">${L.map(l => `<data key="text_${l}">${xmlEsc(txRaw(n, "text", l))}</data>`).join("")}<data key="tags">${xmlEsc(orderedTags(n.tags || []).map(x => x.name).join(" | "))}</data><data key="category">${xmlEsc(catById(n.cat).name)}</data><data key="kind">${n.kind || ""}</data><data key="logic">${n.logic || ""}</data><data key="status">${n.status}</data><data key="notes">${xmlEsc(n.notes)}</data><data key="sources">${xmlEsc(n.sources.join(" | "))}</data><data key="x">${n.x}</data><data key="y">${n.y}</data></node>`));
   doc.edges.forEach(e => out.push(`    <edge id="${xmlEsc(e.id)}" source="${xmlEsc(e.source)}" target="${xmlEsc(e.target)}"/>`));
   out.push(`  </graph>`, `</graphml>`, "");
   download(baseName() + ".graphml", out.join("\n"), "application/xml");
@@ -183,8 +183,8 @@ function exportCSV(which) {
   const A = analyze();
   let rows;
   const L = doc.languages;
-  if (which === "nodes") rows = [["id", ...L.map(l => "text_" + l), "category", "tags", "status", "level", "chains_to_rejection", "notes", "sources"],
-    ...doc.nodes.map(n => [n.id, ...L.map(l => txRaw(n, "text", l)), tx(catById(n.cat), "name"), orderedTags(n.tags || []).map(x => tx(x, "name")).join(" | "), n.status, A.depth.get(n.id) || "", A.paths.get(n.id) || "", n.notes, n.sources.join(" | ")])];
+  if (which === "nodes") rows = [["id", ...L.map(l => "text_" + l), "category", "kind", "causes_combine", "tags", "status", "level", "chains_to_rejection", "notes", "sources"],
+    ...doc.nodes.map(n => [n.id, ...L.map(l => txRaw(n, "text", l)), tx(catById(n.cat), "name"), n.kind ? KINDS[n.kind].name : "", n.logic ? LOGIC[n.logic].name : "", orderedTags(n.tags || []).map(x => tx(x, "name")).join(" | "), n.status, A.depth.get(n.id) || "", A.paths.get(n.id) || "", n.notes, n.sources.join(" | ")])];
   else rows = [["source_id", "source_text", "target_id", "target_text"],
     ...doc.edges.map(e => [e.source, tx(nodeById(e.source)), e.target, tx(nodeById(e.target))])];
   download(`${baseName()}-${which === "nodes" ? "boxes" : "arrows"}.csv`, "﻿" + rows.map(r => r.map(csvCell).join(",")).join("\r\n") + "\r\n", "text/csv");
@@ -196,7 +196,7 @@ function diffCores(a, b) { // a = old snapshot, b = new
   const an = new Map(a.nodes.map(n => [n.id, n])), bn = new Map(b.nodes.map(n => [n.id, n]));
   const added = b.nodes.filter(n => !an.has(n.id)), removed = a.nodes.filter(n => !bn.has(n.id));
   const trs = n => JSON.stringify(n.textTr || {}), tgs = n => (n.tags || []).join(",");
-  const changed = b.nodes.filter(n => { const o = an.get(n.id); return o && (o.text !== n.text || trs(o) !== trs(n) || tgs(o) !== tgs(n) || o.cat !== n.cat || o.status !== n.status || o.notes !== n.notes || (o.sources || []).join("\n") !== (n.sources || []).join("\n")); });
+  const changed = b.nodes.filter(n => { const o = an.get(n.id); return o && (o.text !== n.text || trs(o) !== trs(n) || tgs(o) !== tgs(n) || o.cat !== n.cat || (o.kind || "") !== (n.kind || "") || (o.logic || "") !== (n.logic || "") || o.status !== n.status || o.notes !== n.notes || (o.sources || []).join("\n") !== (n.sources || []).join("\n")); });
   const k = e => e.source + ">" + e.target;
   const ae = new Set(a.edges.map(k)), be = new Set(b.edges.map(k));
   return { added, removed, changed, edgesAdded: b.edges.filter(e => !ae.has(k(e))), edgesRemoved: a.edges.filter(e => !be.has(k(e))), an, bn };

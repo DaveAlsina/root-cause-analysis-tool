@@ -66,7 +66,7 @@ try { Object.assign(view, JSON.parse(lsGet(LS_VIEW) || "{}")); } catch (e) {}
 view.folded = new Set(); view.hiddenCats = new Set(); view.tagFilter = new Set(); view.diff = null;
 let GRADING = false; // interview grading: the diagram is locked, boxes get scores
 const LS_VPREF = "uchuva-rca:viewer";
-function saveViewerPref() { if (VIEWER) lsSet(LS_VPREF, JSON.stringify({ lang: view.lang, tagChips: view.tagChips })); }
+function saveViewerPref() { if (VIEWER) lsSet(LS_VPREF, JSON.stringify({ lang: view.lang, tagChips: view.tagChips, gates: view.gates, kinds: view.kinds })); }
 function saveView() { if (VIEWER) return; const { folded, hiddenCats, tagFilter, diff, ...rest } = view; lsSet(LS_VIEW, JSON.stringify(rest)); }
 
 let selRef = null, selCopy = null, selEdge = null, multi = [];
@@ -291,6 +291,15 @@ function styleSheet() {
       shape: "round-rectangle", "corner-radius": 9, width: "data(w)", height: 19, "background-color": "#3B2F7A", "border-color": ground, "border-width": 2,
       label: "data(label)", color: "#ffffff", "font-family": '"IBM Plex Mono", monospace', "font-weight": 500, "font-size": 11,
       "text-valign": "center", "text-halign": "center", events: "no", "z-index": 22 } },
+    { selector: "node.gatechip", style: {
+      shape: "round-rectangle", "corner-radius": 4, width: "data(w)", height: 17, "background-color": ink, "border-color": ground, "border-width": 2,
+      label: "data(label)", color: ground, "font-family": '"IBM Plex Sans Condensed", ' + FONT_STACK, "font-weight": 600, "font-size": 10.5,
+      "text-valign": "center", "text-halign": "center", events: "no", "z-index": 23 } },
+    { selector: "node.gatechip.or", style: { "background-color": ground, color: ink, "border-color": ink, "border-width": 1.5 } },
+    { selector: "node.kindchip", style: {
+      shape: "round-rectangle", "corner-radius": 9, width: "data(w)", height: 17, "background-color": ground, "border-color": edge, "border-width": 1, "border-style": "dashed",
+      label: "data(label)", color: ink, "font-family": '"IBM Plex Sans Condensed", ' + FONT_STACK, "font-weight": 600, "font-size": 10.5,
+      "text-valign": "center", "text-halign": "center", events: "no", "z-index": 21 } },
     { selector: "node.shade", style: { "underlay-color": "#6E56CF", "underlay-padding": 9 } },
     { selector: "node.tagchip", style: {
       shape: "round-rectangle", "corner-radius": 10, width: "data(w)", height: 21, "background-color": ground, "border-color": edge, "border-width": 1,
@@ -323,6 +332,12 @@ function nodeVisual(n, extraLabel) {
   const missing = doc.languages.length > 1 && txMissing(n);
   return { label: sz.lines.join("\n"), w: box.w, h: box.h, fill: c.fill, font: c.font, fs: missing ? "italic" : "normal",
     stroke: st.color || n.outline || c.stroke, bw: st.width, bs: st.style };
+}
+const kindName = (k, l = curLang()) => KINDS[k] ? (l === "es" ? KINDS[k].es : KINDS[k].name) : "";
+const logicName = (k, l = curLang()) => LOGIC[k] ? (l === "es" ? LOGIC[k].es : LOGIC[k].name) : "";
+function gateChipLabel(n, A) { // AND/OR on a box whose causes it combines; hidden with the View panel switch
+  if (view.gates === false || !n || !LOGIC[n.logic] || !A || (A.out.get(n.id) || []).length < 2) return null;
+  const label = logicName(n.logic); return { label, w: label.length * 7 + 12 };
 }
 function tagChipLabel(n) {
   const ts = orderedTags(n.tags || []); if (!ts.length) return null;
@@ -402,6 +417,18 @@ function applyToCy(U, V, A, byId, vis, pos, routes, opts) {
       const p = pos.get(c.id);
       nodes.push({ group: "nodes", data: { id: "g:" + c.id, owner: c.id, label: gchip.label, w: gchip.w, h: 19 }, classes: "badge gradechip",
         position: { x: p.x + v.w / 2 - gchip.w / 2 + 6, y: p.y + v.h / 2 + 2 } });
+    }
+    const gate = gateChipLabel(n, A);
+    if (gate) {
+      const p = pos.get(c.id);
+      nodes.push({ group: "nodes", data: { id: "a:" + c.id, owner: c.id, label: gate.label, w: gate.w, h: 17 }, classes: "badge gatechip " + n.logic,
+        position: { x: p.x + v.w / 2 + gate.w / 2 - 3, y: p.y - v.h / 2 + 8 + (c.total >= 2 ? 20 : 0) } }); // top right, clear of the edit handle
+    }
+    const kchip = view.kinds === true && n.kind && KINDS[n.kind] && !isQ(n);
+    if (kchip) {
+      const p = pos.get(c.id), label = kindName(n.kind).toLowerCase(), w = label.length * 6 + 14;
+      nodes.push({ group: "nodes", data: { id: "k:" + c.id, owner: c.id, label, w, h: 17 }, classes: "badge kindchip",
+        position: { x: p.x - v.w / 2 + w / 2 + 4, y: p.y + v.h / 2 + 2 } });
     }
     if (c.total >= 2) {
       const r = roman(c.total), p = pos.get(c.id);

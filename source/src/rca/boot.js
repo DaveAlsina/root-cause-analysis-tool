@@ -136,5 +136,5 @@ function initCy() {
     else openNew();
   }
   window.__rca = { parseBib, setBib, get doc() { return doc; }, render, cy: () => cy, view, analyze, exportSVG, commit, nodeById, lastRender: () => lastRender,
-    publishedDoc, encodeShare, decodeShare, setGrade, activeSession, interviewRows, rowsToCSV, setGrading, toggleDiscussed, gradeStep, makeMainLang, translatePass, normalizeDoc, loadText, get VIEWER() { return VIEWER; } };
+    publishedDoc, encodeShare, decodeShare, setGrade, setDontKnow, setWho, setHolds, defaultScales, normScale, activeSession, interviewRows, rowsToCSV, setGrading, toggleDiscussed, gradeStep, makeMainLang, translatePass, normalizeDoc, loadText, get VIEWER() { return VIEWER; } };
 })();

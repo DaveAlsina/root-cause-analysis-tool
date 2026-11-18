@@ -28,6 +28,7 @@ function publishedDoc(o) { // a copy for the public: strips what is only for the
     if (!o.status || r.status === "unassessed") delete r.status;
     if (!Object.keys(r.textTr || {}).length) delete r.textTr;
     if (!(r.tags || []).length) delete r.tags;
+    if (!r.kind) delete r.kind; if (!r.logic) delete r.logic;
     return r;
   });
   d.categories = d.categories.map(c => { const r = { ...c }; if (!o.notes) r.desc = ""; return r; });
@@ -119,6 +120,7 @@ function enterViewer(d) {
   let pref = {}; try { pref = JSON.parse(lsGet(LS_VPREF) || "{}"); } catch (e) {}
   const lang = [q.get("lang"), pref.lang, vd.lang].find(l => l && doc.languages.includes(l)); view.lang = lang || null;
   if (pref.tagChips === false) view.tagChips = false;
+  if (pref.gates === false) view.gates = false; if (pref.kinds === true) view.kinds = true;
   view.mode = (q.get("mode") || vd.mode) === "untangle" ? "untangle" : "manual";
   view.split = q.get("split") === "1";
   if (q.get("branch") && nodeById(q.get("branch"))) view.branch = q.get("branch");

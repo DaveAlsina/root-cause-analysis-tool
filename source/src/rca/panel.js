@@ -30,6 +30,12 @@ const UI = {
     details: "Details", close: "Close", allBranches: "All branches", shared: "shared", branch: "Branch", boxes: "boxes",
     upLevel: "Up one level", showAll: "Show everything", onlyBranch: "Show only this branch",
     export: "Export", tries: n => `${n} tr${n > 1 ? "ies" : "y"}`, place0: "Compact", place1: "Balanced", place2: "Straight arrows",
+    showGates: "Show how causes combine (AND / OR)", showKinds: "Show the kind of each box", kind: "Kind",
+    combineAnd: "all are needed", combineOr: "any one is enough", gatesKey: "How causes combine",
+    whoAct: "Who could act on it", dkTip: "Don't know", seeAnchors: "See all anchors", hideAnchors: "Hide the anchors",
+    hoverAnchor: "Point at a value to read what it means.", holdsQ: "Does this hold in your experience?", pinAnchors: "Pin the anchors on screen",
+    whoFirst: "First: who could act on it. Then, for that actor:",
+    notAskedKind: (k, names) => `Not asked for this kind of box (${k.toLowerCase()}): ${names.join(", ")}.`,
   },
   es: {
     manual: "Mi diseño", manualV: "Como se dibujó", untangle: "Desenredar", allLevels: "Todos los niveles", levels: n => `${n} niveles`, search: "Buscar",
@@ -61,6 +67,12 @@ const UI = {
     details: "Detalles", close: "Cerrar", allBranches: "Todas las ramas", shared: "compartida", branch: "Rama", boxes: "cajas",
     upLevel: "Subir un nivel", showAll: "Mostrar todo", onlyBranch: "Mostrar solo esta rama",
     export: "Exportar", tries: n => `${n} intento${n > 1 ? "s" : ""}`, place0: "Compacta", place1: "Equilibrada", place2: "Flechas rectas",
+    showGates: "Mostrar cómo se combinan las causas (TODAS / ALGUNA)", showKinds: "Mostrar el tipo de cada caja", kind: "Tipo",
+    combineAnd: "se necesitan todas", combineOr: "basta con una", gatesKey: "Cómo se combinan las causas",
+    whoAct: "Quién podría actuar", dkTip: "No sé", seeAnchors: "Ver todos los anclajes", hideAnchors: "Ocultar los anclajes",
+    hoverAnchor: "Señale un valor para leer qué significa.", holdsQ: "¿Se cumple según su experiencia?", pinAnchors: "Fijar los anclajes en pantalla",
+    whoFirst: "Primero: quién podría actuar. Luego, para ese actor:",
+    notAskedKind: (k, names) => `No se pregunta para este tipo de caja (${k.toLowerCase()}): ${names.join(", ")}.`,
   },
 };
 function t(k, ...a) { const L = VIEWER || GRADING ? curLang() : "en"; const v = (UI[L] && UI[L][k] !== undefined) ? UI[L][k] : UI.en[k]; return typeof v === "function" ? v(...a) : (v ?? k); }
@@ -129,6 +141,12 @@ function renderPanel() {
         <p class="muted">Boxes whose colour and arrows disagree. Either the chain continues, or the colour should change.</p>
         ${open.length ? `<details class="ck"><summary>${open.length} intermediate cause${open.length > 1 ? "s" : ""} with nothing below</summary>${boxList(open.map(c => nodeById(c.id)))}</details>` : ""}
         ${deeper.length ? `<details class="ck" open><summary>${deeper.length} root cause${deeper.length > 1 ? "s" : ""} with deeper causes</summary>${boxList(deeper.map(c => nodeById(c.id)))}</details>` : ""}</div>`; })()}
+      ${(() => { const ft = treeChecks(A); if (!ft.total) return "";
+        return `<div class="sec"><h2>Fault-tree checks · ${ft.total}</h2>
+        <p class="muted">Each box with two or more causes needs AND or OR, and each box a kind, before grading by shares.</p>
+        ${ft.noLogic.length ? `<details class="ck"><summary>${ft.noLogic.length} box${ft.noLogic.length > 1 ? "es" : ""} with several causes and no AND/OR</summary>${boxList(ft.noLogic)}</details>` : ""}
+        ${ft.mixed.length ? `<details class="ck"><summary>${ft.mixed.length} AND box${ft.mixed.length > 1 ? "es" : ""} with an open question among the needed causes</summary>${boxList(ft.mixed)}</details>` : ""}
+        ${ft.noKind.length ? `<details class="ck"><summary>${ft.noKind.length} box${ft.noKind.length > 1 ? "es" : ""} without a kind</summary>${boxList(ft.noKind)}</details>` : ""}</div>`; })()}
       <div class="sec"><h2>Open questions · ${qs.length}</h2>
       <ul class="list">${qs.map(x => { const par = A.inn.get(x.id).map(nodeById)[0]; return `<li><button data-go="${esc(x.id)}">${swatch(x)}<span>Why does “${esc(par ? tx(par) : "?")}” happen?</span></button></li>`; }).join("") || `<p class="muted">None.</p>`}</ul></div>
       <div class="sec"><h2>Deepest causes · ${leaves.length}</h2>
@@ -149,6 +167,12 @@ function renderPanel() {
       <div class="field"><label for="f-cat">Category · <button type="button" class="linkbtn" id="p-cats">edit categories</button></label><select id="f-cat">${doc.categories.map(c => `<option value="${esc(c.id)}"${c.id === n.cat ? " selected" : ""}>${esc(tx(c, "name"))}</option>`).join("")}<option disabled>──────────</option><option value="__new">＋ New category…</option><option value="__manage">Edit, delete or recolour categories…</option></select>
         ${catById(n.cat).desc ? `<span class="catdesc">${esc(catById(n.cat).desc)}</span>` : ""}
         ${keyChecks(A).filter(c => c.id === n.id).map(c => `<span class="ckwarn">${esc(c.msg)}.</span>`).join("")}</div>
+      <div class="field"><label for="f-kind">Kind of statement</label><select id="f-kind"><option value="">Not set</option>${Object.entries(KINDS).map(([k, x]) => `<option value="${k}"${n.kind === k ? " selected" : ""}>${esc(x.name)}</option>`).join("")}</select>
+        ${n.kind ? `<span class="catdesc">${esc(KINDS[n.kind].hint)}</span>` : ""}</div>
+      ${A.out.get(n.id).length >= 2 ? `<div class="field"><span>How its ${A.out.get(n.id).length} causes combine</span><div class="seg small logicseg" role="group" aria-label="How its causes combine">
+        <button data-logic="" aria-pressed="${!n.logic}">Not set</button>${Object.entries(LOGIC).map(([k, x]) => `<button data-logic="${k}" aria-pressed="${n.logic === k}" title="${esc(x.hint)}">${x.name}</button>`).join("")}</div>
+        ${n.logic ? `<span class="catdesc">${esc(LOGIC[n.logic].hint)}.</span>` : `<span class="catdesc">AND: all of them are needed. OR: any one is enough.</span>`}</div>`
+      : n.logic ? `<div class="field"><span class="ckwarn">Marked ${LOGIC[n.logic].name}, but it has fewer than two causes. <button type="button" class="linkbtn" data-logic="">Clear</button></span></div>` : ""}
       <div class="field"><span>Tags · <button type="button" class="linkbtn" id="p-tags">edit tags</button></span><div class="tagpick" id="f-tags">${doc.tags.length ? tagPicker([n]) : `<span class="muted">No tags yet.</span>`}</div></div>
       <div class="field"><span>Status</span><div class="status-seg" role="group" aria-label="Status">${Object.entries(STATUSES).map(([k, s]) =>
         `<button data-status="${k}" aria-pressed="${n.status === k}"><i style="border-color:${s.color || "var(--muted)"};border-style:${s.style}"></i>${s.short}</button>`).join("")}</div></div>
@@ -164,7 +188,7 @@ function renderPanel() {
         ${copies > 1 ? `<dt>Appears in view</dt><dd>${roman(copies)} (${copies}×)</dd>` : ""}</dl>
       ${A.cyc.has(n.id) ? `<div class="warnbox">This box is part of a loop. Check whether one of its arrows points the wrong way.</div>` : ""}
     </div>
-    <div class="sec"><h2>Why? Explained by · ${causes.length}</h2>
+    <div class="sec"><h2>Why? Explained by · ${causes.length}${combineNote(n, causes.length)}</h2>
       ${causes.length ? boxList(causes) : `<p class="muted">Nothing yet. The chain ends here.</p>`}</div>
     <div class="sec"><h2>It explains · ${effects.length}</h2>
       ${effects.length ? boxList(effects) : `<p class="muted">This is a top-level problem.</p>`}</div>
@@ -188,10 +212,22 @@ function renderPanel() {
   $("#p-cats").onclick = openCats; $("#p-tags").onclick = () => openTags();
   $$("#f-tags [data-tag]").forEach(b => b.onclick = () => toggleTag([ref], b.dataset.tag));
   $$(".status-seg button").forEach(b => b.onclick = () => commit(() => { nodeById(ref).status = b.dataset.status; }));
+  $("#f-kind").onchange = e => commit(() => { nodeById(ref).kind = e.target.value; });
+  $$("[data-logic]").forEach(b => b.onclick = () => commit(() => { nodeById(ref).logic = b.dataset.logic; }));
   $("#p-add").onclick = () => addChild(ref);
   $("#p-branch") && ($("#p-branch").onclick = () => setBranch(ref));
   $("#p-fold") && ($("#p-fold").onclick = () => toggleFold(ref));
   $("#p-del").onclick = deleteSelection;
+}
+function combineNote(n, k) { // " · all are needed" in the causes heading of an AND or OR box
+  return k >= 2 && LOGIC[n.logic] ? ` · <span class="lgate ${n.logic}">${esc(logicName(n.logic))}</span> <span class="muted">${esc(t(n.logic === "and" ? "combineAnd" : "combineOr"))}</span>` : "";
+}
+function treeChecks(A) { // what still keeps the tree from being a proper fault tree
+  const real = doc.nodes.filter(x => !isQ(x));
+  const noLogic = real.filter(x => A.out.get(x.id).length >= 2 && !x.logic);
+  const mixed = real.filter(x => x.logic === "and" && A.out.get(x.id).some(c => isQ(nodeById(c))));
+  const noKind = real.filter(x => !x.kind && A.inn.get(x.id).length);
+  return { noLogic, mixed, noKind, total: noLogic.length + mixed.length + noKind.length };
 }
 function tagPicker(nodes) { // grouped toggle chips; pressed = every given box has the tag
   return doc.tagGroups.map(g => {
@@ -235,6 +271,7 @@ function renderViewerPanel() {
       ${doc.languages.length > 1 && txMissing(n) ? `<p class="muted"><i>${t("missingTr")}</i></p>` : ""}
       <span class="chip"><span class="sw" style="background:${c.fill};border-color:${c.stroke}"></span>${esc(tx(c, "name"))}</span>
       ${c.desc && curLang() === mainLang() ? `<span class="catdesc">${esc(c.desc)}</span>` : ""}
+      ${n.kind && view.kinds === true ? `<span class="chip" title="${esc(curLang() === "es" ? KINDS[n.kind].hintEs : KINDS[n.kind].hint)}">${esc(kindName(n.kind))}</span>` : ""}
       ${n.status !== "unassessed" ? `<span class="chip"><i class="stbox" style="border-color:${st.color};border-style:${st.style}"></i>${esc(t(n.status))}</span>` : ""}
       ${tagsHtml ? `<div class="tagpick">${tagsHtml}</div>` : ""}
       ${srcHtml ? `<div class="field"><span>${t("sources")}</span><ul class="srclist">${srcHtml}</ul></div>` : ""}
@@ -242,7 +279,7 @@ function renderViewerPanel() {
       <div class="row"><button class="btn small" id="v-link">${t("copyLink")}</button>${A && lastRender.D.sub(n.id).size > 1 && view.branch !== n.id ? `<button class="btn small" id="v-branch">${t("onlyBranch")} (${lastRender.D.sub(n.id).size})</button>` : ""}</div>
       <dl class="kv"><dt>${t("level")}</dt><dd>${A.depth.get(n.id) || "–"}</dd><dt>${t("chains")}</dt><dd>${A.paths.get(n.id) || "–"}</dd></dl>
     </div>
-    <div class="sec"><h2>${t("explainedBy")} · ${causes.length}</h2>${causes.length ? boxList(causes) : `<p class="muted">${t("nothingYet")}</p>`}</div>
+    <div class="sec"><h2>${t("explainedBy")} · ${causes.length}${combineNote(n, causes.length)}</h2>${causes.length ? boxList(causes) : `<p class="muted">${t("nothingYet")}</p>`}</div>
     <div class="sec"><h2>${t("explains")} · ${effects.length}</h2>${effects.length ? boxList(effects) : `<p class="muted">${t("topLevel")}</p>`}</div>
     <div class="sec"><h2>${t("chain")}</h2><ol class="chain">${chain.map(x => `<li><button data-go="${esc(x.id)}">${nm(x)}</button></li>`).join("")}</ol></div>`;
   $("#v-link").onclick = () => copyText(deepLink({ box: n.id }), t("copied"));
@@ -304,6 +341,7 @@ function renderLegend() {
   const open = view.legendOpen === true;
   $("#legend").innerHTML = `<div class="h"><span>${t("colourKey")}</span><span>${VIEWER ? "" : `<button id="edit-cats">${t("edit")}</button> · `}<button id="fold-legend">${open ? t("collapse") : t("expand")}</button></span></div>` + (!open ? "" :
     doc.categories.map(c => `<button class="cat" title="${esc((c.desc && curLang() === mainLang() ? c.desc + "\n" : ""))}" data-cat="${esc(c.id)}" aria-pressed="${!view.hiddenCats.has(c.id)}"><span class="sw" style="background:${c.fill};border-color:${c.stroke}"></span>${esc(tx(c, "name"))}<span class="n">${counts[c.id] || 0}</span></button>`).join("") +
+    (view.gates !== false && doc.nodes.some(n => n.logic) ? `<hr><div class="lg-gates">${esc(t("gatesKey"))}<br><b class="lgate and">${esc(logicName("and"))}</b> ${esc(t("combineAnd"))}<br><b class="lgate or">${esc(logicName("or"))}</b> ${esc(t("combineOr"))}</div>` : "") +
     (doc.nodes.some(n => n.status !== "unassessed") || !VIEWER ? `<hr>` + Object.entries(STATUSES).filter(([k]) => k !== "unassessed").map(([k, s]) => `<span class="st"><i style="border-color:${s.color};border-style:${s.style}"></i>${esc(t(k))}</span>`).join("") : ""));
   $("#edit-cats") && ($("#edit-cats").onclick = openCats);
   $("#fold-legend").onclick = () => { view.legendOpen = !open; saveView(); renderLegend(); };
@@ -365,7 +403,7 @@ function syncControls() {
   $("#mode-manual").setAttribute("aria-pressed", view.mode === "manual");
   $("#mode-untangle").setAttribute("aria-pressed", view.mode === "untangle");
   $("#v-focus").value = view.focusR; $("#o-focus").textContent = view.focusR ? t("steps", view.focusR) : t("off");
-  $("#v-trace").checked = view.trace;
+  $("#v-trace").checked = view.trace; $("#v-gates").checked = view.gates !== false; $("#v-kinds").checked = view.kinds === true;
   $$("[data-red]").forEach(b => b.setAttribute("aria-pressed", b.dataset.red === view.redundant));
   const un = view.mode === "untangle";
   $("#untangle-set").disabled = !un; $("#untangle-note").hidden = un; $("#manual-only").hidden = un;
@@ -384,6 +422,8 @@ let sliderTimer = null;
 function setView(patch, opts = {}) { Object.assign(view, patch); syncControls(); clearTimeout(sliderTimer); sliderTimer = setTimeout(() => render({ animate: true, ...opts }), opts.now ? 0 : 160); }
 $("#v-focus").oninput = e => { if (+e.target.value > 0 && !selRef) toast("Select a box to focus on."); setView({ focusR: +e.target.value }, { now: true }); };
 $("#v-trace").onchange = e => { view.trace = e.target.checked; syncControls(); applySelection(); };
+$("#v-gates").onchange = e => { view.gates = e.target.checked; saveView(); saveViewerPref(); render(); };
+$("#v-kinds").onchange = e => { view.kinds = e.target.checked; saveView(); saveViewerPref(); render(); };
 $$("[data-red]").forEach(b => b.onclick = () => setView({ redundant: b.dataset.red }, { now: true }));
 $("#v-effort").oninput = e => setView({ effort: +e.target.value });
 $("#v-place").oninput = e => setView({ place: +e.target.value });

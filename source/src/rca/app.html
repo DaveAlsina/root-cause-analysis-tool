@@ -86,6 +86,7 @@
     <div id="cy">
       <div class="gradebar" id="gradebar" hidden></div>
       <div class="disc-pop" id="disc-pop" hidden></div>
+      <div class="anchorpin" id="anchorpin" hidden></div>
       <div class="hint edit-only nograde" id="hint">Double-click: new box · drag <span class="dot"></span> onto a cause: connect · Tab: add cause · <kbd>?</kbd> all shortcuts</div>
       <div class="diffbar" id="diffbar" hidden></div>
       <div class="diffbar branchbar" id="branchbar" hidden></div>
@@ -95,6 +96,8 @@
           <div class="xline" id="xline"></div>
           <div class="ctl"><label for="v-focus"><span data-ui="focus">Focus radius</span> <output id="o-focus"></output></label><input type="range" id="v-focus" min="0" max="6" step="1"></div>
           <label class="chk"><input type="checkbox" id="v-trace"> <span data-ui="trace">Highlight the chain of the selected box</span></label>
+          <label class="chk"><input type="checkbox" id="v-gates"> <span data-ui="showGates">Show how causes combine (AND / OR)</span></label>
+          <label class="chk"><input type="checkbox" id="v-kinds"> <span data-ui="showKinds">Show the kind of each box</span></label>
           <div class="ctl"><span class="lbl"><span data-ui="redundant">Redundant arrows</span> <output id="o-red" class="edit-only"></output></span>
             <div class="seg small" role="group" aria-label="Redundant arrows"><button data-red="show" data-ui="show">Show</button><button data-red="dashed" data-ui="dashed">Dashed</button><button data-red="hide" data-ui="hide">Hide</button></div></div>
           <div id="manual-only" class="edit-only nograde"><button class="btn small" data-act="tidy">Tidy overlapping boxes</button></div>

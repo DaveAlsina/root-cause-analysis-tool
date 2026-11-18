@@ -158,3 +158,68 @@ def test_share_link_roundtrip(b, base):
     same = p.js("async () => { const d = window.__rca.publishedDoc({notes:true,sources:true,status:true,versions:false}); const s = await window.__rca.encodeShare(d); const back = await window.__rca.decodeShare(s); return back.nodes.length === d.nodes.length; }")
     assert same
     p.assert_clean(); p.close()
+
+
+def test_kind_and_logic(b, base):
+    p = opened(b, base)
+    d = p.js("t => window.__rca.normalizeDoc(JSON.parse(t)).nodes.slice(0, 2).map(n => [n.kind, n.logic])", RCA_JSON)
+    assert d == [["", ""], ["", ""]], d
+    kept = p.js("() => { const x = { nodes: [{ id: 'a', text: 'A', kind: 'barrier', logic: 'or' }, { id: 'b', text: 'B', kind: 'nope', logic: 'xor' }], edges: [] }; return window.__rca.normalizeDoc(x).nodes.map(n => [n.kind, n.logic]); }")
+    assert kept == [["barrier", "or"], ["", ""]], kept
+    # a box with two or more causes gets the AND/OR switch; setting it draws a chip on the canvas
+    nid = p.js("(() => { const A = window.__rca.analyze(); return window.__rca.doc.nodes.find(n => A.out.get(n.id).length >= 2).id; })()")
+    p.js("document.querySelector('#side-open').click()")
+    p.js(f"void window.__rca.cy().getElementById('{nid}').emit('tap')"); p.page.wait_for_timeout(200)
+    p.js("document.querySelector('[data-logic=and]').click()"); p.page.wait_for_timeout(300)
+    assert p.js(f"window.__rca.nodeById('{nid}').logic") == "and"
+    assert p.js(f"window.__rca.cy().getElementById('a:{nid}').nonempty()")
+    p.js("(() => { const s = document.querySelector('#f-kind'); s.value = 'mechanism'; s.dispatchEvent(new Event('change')); })()"); p.page.wait_for_timeout(300)
+    assert p.js(f"window.__rca.nodeById('{nid}').kind") == "mechanism"
+    p.js("(() => { const c = document.querySelector('#v-gates'); c.checked = false; c.dispatchEvent(new Event('change')); })()"); p.page.wait_for_timeout(300)
+    assert p.js(f"window.__rca.cy().getElementById('a:{nid}').empty()")
+    name, body = p.download("[data-act=exp-nodes]")
+    head = body.splitlines()[0]
+    assert "kind" in head and "causes_combine" in head, head
+    assert "Mechanism" in body and ",AND," in body
+    p.assert_clean(); p.close()
+
+
+def test_grade_anchors_dont_know_who(b, base):
+    p = opened(b, base)
+    p.js("window.__rca.commit(() => { const d = window.__rca.doc; d.scales = window.__rca.defaultScales(d.languages); })"); p.page.wait_for_timeout(200)
+    sc = p.js("window.__rca.doc.scales.find(s => s.id === 'feasibility')")
+    assert len(sc["anchors"]) == 5 and len(sc["who"]) == 4 and sc["anchorsTr"]["es"]["3"].startswith("Posible"), sc
+    assert sc["kinds"] == ["actionable", "barrier", "infogap"]
+    back = p.js("s => window.__rca.normScale(s)", sc)
+    assert back["anchors"] == sc["anchors"] and back["who"] == sc["who"]
+    p.js("document.querySelector('#work-grade').click()"); p.page.fill("#is-code", "EXP-98")
+    p.js("document.querySelector('#istart-form button[type=submit]').click()"); p.page.wait_for_timeout(500)
+    ids = p.js("window.__rca.doc.nodes.slice(2, 5).map(n => n.id)")
+    p.js(f"window.__rca.commit(() => {{ window.__rca.nodeById('{ids[1]}').kind = 'constraint'; window.__rca.nodeById('{ids[2]}').kind = 'exogenous'; }})"); p.page.wait_for_timeout(200)
+    # who could act, then a value: the anchor of that value shows under the buttons
+    p.js(f"void window.__rca.cy().getElementById('{ids[0]}').emit('tap')"); p.page.wait_for_timeout(200)
+    p.js(f"window.__rca.setGrade('{ids[0]}', 'relevance', 4)"); p.page.wait_for_timeout(200)
+    p.js("document.querySelector('[data-scale=feasibility] [data-who=w2]').click()"); p.page.wait_for_timeout(150)
+    p.js("document.querySelector('[data-scale=feasibility] [data-sv=\"3\"]').click()"); p.page.wait_for_timeout(200)
+    g = p.js(f"window.__rca.activeSession().grades['{ids[0]}'].feasibility")
+    assert g["v"] == 3 and g["who"] == "w2", g
+    assert "moderate investment" in p.js("document.querySelector('[data-scale=feasibility] .anchor').textContent")
+    # don't know, with its reason, replaces the value and closes the gate below it
+    p.js("document.querySelector('[data-scale=relevance] [data-sdk]').click()"); p.page.wait_for_timeout(100)
+    p.js("document.querySelector('[data-scale=relevance] [data-dk=notmine]').click()"); p.page.wait_for_timeout(200)
+    r = p.js(f"window.__rca.activeSession().grades['{ids[0]}'].relevance")
+    assert r.get("dk") == "notmine" and "v" not in r, r
+    # a constraint is asked whether it holds, an exogenous condition gets relevance but not feasibility
+    p.js(f"void window.__rca.cy().getElementById('{ids[1]}').emit('tap')"); p.page.wait_for_timeout(200)
+    assert p.js("document.querySelectorAll('[data-scale]').length") == 0
+    p.js("document.querySelector('[data-holds=no]').click()"); p.page.wait_for_timeout(200)
+    p.js(f"void window.__rca.cy().getElementById('{ids[2]}').emit('tap')"); p.page.wait_for_timeout(200)
+    assert p.js("[...document.querySelectorAll('[data-scale]')].map(x => x.dataset.scale)") == ["relevance"]
+    rows = p.js(f"window.__rca.interviewRows(window.__rca.doc).rows.filter(r => {ids!r}.includes(r.box_id))")
+    by = {r["box_id"]: r for r in rows}
+    assert by[ids[0]]["relevance_state"] == "not my part of the chain" and by[ids[0]]["feasibility_who"] == "Through the grower"
+    assert by[ids[1]]["holds"] == "no" and by[ids[1]]["feasibility_state"].startswith("not asked")
+    assert by[ids[2]]["feasibility_state"] == "not asked (exogenous condition)"
+    p.js("document.querySelector('#gb-pin').click()"); p.page.wait_for_timeout(200)
+    assert p.js("!document.querySelector('#anchorpin').hidden")
+    p.assert_clean(); p.close()

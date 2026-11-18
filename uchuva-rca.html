@@ -415,6 +415,35 @@ body.grading .branchbar{top:58px}
 #workseg button[aria-pressed="true"]#work-grade{background:#3B2F7A;color:#fff}
 @media (max-width:980px){.gradebar{max-width:calc(100% - 24px);top:auto;bottom:60px}}
 
+/* fault-tree logic and kinds (RCA) */
+.lgate{display:inline-block;font:600 10.5px/1 "IBM Plex Sans Condensed",var(--sans,system-ui);padding:2px 5px;border-radius:4px;letter-spacing:.02em;vertical-align:1px}
+.lgate.and{background:var(--ink);color:var(--ground)}
+.lgate.or{border:1.5px solid var(--ink);color:var(--ink);padding:1px 4px}
+.lg-gates{display:block;font-size:12px;color:var(--muted);line-height:1.9;padding:0 2px}
+.logicseg button{min-width:56px}
+/* grading: who could act, don't know, anchors (RCA) */
+.sc-btns{gap:5px}
+.sc-btns button{min-width:36px}
+.sc-btns .sc-dk,.sc-btns .sc-clear{min-width:28px}
+.sc-btns .sc-dk{color:var(--muted)}
+.sc-who{display:flex;flex-direction:column;gap:4px}
+.seg.wrap{flex-wrap:wrap;height:auto}
+.dkpick{align-self:flex-start}
+.scale .anchor{margin:0;background:var(--panel-2);border-radius:8px;padding:8px 10px;font-size:13px;line-height:1.45;min-height:2.9em}
+.scale .anchor b{font:500 13px var(--mono);margin-right:4px}
+.anclist{margin:0;padding-left:22px;font-size:12.5px;line-height:1.45;color:var(--muted)}
+.anclist li::marker,.anchorpin li::marker{font-family:var(--mono);color:var(--ink)}
+.kindline{margin:4px 0 0}
+.linkbtn.small{font-size:12px;align-self:flex-start}
+.anchorpin{position:absolute;right:56px;top:auto;bottom:12px;max-height:55%;overflow:auto;z-index:7;width:min(400px,calc(100% - 24px));background:var(--panel);border:1px solid var(--line);box-shadow:var(--shadow);border-radius:10px;padding:10px 14px;font-size:14px;line-height:1.45;display:flex;flex-direction:column;gap:8px}
+.anchorpin ol{margin:4px 0 0;padding-left:22px}
+.anchorpin p{margin:2px 0 0}
+.dkpick[hidden],.anchorpin[hidden]{display:none}
+.scard .srow.kinds{flex-wrap:wrap;gap:4px 12px}
+.scard .srow-d{margin:4px 0;font-size:12.5px}
+.scard .srow-d summary{cursor:pointer;color:var(--muted);padding:4px 0}
+.scard .srow-d textarea{flex:1;min-width:160px;font:13px var(--sans)}
+
 </style>
 </head>
 <body>
@@ -492,6 +521,7 @@ body.grading .branchbar{top:58px}
     <div id="cy">
       <div class="gradebar" id="gradebar" hidden></div>
       <div class="disc-pop" id="disc-pop" hidden></div>
+      <div class="anchorpin" id="anchorpin" hidden></div>
       <div class="hint edit-only nograde" id="hint">Double-click: new box · drag <span class="dot"></span> onto a cause: connect · Tab: add cause · <kbd>?</kbd> all shortcuts</div>
       <div class="diffbar" id="diffbar" hidden></div>
       <div class="diffbar branchbar" id="branchbar" hidden></div>
@@ -501,6 +531,8 @@ body.grading .branchbar{top:58px}
           <div class="xline" id="xline"></div>
           <div class="ctl"><label for="v-focus"><span data-ui="focus">Focus radius</span> <output id="o-focus"></output></label><input type="range" id="v-focus" min="0" max="6" step="1"></div>
           <label class="chk"><input type="checkbox" id="v-trace"> <span data-ui="trace">Highlight the chain of the selected box</span></label>
+          <label class="chk"><input type="checkbox" id="v-gates"> <span data-ui="showGates">Show how causes combine (AND / OR)</span></label>
+          <label class="chk"><input type="checkbox" id="v-kinds"> <span data-ui="showKinds">Show the kind of each box</span></label>
           <div class="ctl"><span class="lbl"><span data-ui="redundant">Redundant arrows</span> <output id="o-red" class="edit-only"></output></span>
             <div class="seg small" role="group" aria-label="Redundant arrows"><button data-red="show" data-ui="show">Show</button><button data-red="dashed" data-ui="dashed">Dashed</button><button data-red="hide" data-ui="hide">Hide</button></div></div>
           <div id="manual-only" class="edit-only nograde"><button class="btn small" data-act="tidy">Tidy overlapping boxes</button></div>
@@ -7345,10 +7377,30 @@ const DEFAULT_CATS = [
   { id: "plant",    name: "Unsure",             role: "uncertain",    desc: "A cause I am not sure about. Shades of purple show the degree of doubt.", fill: "#e1d5e7", stroke: "#9673a6", font: "#1a1a1a" },
   { id: "question", name: "Open question",      role: "question",     desc: "A gap in the chain still to investigate.", fill: "#d80073", stroke: "#a50040", font: "#ffffff" },
 ];
+/* What kind of statement a box makes, separate from its colour (position and certainty). The kind decides which scales are asked
+   in an interview: see each scale's "kinds". */
+const KINDS = {
+  mechanism:  { name: "Mechanism",            es: "Mecanismo",            hint: "Biology or physics that is always true. It gives the tree its structure and is not graded.",
+                hintEs: "Biología o física que siempre se cumple. Da estructura al árbol y no se califica." },
+  constraint: { name: "Constraint",           es: "Restricción",          hint: "Fixed by nature, regulation or the product. Not graded: ask whether it holds, then it goes to the requirements.",
+                hintEs: "Fijada por la naturaleza, la regulación o el producto. No se califica: se pregunta si se cumple y pasa a los requisitos." },
+  exogenous:  { name: "Exogenous condition",  es: "Condición externa",    hint: "Varies, but no one in the chain controls it (weather, demand, port congestion). Relevance yes, feasibility no.",
+                hintEs: "Varía, pero nadie en la cadena la controla (clima, demanda, congestión del puerto). Se pregunta relevancia, no factibilidad." },
+  actionable: { name: "Actionable",           es: "Accionable",           hint: "A practice or condition someone in the chain can change. Relevance and feasibility.",
+                hintEs: "Una práctica o condición que alguien en la cadena puede cambiar. Relevancia y factibilidad." },
+  barrier:    { name: "Barrier",              es: "Barrera",              hint: "A reason a change is hard or does not happen.",
+                hintEs: "Una razón por la que un cambio es difícil o no ocurre." },
+  infogap:    { name: "Information gap",      es: "Vacío de información", hint: "Something not known, measured or passed on along the chain.",
+                hintEs: "Algo que no se sabe, no se mide o no se comunica en la cadena." },
+};
+const UNGRADED_KINDS = ["mechanism", "constraint"]; // asked only whether they hold
+// how a box's causes combine, as in a fault tree
+const LOGIC = { and: { name: "AND", es: "TODAS", hint: "All of its causes are needed: removing any one removes it", hintEs: "Se necesitan todas sus causas: quitar una sola lo elimina" },
+  or: { name: "OR", es: "ALGUNA", hint: "Any one of its causes is enough: each explains part of it", hintEs: "Basta cualquiera de sus causas: cada una explica una parte" } };
 // names the first version of the app guessed; files that still carry them get the real meanings
 const OLD_GUESSES = { problem: "Observed problem", cause: "Cause", fact: "Supporting fact / condition", plant: "Plant-level factor", question: "Open question" };
 const DEFAULT_VIEW = { lang: null, legendOpen: false, tagChips: true, mode: "manual", focusR: 0, trace: true, redundant: "show", effort: 3, place: 1,
-  levelSp: 70, nodeSp: 14, route: "ORTHOGONAL", keepOrder: false, split: false, repeat: true };
+  levelSp: 70, nodeSp: 14, route: "ORTHOGONAL", keepOrder: false, split: false, repeat: true, gates: true, kinds: false, pinAnchors: false };
 const LS_DOC = "uchuva-rca:doc", LS_VIEW = "uchuva-rca:view", LS_FILE = "uchuva-rca:file";
 // names the shared core uses for this tool
 const FILE_DESC = "RCA file";
@@ -7929,7 +7981,7 @@ function emptyDoc() {
     meta: { created: nowISO(), modified: nowISO() } };
 }
 function newNode(text, cat, x, y) {
-  return { id: uid("n"), text, textTr: {}, cat, tags: [], status: "unassessed", notes: "", sources: [], x: Math.round(x), y: Math.round(y) };
+  return { id: uid("n"), text, textTr: {}, cat, kind: "", logic: "", tags: [], status: "unassessed", notes: "", sources: [], x: Math.round(x), y: Math.round(y) };
 }
 function coreOf(d) { return { title: d.title, titleTr: d.titleTr, languages: d.languages, categories: d.categories, tagGroups: d.tagGroups, tags: d.tags, scales: d.scales, nodes: d.nodes, edges: d.edges }; }
 
@@ -7960,6 +8012,7 @@ function normalizeDoc(d) {
     const id = String(n.id); ids.add(id);
     if (!Number.isFinite(n.x) || !Number.isFinite(n.y)) missingPos = true;
     const r = { id, text: String(n.text ?? n.label ?? ""), textTr: trObj(n.textTr), cat: catIds.has(n.cat) ? n.cat : out.categories[0].id,
+      kind: KINDS[n.kind] ? n.kind : "", logic: LOGIC[n.logic] ? n.logic : "",
       tags: Array.isArray(n.tags) ? n.tags.map(String).filter(t => tagIds.has(t)) : [],
       status: STATUSES[n.status] ? n.status : "unassessed", notes: String(n.notes || ""),
       sources: Array.isArray(n.sources) ? n.sources.map(String) : [], x: Math.round(+n.x || 0), y: Math.round(+n.y || 0) };
@@ -8101,7 +8154,7 @@ try { Object.assign(view, JSON.parse(lsGet(LS_VIEW) || "{}")); } catch (e) {}
 view.folded = new Set(); view.hiddenCats = new Set(); view.tagFilter = new Set(); view.diff = null;
 let GRADING = false; // interview grading: the diagram is locked, boxes get scores
 const LS_VPREF = "uchuva-rca:viewer";
-function saveViewerPref() { if (VIEWER) lsSet(LS_VPREF, JSON.stringify({ lang: view.lang, tagChips: view.tagChips })); }
+function saveViewerPref() { if (VIEWER) lsSet(LS_VPREF, JSON.stringify({ lang: view.lang, tagChips: view.tagChips, gates: view.gates, kinds: view.kinds })); }
 function saveView() { if (VIEWER) return; const { folded, hiddenCats, tagFilter, diff, ...rest } = view; lsSet(LS_VIEW, JSON.stringify(rest)); }
 
 let selRef = null, selCopy = null, selEdge = null, multi = [];
@@ -8326,6 +8379,15 @@ function styleSheet() {
       shape: "round-rectangle", "corner-radius": 9, width: "data(w)", height: 19, "background-color": "#3B2F7A", "border-color": ground, "border-width": 2,
       label: "data(label)", color: "#ffffff", "font-family": '"IBM Plex Mono", monospace', "font-weight": 500, "font-size": 11,
       "text-valign": "center", "text-halign": "center", events: "no", "z-index": 22 } },
+    { selector: "node.gatechip", style: {
+      shape: "round-rectangle", "corner-radius": 4, width: "data(w)", height: 17, "background-color": ink, "border-color": ground, "border-width": 2,
+      label: "data(label)", color: ground, "font-family": '"IBM Plex Sans Condensed", ' + FONT_STACK, "font-weight": 600, "font-size": 10.5,
+      "text-valign": "center", "text-halign": "center", events: "no", "z-index": 23 } },
+    { selector: "node.gatechip.or", style: { "background-color": ground, color: ink, "border-color": ink, "border-width": 1.5 } },
+    { selector: "node.kindchip", style: {
+      shape: "round-rectangle", "corner-radius": 9, width: "data(w)", height: 17, "background-color": ground, "border-color": edge, "border-width": 1, "border-style": "dashed",
+      label: "data(label)", color: ink, "font-family": '"IBM Plex Sans Condensed", ' + FONT_STACK, "font-weight": 600, "font-size": 10.5,
+      "text-valign": "center", "text-halign": "center", events: "no", "z-index": 21 } },
     { selector: "node.shade", style: { "underlay-color": "#6E56CF", "underlay-padding": 9 } },
     { selector: "node.tagchip", style: {
       shape: "round-rectangle", "corner-radius": 10, width: "data(w)", height: 21, "background-color": ground, "border-color": edge, "border-width": 1,
@@ -8358,6 +8420,12 @@ function nodeVisual(n, extraLabel) {
   const missing = doc.languages.length > 1 && txMissing(n);
   return { label: sz.lines.join("\n"), w: box.w, h: box.h, fill: c.fill, font: c.font, fs: missing ? "italic" : "normal",
     stroke: st.color || n.outline || c.stroke, bw: st.width, bs: st.style };
+}
+const kindName = (k, l = curLang()) => KINDS[k] ? (l === "es" ? KINDS[k].es : KINDS[k].name) : "";
+const logicName = (k, l = curLang()) => LOGIC[k] ? (l === "es" ? LOGIC[k].es : LOGIC[k].name) : "";
+function gateChipLabel(n, A) { // AND/OR on a box whose causes it combines; hidden with the View panel switch
+  if (view.gates === false || !n || !LOGIC[n.logic] || !A || (A.out.get(n.id) || []).length < 2) return null;
+  const label = logicName(n.logic); return { label, w: label.length * 7 + 12 };
 }
 function tagChipLabel(n) {
   const ts = orderedTags(n.tags || []); if (!ts.length) return null;
@@ -8437,6 +8505,18 @@ function applyToCy(U, V, A, byId, vis, pos, routes, opts) {
       const p = pos.get(c.id);
       nodes.push({ group: "nodes", data: { id: "g:" + c.id, owner: c.id, label: gchip.label, w: gchip.w, h: 19 }, classes: "badge gradechip",
         position: { x: p.x + v.w / 2 - gchip.w / 2 + 6, y: p.y + v.h / 2 + 2 } });
+    }
+    const gate = gateChipLabel(n, A);
+    if (gate) {
+      const p = pos.get(c.id);
+      nodes.push({ group: "nodes", data: { id: "a:" + c.id, owner: c.id, label: gate.label, w: gate.w, h: 17 }, classes: "badge gatechip " + n.logic,
+        position: { x: p.x + v.w / 2 + gate.w / 2 - 3, y: p.y - v.h / 2 + 8 + (c.total >= 2 ? 20 : 0) } }); // top right, clear of the edit handle
+    }
+    const kchip = view.kinds === true && n.kind && KINDS[n.kind] && !isQ(n);
+    if (kchip) {
+      const p = pos.get(c.id), label = kindName(n.kind).toLowerCase(), w = label.length * 6 + 14;
+      nodes.push({ group: "nodes", data: { id: "k:" + c.id, owner: c.id, label, w, h: 17 }, classes: "badge kindchip",
+        position: { x: p.x - v.w / 2 + w / 2 + 4, y: p.y + v.h / 2 + 2 } });
     }
     if (c.total >= 2) {
       const r = roman(c.total), p = pos.get(c.id);
@@ -8828,6 +8908,12 @@ const UI = {
     details: "Details", close: "Close", allBranches: "All branches", shared: "shared", branch: "Branch", boxes: "boxes",
     upLevel: "Up one level", showAll: "Show everything", onlyBranch: "Show only this branch",
     export: "Export", tries: n => `${n} tr${n > 1 ? "ies" : "y"}`, place0: "Compact", place1: "Balanced", place2: "Straight arrows",
+    showGates: "Show how causes combine (AND / OR)", showKinds: "Show the kind of each box", kind: "Kind",
+    combineAnd: "all are needed", combineOr: "any one is enough", gatesKey: "How causes combine",
+    whoAct: "Who could act on it", dkTip: "Don't know", seeAnchors: "See all anchors", hideAnchors: "Hide the anchors",
+    hoverAnchor: "Point at a value to read what it means.", holdsQ: "Does this hold in your experience?", pinAnchors: "Pin the anchors on screen",
+    whoFirst: "First: who could act on it. Then, for that actor:",
+    notAskedKind: (k, names) => `Not asked for this kind of box (${k.toLowerCase()}): ${names.join(", ")}.`,
   },
   es: {
     manual: "Mi diseño", manualV: "Como se dibujó", untangle: "Desenredar", allLevels: "Todos los niveles", levels: n => `${n} niveles`, search: "Buscar",
@@ -8859,6 +8945,12 @@ const UI = {
     details: "Detalles", close: "Cerrar", allBranches: "Todas las ramas", shared: "compartida", branch: "Rama", boxes: "cajas",
     upLevel: "Subir un nivel", showAll: "Mostrar todo", onlyBranch: "Mostrar solo esta rama",
     export: "Exportar", tries: n => `${n} intento${n > 1 ? "s" : ""}`, place0: "Compacta", place1: "Equilibrada", place2: "Flechas rectas",
+    showGates: "Mostrar cómo se combinan las causas (TODAS / ALGUNA)", showKinds: "Mostrar el tipo de cada caja", kind: "Tipo",
+    combineAnd: "se necesitan todas", combineOr: "basta con una", gatesKey: "Cómo se combinan las causas",
+    whoAct: "Quién podría actuar", dkTip: "No sé", seeAnchors: "Ver todos los anclajes", hideAnchors: "Ocultar los anclajes",
+    hoverAnchor: "Señale un valor para leer qué significa.", holdsQ: "¿Se cumple según su experiencia?", pinAnchors: "Fijar los anclajes en pantalla",
+    whoFirst: "Primero: quién podría actuar. Luego, para ese actor:",
+    notAskedKind: (k, names) => `No se pregunta para este tipo de caja (${k.toLowerCase()}): ${names.join(", ")}.`,
   },
 };
 function t(k, ...a) { const L = VIEWER || GRADING ? curLang() : "en"; const v = (UI[L] && UI[L][k] !== undefined) ? UI[L][k] : UI.en[k]; return typeof v === "function" ? v(...a) : (v ?? k); }
@@ -8927,6 +9019,12 @@ function renderPanel() {
         <p class="muted">Boxes whose colour and arrows disagree. Either the chain continues, or the colour should change.</p>
         ${open.length ? `<details class="ck"><summary>${open.length} intermediate cause${open.length > 1 ? "s" : ""} with nothing below</summary>${boxList(open.map(c => nodeById(c.id)))}</details>` : ""}
         ${deeper.length ? `<details class="ck" open><summary>${deeper.length} root cause${deeper.length > 1 ? "s" : ""} with deeper causes</summary>${boxList(deeper.map(c => nodeById(c.id)))}</details>` : ""}</div>`; })()}
+      ${(() => { const ft = treeChecks(A); if (!ft.total) return "";
+        return `<div class="sec"><h2>Fault-tree checks · ${ft.total}</h2>
+        <p class="muted">Each box with two or more causes needs AND or OR, and each box a kind, before grading by shares.</p>
+        ${ft.noLogic.length ? `<details class="ck"><summary>${ft.noLogic.length} box${ft.noLogic.length > 1 ? "es" : ""} with several causes and no AND/OR</summary>${boxList(ft.noLogic)}</details>` : ""}
+        ${ft.mixed.length ? `<details class="ck"><summary>${ft.mixed.length} AND box${ft.mixed.length > 1 ? "es" : ""} with an open question among the needed causes</summary>${boxList(ft.mixed)}</details>` : ""}
+        ${ft.noKind.length ? `<details class="ck"><summary>${ft.noKind.length} box${ft.noKind.length > 1 ? "es" : ""} without a kind</summary>${boxList(ft.noKind)}</details>` : ""}</div>`; })()}
       <div class="sec"><h2>Open questions · ${qs.length}</h2>
       <ul class="list">${qs.map(x => { const par = A.inn.get(x.id).map(nodeById)[0]; return `<li><button data-go="${esc(x.id)}">${swatch(x)}<span>Why does “${esc(par ? tx(par) : "?")}” happen?</span></button></li>`; }).join("") || `<p class="muted">None.</p>`}</ul></div>
       <div class="sec"><h2>Deepest causes · ${leaves.length}</h2>
@@ -8947,6 +9045,12 @@ function renderPanel() {
       <div class="field"><label for="f-cat">Category · <button type="button" class="linkbtn" id="p-cats">edit categories</button></label><select id="f-cat">${doc.categories.map(c => `<option value="${esc(c.id)}"${c.id === n.cat ? " selected" : ""}>${esc(tx(c, "name"))}</option>`).join("")}<option disabled>──────────</option><option value="__new">＋ New category…</option><option value="__manage">Edit, delete or recolour categories…</option></select>
         ${catById(n.cat).desc ? `<span class="catdesc">${esc(catById(n.cat).desc)}</span>` : ""}
         ${keyChecks(A).filter(c => c.id === n.id).map(c => `<span class="ckwarn">${esc(c.msg)}.</span>`).join("")}</div>
+      <div class="field"><label for="f-kind">Kind of statement</label><select id="f-kind"><option value="">Not set</option>${Object.entries(KINDS).map(([k, x]) => `<option value="${k}"${n.kind === k ? " selected" : ""}>${esc(x.name)}</option>`).join("")}</select>
+        ${n.kind ? `<span class="catdesc">${esc(KINDS[n.kind].hint)}</span>` : ""}</div>
+      ${A.out.get(n.id).length >= 2 ? `<div class="field"><span>How its ${A.out.get(n.id).length} causes combine</span><div class="seg small logicseg" role="group" aria-label="How its causes combine">
+        <button data-logic="" aria-pressed="${!n.logic}">Not set</button>${Object.entries(LOGIC).map(([k, x]) => `<button data-logic="${k}" aria-pressed="${n.logic === k}" title="${esc(x.hint)}">${x.name}</button>`).join("")}</div>
+        ${n.logic ? `<span class="catdesc">${esc(LOGIC[n.logic].hint)}.</span>` : `<span class="catdesc">AND: all of them are needed. OR: any one is enough.</span>`}</div>`
+      : n.logic ? `<div class="field"><span class="ckwarn">Marked ${LOGIC[n.logic].name}, but it has fewer than two causes. <button type="button" class="linkbtn" data-logic="">Clear</button></span></div>` : ""}
       <div class="field"><span>Tags · <button type="button" class="linkbtn" id="p-tags">edit tags</button></span><div class="tagpick" id="f-tags">${doc.tags.length ? tagPicker([n]) : `<span class="muted">No tags yet.</span>`}</div></div>
       <div class="field"><span>Status</span><div class="status-seg" role="group" aria-label="Status">${Object.entries(STATUSES).map(([k, s]) =>
         `<button data-status="${k}" aria-pressed="${n.status === k}"><i style="border-color:${s.color || "var(--muted)"};border-style:${s.style}"></i>${s.short}</button>`).join("")}</div></div>
@@ -8962,7 +9066,7 @@ function renderPanel() {
         ${copies > 1 ? `<dt>Appears in view</dt><dd>${roman(copies)} (${copies}×)</dd>` : ""}</dl>
       ${A.cyc.has(n.id) ? `<div class="warnbox">This box is part of a loop. Check whether one of its arrows points the wrong way.</div>` : ""}
     </div>
-    <div class="sec"><h2>Why? Explained by · ${causes.length}</h2>
+    <div class="sec"><h2>Why? Explained by · ${causes.length}${combineNote(n, causes.length)}</h2>
       ${causes.length ? boxList(causes) : `<p class="muted">Nothing yet. The chain ends here.</p>`}</div>
     <div class="sec"><h2>It explains · ${effects.length}</h2>
       ${effects.length ? boxList(effects) : `<p class="muted">This is a top-level problem.</p>`}</div>
@@ -8986,10 +9090,22 @@ function renderPanel() {
   $("#p-cats").onclick = openCats; $("#p-tags").onclick = () => openTags();
   $$("#f-tags [data-tag]").forEach(b => b.onclick = () => toggleTag([ref], b.dataset.tag));
   $$(".status-seg button").forEach(b => b.onclick = () => commit(() => { nodeById(ref).status = b.dataset.status; }));
+  $("#f-kind").onchange = e => commit(() => { nodeById(ref).kind = e.target.value; });
+  $$("[data-logic]").forEach(b => b.onclick = () => commit(() => { nodeById(ref).logic = b.dataset.logic; }));
   $("#p-add").onclick = () => addChild(ref);
   $("#p-branch") && ($("#p-branch").onclick = () => setBranch(ref));
   $("#p-fold") && ($("#p-fold").onclick = () => toggleFold(ref));
   $("#p-del").onclick = deleteSelection;
+}
+function combineNote(n, k) { // " · all are needed" in the causes heading of an AND or OR box
+  return k >= 2 && LOGIC[n.logic] ? ` · <span class="lgate ${n.logic}">${esc(logicName(n.logic))}</span> <span class="muted">${esc(t(n.logic === "and" ? "combineAnd" : "combineOr"))}</span>` : "";
+}
+function treeChecks(A) { // what still keeps the tree from being a proper fault tree
+  const real = doc.nodes.filter(x => !isQ(x));
+  const noLogic = real.filter(x => A.out.get(x.id).length >= 2 && !x.logic);
+  const mixed = real.filter(x => x.logic === "and" && A.out.get(x.id).some(c => isQ(nodeById(c))));
+  const noKind = real.filter(x => !x.kind && A.inn.get(x.id).length);
+  return { noLogic, mixed, noKind, total: noLogic.length + mixed.length + noKind.length };
 }
 function tagPicker(nodes) { // grouped toggle chips; pressed = every given box has the tag
   return doc.tagGroups.map(g => {
@@ -9033,6 +9149,7 @@ function renderViewerPanel() {
       ${doc.languages.length > 1 && txMissing(n) ? `<p class="muted"><i>${t("missingTr")}</i></p>` : ""}
       <span class="chip"><span class="sw" style="background:${c.fill};border-color:${c.stroke}"></span>${esc(tx(c, "name"))}</span>
       ${c.desc && curLang() === mainLang() ? `<span class="catdesc">${esc(c.desc)}</span>` : ""}
+      ${n.kind && view.kinds === true ? `<span class="chip" title="${esc(curLang() === "es" ? KINDS[n.kind].hintEs : KINDS[n.kind].hint)}">${esc(kindName(n.kind))}</span>` : ""}
       ${n.status !== "unassessed" ? `<span class="chip"><i class="stbox" style="border-color:${st.color};border-style:${st.style}"></i>${esc(t(n.status))}</span>` : ""}
       ${tagsHtml ? `<div class="tagpick">${tagsHtml}</div>` : ""}
       ${srcHtml ? `<div class="field"><span>${t("sources")}</span><ul class="srclist">${srcHtml}</ul></div>` : ""}
@@ -9040,7 +9157,7 @@ function renderViewerPanel() {
       <div class="row"><button class="btn small" id="v-link">${t("copyLink")}</button>${A && lastRender.D.sub(n.id).size > 1 && view.branch !== n.id ? `<button class="btn small" id="v-branch">${t("onlyBranch")} (${lastRender.D.sub(n.id).size})</button>` : ""}</div>
       <dl class="kv"><dt>${t("level")}</dt><dd>${A.depth.get(n.id) || "–"}</dd><dt>${t("chains")}</dt><dd>${A.paths.get(n.id) || "–"}</dd></dl>
     </div>
-    <div class="sec"><h2>${t("explainedBy")} · ${causes.length}</h2>${causes.length ? boxList(causes) : `<p class="muted">${t("nothingYet")}</p>`}</div>
+    <div class="sec"><h2>${t("explainedBy")} · ${causes.length}${combineNote(n, causes.length)}</h2>${causes.length ? boxList(causes) : `<p class="muted">${t("nothingYet")}</p>`}</div>
     <div class="sec"><h2>${t("explains")} · ${effects.length}</h2>${effects.length ? boxList(effects) : `<p class="muted">${t("topLevel")}</p>`}</div>
     <div class="sec"><h2>${t("chain")}</h2><ol class="chain">${chain.map(x => `<li><button data-go="${esc(x.id)}">${nm(x)}</button></li>`).join("")}</ol></div>`;
   $("#v-link").onclick = () => copyText(deepLink({ box: n.id }), t("copied"));
@@ -9102,6 +9219,7 @@ function renderLegend() {
   const open = view.legendOpen === true;
   $("#legend").innerHTML = `<div class="h"><span>${t("colourKey")}</span><span>${VIEWER ? "" : `<button id="edit-cats">${t("edit")}</button> · `}<button id="fold-legend">${open ? t("collapse") : t("expand")}</button></span></div>` + (!open ? "" :
     doc.categories.map(c => `<button class="cat" title="${esc((c.desc && curLang() === mainLang() ? c.desc + "\n" : ""))}" data-cat="${esc(c.id)}" aria-pressed="${!view.hiddenCats.has(c.id)}"><span class="sw" style="background:${c.fill};border-color:${c.stroke}"></span>${esc(tx(c, "name"))}<span class="n">${counts[c.id] || 0}</span></button>`).join("") +
+    (view.gates !== false && doc.nodes.some(n => n.logic) ? `<hr><div class="lg-gates">${esc(t("gatesKey"))}<br><b class="lgate and">${esc(logicName("and"))}</b> ${esc(t("combineAnd"))}<br><b class="lgate or">${esc(logicName("or"))}</b> ${esc(t("combineOr"))}</div>` : "") +
     (doc.nodes.some(n => n.status !== "unassessed") || !VIEWER ? `<hr>` + Object.entries(STATUSES).filter(([k]) => k !== "unassessed").map(([k, s]) => `<span class="st"><i style="border-color:${s.color};border-style:${s.style}"></i>${esc(t(k))}</span>`).join("") : ""));
   $("#edit-cats") && ($("#edit-cats").onclick = openCats);
   $("#fold-legend").onclick = () => { view.legendOpen = !open; saveView(); renderLegend(); };
@@ -9163,7 +9281,7 @@ function syncControls() {
   $("#mode-manual").setAttribute("aria-pressed", view.mode === "manual");
   $("#mode-untangle").setAttribute("aria-pressed", view.mode === "untangle");
   $("#v-focus").value = view.focusR; $("#o-focus").textContent = view.focusR ? t("steps", view.focusR) : t("off");
-  $("#v-trace").checked = view.trace;
+  $("#v-trace").checked = view.trace; $("#v-gates").checked = view.gates !== false; $("#v-kinds").checked = view.kinds === true;
   $$("[data-red]").forEach(b => b.setAttribute("aria-pressed", b.dataset.red === view.redundant));
   const un = view.mode === "untangle";
   $("#untangle-set").disabled = !un; $("#untangle-note").hidden = un; $("#manual-only").hidden = un;
@@ -9182,6 +9300,8 @@ let sliderTimer = null;
 function setView(patch, opts = {}) { Object.assign(view, patch); syncControls(); clearTimeout(sliderTimer); sliderTimer = setTimeout(() => render({ animate: true, ...opts }), opts.now ? 0 : 160); }
 $("#v-focus").oninput = e => { if (+e.target.value > 0 && !selRef) toast("Select a box to focus on."); setView({ focusR: +e.target.value }, { now: true }); };
 $("#v-trace").onchange = e => { view.trace = e.target.checked; syncControls(); applySelection(); };
+$("#v-gates").onchange = e => { view.gates = e.target.checked; saveView(); saveViewerPref(); render(); };
+$("#v-kinds").onchange = e => { view.kinds = e.target.checked; saveView(); saveViewerPref(); render(); };
 $$("[data-red]").forEach(b => b.onclick = () => setView({ redundant: b.dataset.red }, { now: true }));
 $("#v-effort").oninput = e => setView({ effort: +e.target.value });
 $("#v-place").oninput = e => setView({ place: +e.target.value });
@@ -9398,11 +9518,11 @@ function exportDrawio() {
 }
 function exportGraphML() {
   const L = doc.languages;
-  const keys = [...L.map(l => ["text_" + l, "node"]), ["tags", "node"], ["category", "node"], ["status", "node"], ["notes", "node"], ["sources", "node"], ["x", "node", "double"], ["y", "node", "double"]];
+  const keys = [...L.map(l => ["text_" + l, "node"]), ["tags", "node"], ["category", "node"], ["kind", "node"], ["logic", "node"], ["status", "node"], ["notes", "node"], ["sources", "node"], ["x", "node", "double"], ["y", "node", "double"]];
   const out = [`<?xml version="1.0" encoding="UTF-8"?>`, `<graphml xmlns="http://graphml.graphdrawing.org/xmlns">`,
     ...keys.map(([k, f, t]) => `  <key id="${k}" for="${f}" attr.name="${k}" attr.type="${t || "string"}"/>`),
     `  <graph id="rca" edgedefault="directed">`];
-  doc.nodes.forEach(n => out.push(`    <node id="${xmlEsc(n.id)}">${L.map(l => `<data key="text_${l}">${xmlEsc(txRaw(n, "text", l))}</data>`).join("")}<data key="tags">${xmlEsc(orderedTags(n.tags || []).map(x => x.name).join(" | "))}</data><data key="category">${xmlEsc(catById(n.cat).name)}</data><data key="status">${n.status}</data><data key="notes">${xmlEsc(n.notes)}</data><data key="sources">${xmlEsc(n.sources.join(" | "))}</data><data key="x">${n.x}</data><data key="y">${n.y}</data></node>`));
+  doc.nodes.forEach(n => out.push(`    <node id="${xmlEsc(n.id)}">${L.map(l => `<data key="text_${l}">${xmlEsc(txRaw(n, "text", l))}</data>`).join("")}<data key="tags">${xmlEsc(orderedTags(n.tags || []).map(x => x.name).join(" | "))}</data><data key="category">${xmlEsc(catById(n.cat).name)}</data><data key="kind">${n.kind || ""}</data><data key="logic">${n.logic || ""}</data><data key="status">${n.status}</data><data key="notes">${xmlEsc(n.notes)}</data><data key="sources">${xmlEsc(n.sources.join(" | "))}</data><data key="x">${n.x}</data><data key="y">${n.y}</data></node>`));
   doc.edges.forEach(e => out.push(`    <edge id="${xmlEsc(e.id)}" source="${xmlEsc(e.source)}" target="${xmlEsc(e.target)}"/>`));
   out.push(`  </graph>`, `</graphml>`, "");
   download(baseName() + ".graphml", out.join("\n"), "application/xml");
@@ -9412,8 +9532,8 @@ function exportCSV(which) {
   const A = analyze();
   let rows;
   const L = doc.languages;
-  if (which === "nodes") rows = [["id", ...L.map(l => "text_" + l), "category", "tags", "status", "level", "chains_to_rejection", "notes", "sources"],
-    ...doc.nodes.map(n => [n.id, ...L.map(l => txRaw(n, "text", l)), tx(catById(n.cat), "name"), orderedTags(n.tags || []).map(x => tx(x, "name")).join(" | "), n.status, A.depth.get(n.id) || "", A.paths.get(n.id) || "", n.notes, n.sources.join(" | ")])];
+  if (which === "nodes") rows = [["id", ...L.map(l => "text_" + l), "category", "kind", "causes_combine", "tags", "status", "level", "chains_to_rejection", "notes", "sources"],
+    ...doc.nodes.map(n => [n.id, ...L.map(l => txRaw(n, "text", l)), tx(catById(n.cat), "name"), n.kind ? KINDS[n.kind].name : "", n.logic ? LOGIC[n.logic].name : "", orderedTags(n.tags || []).map(x => tx(x, "name")).join(" | "), n.status, A.depth.get(n.id) || "", A.paths.get(n.id) || "", n.notes, n.sources.join(" | ")])];
   else rows = [["source_id", "source_text", "target_id", "target_text"],
     ...doc.edges.map(e => [e.source, tx(nodeById(e.source)), e.target, tx(nodeById(e.target))])];
   download(`${baseName()}-${which === "nodes" ? "boxes" : "arrows"}.csv`, "﻿" + rows.map(r => r.map(csvCell).join(",")).join("\r\n") + "\r\n", "text/csv");
@@ -9425,7 +9545,7 @@ function diffCores(a, b) { // a = old snapshot, b = new
   const an = new Map(a.nodes.map(n => [n.id, n])), bn = new Map(b.nodes.map(n => [n.id, n]));
   const added = b.nodes.filter(n => !an.has(n.id)), removed = a.nodes.filter(n => !bn.has(n.id));
   const trs = n => JSON.stringify(n.textTr || {}), tgs = n => (n.tags || []).join(",");
-  const changed = b.nodes.filter(n => { const o = an.get(n.id); return o && (o.text !== n.text || trs(o) !== trs(n) || tgs(o) !== tgs(n) || o.cat !== n.cat || o.status !== n.status || o.notes !== n.notes || (o.sources || []).join("\n") !== (n.sources || []).join("\n")); });
+  const changed = b.nodes.filter(n => { const o = an.get(n.id); return o && (o.text !== n.text || trs(o) !== trs(n) || tgs(o) !== tgs(n) || o.cat !== n.cat || (o.kind || "") !== (n.kind || "") || (o.logic || "") !== (n.logic || "") || o.status !== n.status || o.notes !== n.notes || (o.sources || []).join("\n") !== (n.sources || []).join("\n")); });
   const k = e => e.source + ">" + e.target;
   const ae = new Set(a.edges.map(k)), be = new Set(b.edges.map(k));
   return { added, removed, changed, edgesAdded: b.edges.filter(e => !ae.has(k(e))), edgesRemoved: a.edges.filter(e => !be.has(k(e))), an, bn };
@@ -9622,6 +9742,7 @@ function publishedDoc(o) { // a copy for the public: strips what is only for the
     if (!o.status || r.status === "unassessed") delete r.status;
     if (!Object.keys(r.textTr || {}).length) delete r.textTr;
     if (!(r.tags || []).length) delete r.tags;
+    if (!r.kind) delete r.kind; if (!r.logic) delete r.logic;
     return r;
   });
   d.categories = d.categories.map(c => { const r = { ...c }; if (!o.notes) r.desc = ""; return r; });
@@ -9713,6 +9834,7 @@ function enterViewer(d) {
   let pref = {}; try { pref = JSON.parse(lsGet(LS_VPREF) || "{}"); } catch (e) {}
   const lang = [q.get("lang"), pref.lang, vd.lang].find(l => l && doc.languages.includes(l)); view.lang = lang || null;
   if (pref.tagChips === false) view.tagChips = false;
+  if (pref.gates === false) view.gates = false; if (pref.kinds === true) view.kinds = true;
   view.mode = (q.get("mode") || vd.mode) === "untangle" ? "untangle" : "manual";
   view.split = q.get("split") === "1";
   if (q.get("branch") && nodeById(q.get("branch"))) view.branch = q.get("branch");
@@ -9730,7 +9852,37 @@ function normScale(x) {
   if (max <= min) max = min + 1;
   return { id: String(x.id), name: String(x.name ?? "Scale"), nameTr: trObj(x.nameTr), min, max,
     low: String(x.low || ""), lowTr: trObj(x.lowTr), high: String(x.high || ""), highTr: trObj(x.highTr),
-    gate: x.gate && x.gate.scale ? { scale: String(x.gate.scale), min: Math.round(+x.gate.min || 0) } : null };
+    gate: x.gate && x.gate.scale ? { scale: String(x.gate.scale), min: Math.round(+x.gate.min || 0) } : null,
+    anchors: anchorObj(x.anchors, min, max), anchorsTr: Object.fromEntries(Object.entries(x.anchorsTr && typeof x.anchorsTr === "object" ? x.anchorsTr : {}).map(([l, o]) => [l, anchorObj(o, min, max)]).filter(([, o]) => Object.keys(o).length)),
+    kinds: Array.isArray(x.kinds) ? [...new Set(x.kinds.map(String).filter(k => KINDS[k]))] : [],
+    who: Array.isArray(x.who) ? x.who.filter(w => w && String(w.name || "").trim()).map((w, i) => ({ id: String(w.id || "w" + (i + 1)), name: String(w.name).trim(), nameTr: trObj(w.nameTr) })) : [] };
+}
+function anchorObj(o, min, max) { // value -> what it means, only for values on the scale
+  const r = {}; if (o && typeof o === "object") Object.entries(o).forEach(([k, v]) => { const n = +k; if (Number.isInteger(n) && n >= min && n <= max && typeof v === "string" && v.trim()) r[n] = v.trim(); });
+  return r;
+}
+/* suggested absolute anchors for feasibility: cost, time and whether the means exist, for the actor picked in "who could act" */
+const FEAS_ANCHORS = {
+  en: { 1: "Not possible with any known means: it would need research, new rules, or a change in weather or market.",
+    2: "Possible only with a large investment (new equipment or facility) or a change that takes more than a season.",
+    3: "Possible with a moderate investment or a new procedure; needs training or coordination; within a season.",
+    4: "Possible with the staff and equipment already there, by changing how things are done; a few weeks.",
+    5: "Can start right away at almost no cost: a setting, an instruction, a checklist." },
+  es: { 1: "No es posible con ningún medio conocido: haría falta investigación, nuevas normas o un cambio en el clima o el mercado.",
+    2: "Posible solo con una inversión grande (equipos o instalaciones nuevas) o con un cambio que toma más de una temporada.",
+    3: "Posible con una inversión moderada o un procedimiento nuevo; requiere capacitación o coordinación; dentro de una temporada.",
+    4: "Posible con el personal y los equipos que ya hay, cambiando la forma de hacer las cosas; unas pocas semanas.",
+    5: "Se puede empezar de inmediato y casi sin costo: un ajuste, una instrucción, una lista de chequeo." } };
+const FEAS_WHO = [["Exporter directly", "La exportadora directamente"], ["Through the grower", "A través del productor"], ["Another actor", "Otro actor"], ["No one", "Nadie"]];
+const SCALE_KINDS = { relevance: ["exogenous", "actionable", "barrier", "infogap"], feasibility: ["actionable", "barrier", "infogap"] };
+function suggestFeasibility(s, langs) { // fills anchors, who could act and kinds of a feasibility scale (1–5), in the file's languages
+  const main = langs[0], other = langs.slice(1);
+  s.anchors = { ...(FEAS_ANCHORS[main] || FEAS_ANCHORS.en) };
+  s.anchorsTr = Object.fromEntries(other.filter(l => FEAS_ANCHORS[l]).map(l => [l, { ...FEAS_ANCHORS[l] }]));
+  s.who = FEAS_WHO.map(([en, es], i) => { const w = { id: "w" + (i + 1), name: main === "es" ? es : en, nameTr: {} };
+    other.forEach(l => { if (l === "es") w.nameTr.es = es; if (l === "en") w.nameTr.en = en; }); return w; });
+  s.kinds = SCALE_KINDS.feasibility.slice();
+  return s;
 }
 function normSession(x) {
   const obj = o => (o && typeof o === "object" ? o : {});
@@ -9746,21 +9898,41 @@ function defaultScales(langs) {
     langs.slice(1).forEach(l => { if (l === "es") { s.nameTr.es = es; s.lowTr.es = loEs; s.highTr.es = hiEs; } if (l === "en") { s.nameTr.en = en; s.lowTr.en = lo; s.highTr.en = hi; } });
     return s;
   };
-  return [mk("relevance", "Relevance", "Relevancia", 0, 5, "Not relevant", "No es relevante", "Critical", "Crítico", null),
-    mk("feasibility", "Feasibility", "Factibilidad", 1, 5, "Very hard to act on", "Muy difícil de abordar", "Easy to act on", "Fácil de abordar", { scale: "relevance", min: 3 })];
+  const rel = mk("relevance", "Relevance", "Relevancia", 0, 5, "Not relevant", "No es relevante", "Critical", "Crítico", null);
+  rel.anchors = {}; rel.anchorsTr = {}; rel.who = []; rel.kinds = SCALE_KINDS.relevance.slice();
+  const feas = suggestFeasibility(mk("feasibility", "Feasibility", "Factibilidad", 1, 5, "Very hard to act on", "Muy difícil de abordar", "Easy to act on", "Fácil de abordar", { scale: "relevance", min: 3 }), langs);
+  return [rel, feas];
 }
 const activeSession = () => (doc.activeSession && doc.sessions.find(x => x.id === doc.activeSession)) || null;
 const scaleById = id => doc.scales.find(x => x.id === id);
 const scaleRange = sc => Array.from({ length: sc.max - sc.min + 1 }, (_, i) => sc.min + i);
-function gradeOf(sess, nodeId, scaleId) { const g = sess.grades[nodeId]; return g && g[scaleId] ? g[scaleId].v : null; }
+function gradeOf(sess, nodeId, scaleId) { const g = sess.grades[nodeId] && sess.grades[nodeId][scaleId]; return g && typeof g.v === "number" ? g.v : null; }
+const dkOf = (sess, nodeId, scaleId) => { const g = sess.grades[nodeId] && sess.grades[nodeId][scaleId]; return g && g.dk ? g.dk : null; };
+const whoOf = (sess, nodeId, scaleId) => { const g = sess.grades[nodeId] && sess.grades[nodeId][scaleId]; return g && g.who ? g.who : null; };
+const holdsOf = (sess, nodeId) => { const g = sess.grades[nodeId] && sess.grades[nodeId]._holds; return g ? g.v : null; };
+const DK = { unknown: { en: "I don't know", es: "No sé" }, notmine: { en: "Not my part of the chain", es: "No es mi parte de la cadena" } };
+const HOLDS = { yes: { en: "Yes", es: "Sí" }, no: { en: "No", es: "No" }, dk: { en: "Don't know", es: "No sé" } };
+const word = (o, l = curLang()) => (o && (o[l] || o.en)) || "";
+function scaleApplies(sc, n) { // the kind of a box decides which scales are asked; boxes without a kind get every scale
+  if (!n || !n.kind) return true;
+  return sc.kinds && sc.kinds.length ? sc.kinds.includes(n.kind) : !UNGRADED_KINDS.includes(n.kind);
+}
+const asksHolds = n => !!(n && UNGRADED_KINDS.includes(n.kind) && !doc.scales.some(sc => scaleApplies(sc, n)));
+function anchorText(sc, v, l = curLang()) {
+  if (!sc || v == null) return "";
+  return (l === mainLang() ? (sc.anchors || {})[v] : ((sc.anchorsTr || {})[l] || {})[v]) || (sc.anchors || {})[v] || Object.values(sc.anchorsTr || {}).map(o => o[v]).find(Boolean) || "";
+}
+const hasAnchors = sc => Object.keys(sc.anchors || {}).length > 0 || Object.values(sc.anchorsTr || {}).some(o => Object.keys(o).length);
+const whoName = (sc, id) => { const w = (sc.who || []).find(x => x.id === id); return w ? tx(w, "name") : ""; };
 function gateOpen(sess, nodeId, sc) { if (!sc.gate) return true; const v = gradeOf(sess, nodeId, sc.gate.scale); return v != null && v >= sc.gate.min; }
 function isDiscussed(sess, D, id) { return sess.discussed.includes(id) || (D.idom.has(id) && D.ancestors(id).some(a => sess.discussed.includes(a))); }
 const isGraded = (sess, id) => !!(sess.grades[id] && Object.keys(sess.grades[id]).length);
 const fmtClock = sec => { sec = Math.max(0, Math.round(sec)); const h = Math.floor(sec / 3600), m = Math.floor(sec / 60) % 60, ss = sec % 60; return (h ? h + ":" + String(m).padStart(2, "0") : m) + ":" + String(ss).padStart(2, "0"); };
 function gradeChipLabel(n) {
   const sess = activeSession(); if (!sess) return null;
-  const parts = doc.scales.map(sc => { const v = gradeOf(sess, n.id, sc.id); if (v == null) return null;
-    return (tx(sc, "name")[0] || "?").toUpperCase() + v + (gateOpen(sess, n.id, sc) ? "" : "*"); }).filter(Boolean);
+  const parts = doc.scales.map(sc => { const v = gradeOf(sess, n.id, sc.id), dk = dkOf(sess, n.id, sc.id); if (v == null && !dk) return null;
+    return (tx(sc, "name")[0] || "?").toUpperCase() + (v != null ? v : dk === "notmine" ? "–" : "?") + (gateOpen(sess, n.id, sc) || v == null ? "" : "*"); }).filter(Boolean);
+  const h = holdsOf(sess, n.id); if (h) parts.unshift(h === "yes" ? "✓" : h === "no" ? "✗" : "?");
   if (!parts.length) return null;
   const label = parts.join(" ");
   return { label, w: label.length * 7 + 14 };
@@ -9787,10 +9959,31 @@ function refreshGrades() { // grades change no positions: redraw chips, shading,
   applyGradeVisuals(); applySelection(); applyTagFilter(); renderPanel(); renderGradebar(); updateChrome(true);
 }
 function gradeCommit(fn) { if (!activeSession()) return; pushUndo(snap()); fn(activeSession()); touch(); refreshGrades(); }
-function setGrade(nodeId, scaleId, v) {
+function setGrade(nodeId, scaleId, v) { // a number, or null to clear the whole grade (value, don't know and who)
   gradeCommit(sess => {
     const g = sess.grades[nodeId] = sess.grades[nodeId] || {};
-    if (v == null) delete g[scaleId]; else g[scaleId] = { v, at: nowISO() };
+    if (v == null) delete g[scaleId]; else { const o = g[scaleId] || {}; delete o.dk; g[scaleId] = { ...o, v, at: nowISO() }; }
+    if (!Object.keys(g).length) delete sess.grades[nodeId];
+  });
+}
+function setDontKnow(nodeId, scaleId, reason) { // "unknown" or "notmine"; replaces the value
+  gradeCommit(sess => {
+    const g = sess.grades[nodeId] = sess.grades[nodeId] || {}, o = g[scaleId] || {};
+    delete o.v; g[scaleId] = { ...o, dk: DK[reason] ? reason : "unknown", at: nowISO() };
+  });
+}
+function setWho(nodeId, scaleId, who) {
+  gradeCommit(sess => {
+    const g = sess.grades[nodeId] = sess.grades[nodeId] || {}, o = g[scaleId] || {};
+    if (who) o.who = who; else delete o.who;
+    if (o.v == null && !o.dk && !o.who) delete g[scaleId]; else g[scaleId] = { ...o, at: o.at || nowISO() };
+    if (!Object.keys(g).length) delete sess.grades[nodeId];
+  });
+}
+function setHolds(nodeId, v) {
+  gradeCommit(sess => {
+    const g = sess.grades[nodeId] = sess.grades[nodeId] || {};
+    if (v) g._holds = { v, at: nowISO() }; else delete g._holds;
     if (!Object.keys(g).length) delete sess.grades[nodeId];
   });
 }
@@ -9820,8 +10013,11 @@ function gradeKey(e) {
     e.preventDefault();
     const v = +m[2], sess = activeSession();
     if (v < sc.min || v > sc.max) { toast(t("outOfRange", tx(sc, "name"), sc.min, sc.max)); return true; }
+    if (!scaleApplies(sc, nodeById(selRef))) { toast(t("notAskedKind", kindName(nodeById(selRef).kind), [tx(sc, "name")])); return true; }
     if (!gateOpen(sess, selRef, sc)) { toast(t("gatedNote", tx(scaleById(sc.gate.scale), "name"), sc.gate.min)); return true; }
-    setGrade(selRef, sc.id, v); return true;
+    setGrade(selRef, sc.id, v);
+    const an = anchorText(sc, v); if (an) toast(`${tx(sc, "name")} ${v} · ${an}`, 4500);
+    return true;
   }
   const k = e.key.toLowerCase();
   if (k === "n" || e.key === "ArrowDown") { e.preventDefault(); gradeStep(1); return true; }
@@ -9842,7 +10038,7 @@ function setGrading(on) {
 }
 function renderGradebar() {
   const bar = $("#gradebar"), sess = activeSession();
-  if (!GRADING || !sess) { bar.hidden = true; return; }
+  if (!GRADING || !sess) { bar.hidden = true; renderAnchorPin(); return; }
   const { D } = lastRender, branches = D.top;
   const graded = doc.nodes.filter(n => isGraded(sess, n.id)).length, gradable = doc.nodes.filter(n => !isQ(n)).length;
   const disc = branches.filter(b => isDiscussed(sess, D, b)).length;
@@ -9852,10 +10048,13 @@ function renderGradebar() {
     <span class="gb-sep"></span><span>${t("gradedOf", graded, gradable)}</span>
     <button class="btn small" id="gb-disc">${t("discussedBranches")} ${disc}/${branches.length} ▾</button>
     ${doc.scales[0] ? `<label class="chk"><input type="checkbox" id="gb-shade"${view.shade ? " checked" : ""}> ${esc(t("shadeBy", tx(doc.scales[0], "name")))}</label>` : ""}
+    ${doc.scales.some(hasAnchors) ? `<label class="chk"><input type="checkbox" id="gb-pin"${view.pinAnchors ? " checked" : ""}> ${esc(t("pinAnchors"))}</label>` : ""}
     <button class="btn small primary" id="gb-end">${t("endInterview")}</button>`;
   $("#gb-reset").onclick = () => gradeCommit(x => { x.t0 = nowISO(); }) || toast(t("clockWasReset"));
   $("#gb-disc").onclick = e => { e.stopPropagation(); toggleDiscPop(); };
   $("#gb-shade") && ($("#gb-shade").onchange = e => { view.shade = e.target.checked; saveView(); applyGradeVisuals(); });
+  $("#gb-pin") && ($("#gb-pin").onchange = e => { view.pinAnchors = e.target.checked; saveView(); renderAnchorPin(); });
+  renderAnchorPin();
   $("#gb-end").onclick = openEndInterview;
 }
 setInterval(() => { const el = $("#gb-clock"), sess = GRADING && activeSession(); if (el && sess) el.textContent = fmtClock((Date.now() - Date.parse(sess.t0)) / 1000); }, 1000);
@@ -9899,28 +10098,63 @@ function renderGradePanel() {
   p.innerHTML = `<div class="sec">
       <p class="sel-title">${isQ(n) ? esc(t("open")) : esc(tx(n))}</p>
       ${n.origin ? `<span class="chip">${esc(t("proposedBy", n.origin.session))}</span>` : ""}
-      ${doc.scales.length ? doc.scales.map(sc => {
-        const cur = gradeOf(sess, n.id, sc.id), open = gateOpen(sess, n.id, sc), gs = sc.gate && scaleById(sc.gate.scale);
-        return `<div class="scale" data-scale="${esc(sc.id)}"><div class="sc-head"><b>${esc(tx(sc, "name"))}</b><span class="sc-ends">${sc.min} ${esc(tx(sc, "low"))} · ${sc.max} ${esc(tx(sc, "high"))}</span></div>
-          <div class="sc-btns">${scaleRange(sc).map(v => `<button type="button" data-sv="${v}" aria-pressed="${cur === v}"${open ? "" : " disabled"}>${v}</button>`).join("")}<button type="button" class="sc-clear" data-sclear title="${esc(t("clearGrade"))}" aria-label="${esc(t("clearGrade"))}"${cur == null ? " disabled" : ""}>×</button></div>
-          ${!open && gs ? `<p class="muted small">${esc(t("gatedNote", tx(gs, "name"), sc.gate.min))}</p>` : ""}
-          ${cur != null && !open ? `<p class="ckwarn small">${esc(t("gatedOut"))}</p>` : ""}</div>`; }).join("") : `<p class="muted">${esc(t("noScales"))}</p>`}
+      ${n.kind ? `<p class="muted small kindline"><b>${esc(kindName(n.kind))}</b> · ${esc(curLang() === "es" ? KINDS[n.kind].hintEs : KINDS[n.kind].hint)}</p>` : ""}
+      ${asksHolds(n) ? holdsBlock(sess, n) : ""}
+      ${doc.scales.length ? doc.scales.filter(sc => scaleApplies(sc, n)).map(sc => scaleBlock(sess, n, sc)).join("") : `<p class="muted">${esc(t("noScales"))}</p>`}
+      ${(() => { const skip = doc.scales.filter(sc => !scaleApplies(sc, n)); return skip.length && !asksHolds(n) ? `<p class="muted small">${esc(t("notAskedKind", kindName(n.kind), skip.map(sc => tx(sc, "name"))))}</p>` : ""; })()}
       <label class="field"><span>${esc(t("whyNote"))}</span><textarea id="g-note" rows="3" placeholder="${esc(t("whyPlaceholder"))}">${esc(sess.notes[n.id] || "")}</textarea></label>
       <label class="chk"><input type="checkbox" id="g-disc"${disc ? " checked" : ""}${coverBy ? " disabled" : ""}> ${esc(coverBy ? t("coveredBy", short(tx(nodeById(coverBy)), 40)) : t("everythingBelow", D.sub(n.id).size))}</label>
       <div class="row"><button class="btn small" id="g-prev">← ${esc(t("prev"))}</button><button class="btn small" id="g-next">${esc(t("next"))} →</button><button class="btn small" id="g-add">＋ ${esc(t("addCauseHere"))}</button></div>
       <p class="muted keys">${t("keysHelp", doc.scales.map(sc => tx(sc, "name")))}</p>
     </div>`;
   const ref = n.id;
-  p.querySelectorAll(".scale").forEach(box => {
-    const sc = scaleById(box.dataset.scale);
-    box.querySelectorAll("[data-sv]").forEach(b => b.onclick = () => setGrade(ref, sc.id, +b.dataset.sv));
+  p.querySelectorAll(".scale[data-scale]").forEach(box => {
+    const sc = scaleById(box.dataset.scale), line = box.querySelector(".anchor");
+    const show = v => { if (!line) return; const cur = gradeOf(activeSession(), ref, sc.id), dk = dkOf(activeSession(), ref, sc.id);
+      line.innerHTML = anchorLine(sc, v != null ? v : cur, v == null && dk); };
+    box.querySelectorAll("[data-sv]").forEach(b => { b.onclick = () => setGrade(ref, sc.id, +b.dataset.sv);
+      b.onmouseenter = b.onfocus = () => show(+b.dataset.sv); b.onmouseleave = b.onblur = () => show(null); });
     box.querySelector("[data-sclear]").onclick = () => setGrade(ref, sc.id, null);
+    const q = box.querySelector("[data-sdk]"); if (q) q.onclick = () => box.querySelector(".dkpick").hidden = !box.querySelector(".dkpick").hidden;
+    box.querySelectorAll("[data-dk]").forEach(b => b.onclick = () => setDontKnow(ref, sc.id, b.dataset.dk));
+    box.querySelectorAll("[data-who]").forEach(b => b.onclick = () => setWho(ref, sc.id, whoOf(activeSession(), ref, sc.id) === b.dataset.who ? null : b.dataset.who));
+    const all = box.querySelector("[data-allanc]"); if (all) all.onclick = () => { const l = box.querySelector(".anclist"); l.hidden = !l.hidden; all.textContent = t(l.hidden ? "seeAnchors" : "hideAnchors"); };
   });
+  p.querySelectorAll("[data-holds]").forEach(b => b.onclick = () => setHolds(ref, holdsOf(activeSession(), ref) === b.dataset.holds ? null : b.dataset.holds));
   let noteTimer = null;
   $("#g-note").addEventListener("input", e => { clearTimeout(noteTimer); const v = e.target.value; noteTimer = setTimeout(() => {
     const s2 = activeSession(); if (!s2) return; if (v.trim()) s2.notes[ref] = v; else delete s2.notes[ref]; touch(); }, 400); });
   $("#g-disc").onchange = () => toggleDiscussed(ref);
   $("#g-prev").onclick = () => gradeStep(-1); $("#g-next").onclick = () => gradeStep(1); $("#g-add").onclick = quickAdd;
+}
+
+function anchorLine(sc, v, dk) {
+  if (dk) return `<b>?</b> ${esc(word(DK[dk]))}`;
+  if (v == null) return `<span class="muted">${esc(t("hoverAnchor"))}</span>`;
+  const a = anchorText(sc, v); return a ? `<b>${v}</b> ${esc(a)}` : `<span class="muted">${v}</span>`;
+}
+function scaleBlock(sess, n, sc) { // one scale in the grading panel: who could act, the values, don't know, the anchor of the value
+  const cur = gradeOf(sess, n.id, sc.id), dk = dkOf(sess, n.id, sc.id), who = whoOf(sess, n.id, sc.id);
+  const open = gateOpen(sess, n.id, sc), gs = sc.gate && scaleById(sc.gate.scale), anc = hasAnchors(sc);
+  return `<div class="scale" data-scale="${esc(sc.id)}"><div class="sc-head"><b>${esc(tx(sc, "name"))}</b><span class="sc-ends">${sc.min} ${esc(tx(sc, "low"))} · ${sc.max} ${esc(tx(sc, "high"))}</span></div>
+    ${sc.who.length ? `<div class="sc-who"><span class="muted small">${esc(t("whoAct"))}</span><div class="seg small wrap">${sc.who.map(w => `<button type="button" data-who="${esc(w.id)}" aria-pressed="${who === w.id}"${open ? "" : " disabled"}>${esc(tx(w, "name"))}</button>`).join("")}</div></div>` : ""}
+    <div class="sc-btns">${scaleRange(sc).map(v => `<button type="button" data-sv="${v}" aria-pressed="${cur === v}"${open ? "" : " disabled"}${anc ? ` title="${esc(anchorText(sc, v))}"` : ""}>${v}</button>`).join("")}<button type="button" class="sc-dk" data-sdk aria-pressed="${!!dk}" title="${esc(t("dkTip"))}" aria-label="${esc(t("dkTip"))}"${open ? "" : " disabled"}>?</button><button type="button" class="sc-clear" data-sclear title="${esc(t("clearGrade"))}" aria-label="${esc(t("clearGrade"))}"${cur == null && !dk && !who ? " disabled" : ""}>×</button></div>
+    <div class="dkpick seg small" ${dk ? "" : "hidden"}>${Object.keys(DK).map(k => `<button type="button" data-dk="${k}" aria-pressed="${dk === k}">${esc(word(DK[k]))}</button>`).join("")}</div>
+    ${anc ? `<p class="anchor">${anchorLine(sc, cur, dk)}</p><button type="button" class="linkbtn small" data-allanc>${esc(t("seeAnchors"))}</button>
+      <ol class="anclist" hidden>${scaleRange(sc).filter(v => anchorText(sc, v)).map(v => `<li value="${v}">${esc(anchorText(sc, v))}</li>`).join("")}</ol>` : ""}
+    ${!open && gs ? `<p class="muted small">${esc(t("gatedNote", tx(gs, "name"), sc.gate.min))}</p>` : ""}
+    ${(cur != null || dk) && !open ? `<p class="ckwarn small">${esc(t("gatedOut"))}</p>` : ""}</div>`;
+}
+function holdsBlock(sess, n) {
+  const h = holdsOf(sess, n.id);
+  return `<div class="scale holds"><div class="sc-head"><b>${esc(t("holdsQ"))}</b></div>
+    <div class="seg small">${Object.keys(HOLDS).map(k => `<button type="button" data-holds="${k}" aria-pressed="${h === k}">${esc(word(HOLDS[k]))}</button>`).join("")}</div></div>`;
+}
+function renderAnchorPin() { // the anchors of every scale, pinned on the canvas so a screen-shared interviewee can read them
+  const box = $("#anchorpin"); if (!box) return;
+  const scs = GRADING && view.pinAnchors && activeSession() ? doc.scales.filter(hasAnchors) : [];
+  box.hidden = !scs.length; if (!scs.length) { box.innerHTML = ""; return; }
+  box.innerHTML = scs.map(sc => `<div><b>${esc(tx(sc, "name"))}</b>${sc.who.length ? `<p class="muted small">${esc(t("whoFirst"))}</p>` : ""}<ol>${scaleRange(sc).filter(v => anchorText(sc, v)).map(v => `<li value="${v}">${esc(anchorText(sc, v))}</li>`).join("")}</ol></div>`).join("");
 }
 
 /* starting, resuming and ending an interview */
@@ -10002,25 +10236,49 @@ function drawScales() {
     <div class="srow"><span class="lab lab-max">${sc.max} means</span><input type="text" data-i="${i}" data-f="high" value="${esc(sc.high)}" placeholder="e.g. Critical">${trs(sc, "high", i, "Meaning of the highest value")}</div>
     <div class="srow"><span class="lab">Ask it</span><select data-i="${i}" data-f="gate"><option value="">always</option>${scaleDraft.filter(o => o.id !== sc.id).map(o => `<option value="${esc(o.id)}"${sc.gate && sc.gate.scale === o.id ? " selected" : ""}>only when ${esc(o.name)} is at least</option>`).join("")}</select>
       ${sc.gate ? `<input type="number" class="gmin" data-i="${i}" data-f="gmin" value="${sc.gate.min}" step="1" aria-label="Threshold">` : ""}</div>
+    <div class="srow kinds"><span class="lab">For boxes of kind</span>${Object.entries(KINDS).map(([k, x]) => `<label class="chk"><input type="checkbox" data-i="${i}" data-f="kind" value="${k}"${(sc.kinds || []).includes(k) ? " checked" : ""}> ${esc(x.name)}</label>`).join("")}
+      <span class="muted small">None ticked: every kind except mechanisms and constraints. Boxes without a kind always get it.</span></div>
+    <details class="srow-d"${Object.keys(sc.anchors || {}).length ? "" : ""}><summary>What each value means (anchors) · ${Object.keys(sc.anchors || {}).length} of ${sc.max - sc.min + 1}</summary>
+      ${Array.from({ length: Math.max(0, sc.max - sc.min + 1) }, (_, k) => sc.min + k).map(v => `<div class="srow"><span class="lab">${v}</span><input type="text" data-i="${i}" data-f="anchor" data-v="${v}" value="${esc((sc.anchors || {})[v] || "")}" placeholder="What ${v} means">${L.slice(1).map(l => `<label class="trin"><b>${esc(l.toUpperCase())}</b><input type="text" data-i="${i}" data-f="anchor" data-v="${v}" data-trl="${esc(l)}" value="${esc(((sc.anchorsTr || {})[l] || {})[v] || "")}"></label>`).join("")}</div>`).join("")}
+    </details>
+    <details class="srow-d"><summary>Ask first who could act on it · ${(sc.who || []).length ? (sc.who || []).length + " options" : "not asked"}</summary>
+      <div class="srow"><textarea data-i="${i}" data-f="who" rows="4" placeholder="One option per line, e.g. Exporter directly">${esc((sc.who || []).map(w => w.name).join("\n"))}</textarea>${L.slice(1).map(l => `<label class="trin"><b>${esc(l.toUpperCase())}</b><textarea data-i="${i}" data-f="who" data-trl="${esc(l)}" rows="4">${esc((sc.who || []).map(w => (w.nameTr || {})[l] || "").join("\n"))}</textarea></label>`).join("")}</div>
+    </details>
+    ${sc.max - sc.min === 4 ? `<div class="srow"><button type="button" class="btn small" data-ssug="${i}">Use the suggested feasibility setup</button><span class="muted small">Anchors on cost, time and whether the means exist, who could act, and actionable, barrier and information-gap boxes only.</span></div>` : ""}
   </div>`).join("");
 }
 $("#scale-rows").addEventListener("input", e => {
   const el = e.target, i = +el.dataset.i, f = el.dataset.f; if (!f) return; const sc = scaleDraft[i];
+  if (f === "anchor") { const v = el.dataset.v, l = el.dataset.trl;
+    if (l) { sc.anchorsTr = sc.anchorsTr || {}; sc.anchorsTr[l] = sc.anchorsTr[l] || {}; sc.anchorsTr[l][v] = el.value.trim(); } else { sc.anchors = sc.anchors || {}; sc.anchors[v] = el.value.trim(); }
+    return; }
+  if (f === "who") { const lines = el.value.split("\n").map(x => x.trim()), l = el.dataset.trl; sc.who = sc.who || [];
+    if (l) lines.forEach((x, k) => { if (sc.who[k]) { sc.who[k].nameTr = sc.who[k].nameTr || {}; if (x) sc.who[k].nameTr[l] = x; else delete sc.who[k].nameTr[l]; } });
+    else { const old = sc.who; sc.who = lines.filter(Boolean).map((x, k) => ({ id: "w" + (k + 1), name: x, nameTr: (old[k] || {}).nameTr || {} })); }
+    return; }
+  if (f === "kind") return;
   if (el.dataset.trl) { sc[f + "Tr"] = sc[f + "Tr"] || {}; sc[f + "Tr"][el.dataset.trl] = el.value.trim(); return; }
   if (f === "min" || f === "max") { sc[f] = Math.round(+el.value); const card = el.closest(".scard"); card.querySelector(".lab-" + f).textContent = `${sc[f]} means`; return; }
   if (f === "gmin") { if (sc.gate) sc.gate.min = Math.round(+el.value); return; }
   if (f !== "gate") sc[f] = el.value;
 });
 $("#scale-rows").addEventListener("change", e => {
-  const el = e.target; if (el.dataset.f === "gate") { const sc = scaleDraft[+el.dataset.i]; const o = scaleDraft.find(x => x.id === el.value);
+  const el = e.target;
+  if (el.dataset.f === "kind") { const sc = scaleDraft[+el.dataset.i]; sc.kinds = [...el.closest(".kinds").querySelectorAll("input:checked")].map(x => x.value); return; }
+  if (el.dataset.f === "gate") { const sc = scaleDraft[+el.dataset.i]; const o = scaleDraft.find(x => x.id === el.value);
     sc.gate = el.value ? { scale: el.value, min: sc.gate ? sc.gate.min : Math.ceil((o.min + o.max) / 2) } : null; drawScales(); }
 });
 $("#scale-rows").addEventListener("click", e => {
   const b = e.target.closest("button"); if (!b) return;
   if (b.dataset.sdel !== undefined) { const i = +b.dataset.sdel, id = scaleDraft[i].id; scaleDraft.splice(i, 1); scaleDraft.forEach(x => { if (x.gate && x.gate.scale === id) x.gate = null; }); drawScales(); }
+  if (b.dataset.ssug !== undefined) { const sc = scaleDraft[+b.dataset.ssug]; const keep = { min: sc.min, max: sc.max };
+    if (Object.keys(sc.anchors || {}).length && !confirm("Replace this scale's anchors and who-could-act options with the suggested ones?")) return;
+    suggestFeasibility(sc, doc.languages); if (keep.min !== 1) { const sh = keep.min - 1; const mv = o => Object.fromEntries(Object.entries(o).map(([k, v]) => [+k + sh, v]));
+      sc.anchors = mv(sc.anchors); Object.keys(sc.anchorsTr).forEach(l => sc.anchorsTr[l] = mv(sc.anchorsTr[l])); }
+    drawScales(); return; }
   if (b.dataset.sup !== undefined) { const i = +b.dataset.sup; [scaleDraft[i - 1], scaleDraft[i]] = [scaleDraft[i], scaleDraft[i - 1]]; drawScales(); }
 });
-$("#scale-add").onclick = () => { scaleDraft.push({ id: uid("s"), name: "", nameTr: {}, min: 1, max: 5, low: "", lowTr: {}, high: "", highTr: {}, gate: null }); drawScales(); };
+$("#scale-add").onclick = () => { scaleDraft.push({ id: uid("s"), name: "", nameTr: {}, min: 1, max: 5, low: "", lowTr: {}, high: "", highTr: {}, gate: null, anchors: {}, anchorsTr: {}, kinds: [], who: [] }); drawScales(); };
 $("#scale-save").onclick = () => {
   for (const sc of scaleDraft) {
     if (!sc.name.trim()) return toast("Every scale needs a name.");
@@ -10045,14 +10303,19 @@ function interviewRows(d) {
         const graded = isGraded(sess, n.id), disc = graded || isDiscussed(sess, D, n.id), br = branchOf(D, n.id);
         const r = { interview: sess.code, role: sess.role, date: sess.startedAt.slice(0, 10), interview_language: sess.lang, box_id: n.id };
         d.languages.forEach(l => (r["text_" + l] = txRaw(n, "text", l)));
-        Object.assign(r, { category: catById(n.cat).name, tags: orderedTags(n.tags || []).map(x => x.name).join(" | "),
+        Object.assign(r, { category: catById(n.cat).name, kind: n.kind ? KINDS[n.kind].name : "", causes_combine: n.logic ? LOGIC[n.logic].name : "", tags: orderedTags(n.tags || []).map(x => x.name).join(" | "),
           branch: br ? (nodeById(br) || {}).text || "" : "(trunk)", level: A.depth.get(n.id) || "",
           in_diagram_at_start: shown ? "yes" : "no", added_in_interview: added ? "yes" : "no", branch_discussed: disc ? "yes" : "no" });
+        const h = sess.grades[n.id] && sess.grades[n.id]._holds;
+        r.holds = h ? HOLDS[h.v].en.toLowerCase() : asksHolds(n) ? "" : "not asked";
         d.scales.forEach(sc => {
-          const g = sess.grades[n.id] && sess.grades[n.id][sc.id], open = gateOpen(sess, n.id, sc);
-          r[sc.id] = g ? g.v : "";
-          r[sc.id + "_state"] = g ? (open ? "graded" : "gated out") : (!shown && !added) ? "not in diagram" : !disc ? "not discussed" : (sc.gate && !open) ? "gated out" : "not graded (branch discussed)";
-          r[sc.id + "_minute"] = g ? fmtClock((Date.parse(g.at) - Date.parse(sess.t0)) / 1000) : "";
+          const g = sess.grades[n.id] && sess.grades[n.id][sc.id], open = gateOpen(sess, n.id, sc), asked = scaleApplies(sc, n);
+          const has = g && (typeof g.v === "number" || g.dk);
+          r[sc.id] = g && typeof g.v === "number" ? g.v : "";
+          r[sc.id + "_state"] = !asked ? `not asked (${KINDS[n.kind].name.toLowerCase()})` : has ? (g.dk ? (g.dk === "notmine" ? "not my part of the chain" : "don't know") : open ? "graded" : "gated out")
+            : (!shown && !added) ? "not in diagram" : !disc ? "not discussed" : (sc.gate && !open) ? "gated out" : "not graded (branch discussed)";
+          r[sc.id + "_who"] = g && g.who ? (sc.who.find(w => w.id === g.who) || { name: g.who }).name : "";
+          r[sc.id + "_minute"] = g && g.at ? fmtClock((Date.parse(g.at) - Date.parse(sess.t0)) / 1000) : "";
         });
         r.note = sess.notes[n.id] || "";
         r.interview_memo = sess.memo || "";
@@ -10065,9 +10328,9 @@ function interviewRows(d) {
 function rowsToCSV(parts) {
   const langs = [...new Set(parts.flatMap(p => p.langs))];
   const scales = []; parts.forEach(p => p.scales.forEach(sc => { if (!scales.some(x => x.id === sc.id)) scales.push(sc); }));
-  const cols = ["interview", "role", "date", "interview_language", "box_id", ...langs.map(l => "text_" + l), "category", "tags", "branch", "level",
-    "in_diagram_at_start", "added_in_interview", "branch_discussed", ...scales.flatMap(sc => [sc.id, sc.id + "_state", sc.id + "_minute"]), "note", "interview_memo"];
-  const head = cols.map(c => { const sc = scales.find(x => x.id === c || x.id + "_state" === c || x.id + "_minute" === c);
+  const cols = ["interview", "role", "date", "interview_language", "box_id", ...langs.map(l => "text_" + l), "category", "kind", "causes_combine", "tags", "branch", "level",
+    "in_diagram_at_start", "added_in_interview", "branch_discussed", "holds", ...scales.flatMap(sc => [sc.id, sc.id + "_state", ...(sc.who && sc.who.length ? [sc.id + "_who"] : []), sc.id + "_minute"]), "note", "interview_memo"];
+  const head = cols.map(c => { const sc = scales.find(x => x.id === c || x.id + "_state" === c || x.id + "_who" === c || x.id + "_minute" === c);
     return sc ? c.replace(sc.id, slug(sc.name).toLowerCase() || sc.id) : c; });
   const lines = [head, ...parts.flatMap(p => p.rows).map(r => cols.map(c => r[c] ?? ""))];
   return "﻿" + lines.map(r => r.map(csvCell).join(",")).join("\r\n") + "\r\n";
@@ -10231,7 +10494,7 @@ function initCy() {
     else openNew();
   }
   window.__rca = { parseBib, setBib, get doc() { return doc; }, render, cy: () => cy, view, analyze, exportSVG, commit, nodeById, lastRender: () => lastRender,
-    publishedDoc, encodeShare, decodeShare, setGrade, activeSession, interviewRows, rowsToCSV, setGrading, toggleDiscussed, gradeStep, makeMainLang, translatePass, normalizeDoc, loadText, get VIEWER() { return VIEWER; } };
+    publishedDoc, encodeShare, decodeShare, setGrade, setDontKnow, setWho, setHolds, defaultScales, normScale, activeSession, interviewRows, rowsToCSV, setGrading, toggleDiscussed, gradeStep, makeMainLang, translatePass, normalizeDoc, loadText, get VIEWER() { return VIEWER; } };
 })();
 
 </script>

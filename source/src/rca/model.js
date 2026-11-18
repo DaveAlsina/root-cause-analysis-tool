@@ -5,7 +5,7 @@ function emptyDoc() {
     meta: { created: nowISO(), modified: nowISO() } };
 }
 function newNode(text, cat, x, y) {
-  return { id: uid("n"), text, textTr: {}, cat, tags: [], status: "unassessed", notes: "", sources: [], x: Math.round(x), y: Math.round(y) };
+  return { id: uid("n"), text, textTr: {}, cat, kind: "", logic: "", tags: [], status: "unassessed", notes: "", sources: [], x: Math.round(x), y: Math.round(y) };
 }
 function coreOf(d) { return { title: d.title, titleTr: d.titleTr, languages: d.languages, categories: d.categories, tagGroups: d.tagGroups, tags: d.tags, scales: d.scales, nodes: d.nodes, edges: d.edges }; }
 
@@ -36,6 +36,7 @@ function normalizeDoc(d) {
     const id = String(n.id); ids.add(id);
     if (!Number.isFinite(n.x) || !Number.isFinite(n.y)) missingPos = true;
     const r = { id, text: String(n.text ?? n.label ?? ""), textTr: trObj(n.textTr), cat: catIds.has(n.cat) ? n.cat : out.categories[0].id,
+      kind: KINDS[n.kind] ? n.kind : "", logic: LOGIC[n.logic] ? n.logic : "",
       tags: Array.isArray(n.tags) ? n.tags.map(String).filter(t => tagIds.has(t)) : [],
       status: STATUSES[n.status] ? n.status : "unassessed", notes: String(n.notes || ""),
       sources: Array.isArray(n.sources) ? n.sources.map(String) : [], x: Math.round(+n.x || 0), y: Math.round(+n.y || 0) };
