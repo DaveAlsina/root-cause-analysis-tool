@@ -44,6 +44,20 @@ function sampleDoc() { // a small worked example, so a first visit has something
   V.systemBoundary = b1.id; g.ref = grower.id; i.ref = importer.id; w.ref = weather.id;
   a.actsOn = [P(fruit)]; s.actsOn = [P(fruit)]; m.actsOn = [P(calyx)]; c.actsOn = [P(fruit)]; r.actsOn = [P(cold)]; m.key = c.key = true;
   V.flows.find(l => l.text === "inoculum").element = conidia.id;
+  // the goals inside that boundary, scored by the analyst and one exporter
+  const Gs = d.goals; Gs.root = { text: "Improve export revenues of uchuva while reducing Botrytis cinerea incidence", textTr: {} };
+  const you = Gs.stakeholders[0], exp = { id: uid("sh"), name: "Exporter A", note: "Interview, packhouse manager" }; Gs.stakeholders.push(exp);
+  const T = newGoalTree(b1.id); Gs.trees = [T]; Gs.active = T.id;
+  const GL = (text, parent, mine, theirs, measure = "") => { const g = newGoal(text); g.measure = measure; Gs.catalogue.push(g);
+    T.nodes.push({ goal: g.id, parent: parent ? parent.id : null, out: false, scores: { [you.id]: mine, [exp.id]: theirs } }); return g; };
+  const q = GL("Higher quality of fruit", null, 5, 5), rip = GL("Good assessment of ripeness", q, 3, 4, "% of lots graded to the right colour class"),
+    inf = GL("Low infection rate", q, 5, 5, "% of fruit with Botrytis on arrival"), shelf = GL("Longer shelf life", q, 4, 5);
+  const decay = GL("Less decay after arrival", shelf, 5, 4, "% decayed fruit at day 21 after arrival"), green = GL("Calyx stays green and dry", shelf, 3, 2, "% of calyces dry and green at arrival"),
+    firm = GL("Fruit stays firm", shelf, 2, 3, "Firmness at arrival, N");
+  firm.notes = "Not served by any function yet: the goals checks list it";
+  const und = GL("Better understanding of the problem", null, 3, 2), cov = GL("Wider coverage of measurements", und, 4, 3);
+  const rh = GL("Humidity known along the chain", cov, 5, 3, "% of shipments with RH logged"), temp = GL("Temperature known along the chain", cov, 4, 5, "% of shipments with temperature logged");
+  a.serves = [rip.id]; s.serves = [inf.id]; m.serves = [decay.id, green.id]; c.serves = [decay.id]; r.serves = [rh.id, temp.id];
   d.variants = [V]; d.activeVariant = V.id; d.versions = [mkVersion(d, "Example", "")];
   return d;
 }
@@ -98,6 +112,10 @@ function exportSVG() {
   });
   cy.nodes().filter(n => n.visible() && !n.isParent()).forEach(n => {
     const d = n.data(), p = n.position();
+    if (n.hasClass("relb")) {
+      out.push(`<rect x="${X(p.x - d.w / 2)}" y="${Y(p.y - 10.5)}" width="${d.w}" height="21" rx="10" fill="#E2F3EA" stroke="#3E9A78" stroke-width="1"/><text x="${X(p.x)}" y="${Y(p.y)}" font-size="10.5" font-weight="600" fill="${ink}" text-anchor="middle" dominant-baseline="central">${esc(d.label)}</text>`);
+      return;
+    }
     if (n.hasClass("badge")) {
       out.push(`<rect x="${X(p.x - d.w / 2)}" y="${Y(p.y - 10.5)}" width="${d.w}" height="21" rx="10" fill="#ffffff" stroke="#5f6e68" stroke-width="1"/>`);
       out.push(`<text x="${X(p.x)}" y="${Y(p.y)}" font-size="13" font-family="Apple Color Emoji, Segoe UI Emoji, Noto Color Emoji, sans-serif" text-anchor="middle" dominant-baseline="central">${esc(d.label)}</text>`);
@@ -112,15 +130,16 @@ function exportSVG() {
   return { svg: out.join("\n"), W, H };
 }
 function exportPNG() {
-  const { svg, W, H } = view.mode === "system" ? exportSystemSVG() : exportSVG(); const img = new Image(); const s = 2;
+  const { svg, W, H } = view.mode === "system" ? exportSystemSVG() : view.mode === "goals" ? exportGoalsSVG() : exportSVG(); const img = new Image(); const s = 2;
   img.onload = () => {
     const c = document.createElement("canvas"); c.width = W * s; c.height = H * s;
     const g = c.getContext("2d"); g.scale(s, s); g.drawImage(img, 0, 0);
-    c.toBlob(b => { download(`${baseName()}-${view.mode === "system" ? "system" : variantSlug()}.png`, b); toast("PNG exported."); }, "image/png");
+    c.toBlob(b => { download(`${baseName()}-${view.mode === "system" ? "system" : view.mode === "goals" ? "goals-" + slug(treeName(curTree()) || "tree").toLowerCase() : variantSlug()}.png`, b); toast("PNG exported."); }, "image/png");
   };
   img.onerror = () => toast("PNG export failed in this browser. Use SVG instead.");
   img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
 }
+const relCell = (f, T, R) => { if (!T) return ""; const r = fnRelevance(f, T, R).rel; return r == null ? "" : +r.toFixed(4); };
 const csvCell = v => { const s = String(v ?? ""); return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s; };
 const toCSV = rows => "﻿" + rows.map(r => r.map(csvCell).join(",")).join("\n") + "\n";
 function exportCSV(which) {
@@ -130,20 +149,24 @@ function exportCSV(which) {
   let rows, name;
   if (which === "functions") { // the whole catalogue, with where each function sits in the open variant
     name = `${baseName()}-functions.csv`;
-    rows = [["id", ...L.map(l => "text_" + l), "kind", "level_in_open_variant", "parent_in_open_variant", "variants", "key", "acts_on", "tags", "rca_causes", "verb_ok", "notes", "sources"],
+    const GT = treeForVariant(V), GR = GT ? goalResults(GT) : null;
+    rows = [["id", ...L.map(l => "text_" + l), "kind", "level_in_open_variant", "parent_in_open_variant", "variants", "key", `${GOAL_METHODS[doc.goals.method].short}_in_open_variant`, "serves_goals", "acts_on", "tags", "rca_causes", "verb_ok", "notes", "sources"],
       ...doc.functions.map(f => [f.id, ...L.map(l => txRaw(f, "text", l)), f.kind === "aux" ? "auxiliary" : "main", inVariant(f.id) ? depthOf(f.id, V) : "",
-        inVariant(f.id) && f.id !== V.root ? tx(fnById(parentOf(f.id, V))) : "", usedIn(f.id).map(v => tx(v, "name")).join(" | "), f.key ? "yes" : "no", (f.actsOn || []).map(id => apLabel(id, true)).join(" | "), tagNames(f),
+        inVariant(f.id) && f.id !== V.root ? tx(fnById(parentOf(f.id, V))) : "", usedIn(f.id).map(v => tx(v, "name")).join(" | "), f.key ? "yes" : "no", relCell(f, GT, GR), (f.serves || []).map(goalLabel).join(" | "), (f.actsOn || []).map(id => apLabel(id, true)).join(" | "), tagNames(f),
         (f.rcaLinks || []).map(rcaText).join(" | "), verbOK(f) ? "yes" : "no", f.notes, f.sources.join(" | ")])];
   } else if (which === "flows") {
     name = `${baseName()}-${variantSlug()}-flows.csv`;
     rows = [["id", "from", "to", "type", ...L.map(l => "text_" + l), "unwanted", "crosses_boundary", "tags", "notes", "sources"],
       ...V.flows.map(l => [l.id, tx(nodeOf(l.source)), tx(nodeOf(l.target)), tx(typeById(l.type), "name"), ...L.map(x => txRaw(l, "text", x)), l.unwanted ? "yes" : "no",
         S.inputs.includes(l) ? "in" : S.outputs.includes(l) ? "out" : S.outside.includes(l) ? "outside" : "no", tagNames(l), l.notes, l.sources.join(" | ")])];
-  } else { // morphological chart starter: one row per leaf function, columns to fill with means
+  } else { // morphological chart starter: one row per leaf function, columns to fill with means; most relevant first when there are goals
     name = `${baseName()}-${variantSlug()}-morphological-chart.csv`;
-    const leaves = Object.keys(V.placed).filter(id => !childrenOf(id, V).length).sort((a, b) => V.placed[a].x - V.placed[b].x || V.placed[a].y - V.placed[b].y);
-    rows = [["function", "level", "kind", "parent", "means_1", "means_2", "means_3", "means_4", "means_5"],
-      ...leaves.map(id => { const f = fnById(id); return [tx(f), depthOf(id, V), f.kind === "aux" ? "auxiliary" : "main", tx(fnById(parentOf(id, V))), "", "", "", "", ""]; })];
+    const GT = treeForVariant(V), GR = GT ? goalResults(GT) : null, rel = id => GT ? fnRelevance(fnById(id), GT, GR).rel : null;
+    const leaves = Object.keys(V.placed).filter(id => !childrenOf(id, V).length)
+      .sort((a, b) => (rel(b) ?? -1) - (rel(a) ?? -1) || (fnById(b).key - fnById(a).key) || V.placed[a].x - V.placed[b].x || V.placed[a].y - V.placed[b].y);
+    rows = [["function", "key", ...(GT ? [GOAL_METHODS[doc.goals.method].short, "serves_goals"] : []), "level", "kind", "parent", "means_1", "means_2", "means_3", "means_4", "means_5"],
+      ...leaves.map(id => { const f = fnById(id); return [tx(f), f.key ? "★" : "", ...(GT ? [relCell(f, GT, GR), fnRelevance(f, GT, GR).goals.map(goalLabel).join(" | ")] : []),
+        depthOf(id, V), f.kind === "aux" ? "auxiliary" : "main", tx(fnById(parentOf(id, V))), "", "", "", "", ""]; })];
   }
   download(name, toCSV(rows), "text/csv"); toast(`${name} exported.`);
 }
@@ -152,7 +175,7 @@ function exportCSV(which) {
 function diffCores(a, b) { // a = old snapshot, b = new
   const an = new Map(a.functions.map(f => [f.id, f])), bn = new Map(b.functions.map(f => [f.id, f]));
   const added = b.functions.filter(f => !an.has(f.id)), removed = a.functions.filter(f => !bn.has(f.id));
-  const key = f => JSON.stringify([f.text, f.textTr, f.kind, f.key, f.actsOn, f.notes, f.sources, f.tags, f.rcaLinks]);
+  const key = f => JSON.stringify([f.text, f.textTr, f.kind, f.key, f.actsOn, f.serves, f.notes, f.sources, f.tags, f.rcaLinks]);
   const changed = b.functions.filter(f => an.has(f.id) && key(an.get(f.id)) !== key(f));
   const flows = s => new Map(s.variants.flatMap(v => v.flows.map(l => [l.id, { ...l, variant: v.name }])));
   const af = flows(a), bf = flows(b);
@@ -164,7 +187,7 @@ function diffCores(a, b) { // a = old snapshot, b = new
     restructured: b.variants.filter(v => ap.has(v.id) && ap.get(v.id) !== bp.get(v.id)) };
 }
 const chgLine = d => `<span class="chg"><span class="p">+${d.added.length}</span> / <span class="m">−${d.removed.length}</span> functions · <span class="c">${d.changed.length} edited</span> · flows <span class="p">+${d.flowsAdded.length}</span> / <span class="m">−${d.flowsRemoved.length}</span>${d.variantsAdded.length || d.variantsRemoved.length ? ` · variants <span class="p">+${d.variantsAdded.length}</span> / <span class="m">−${d.variantsRemoved.length}</span>` : ""}</span>${d.elAdded || d.elRemoved ? ` · elements <span class="p">+${d.elAdded}</span> / <span class="m">−${d.elRemoved}</span>` : ""}`;
-function versionSize(s) { return `${((s.system || {}).elements || []).length} elements, ${s.functions.length} functions, ${s.variants.length} variant${s.variants.length === 1 ? "" : "s"}`; }
+function versionSize(s) { return `${((s.system || {}).elements || []).length} elements, ${((s.goals || {}).catalogue || []).length} goals, ${s.functions.length} functions, ${s.variants.length} variant${s.variants.length === 1 ? "" : "s"}`; }
 function versionCompare(v, d, box) {
   const li = arr => arr.length ? `<ul>${arr.slice(0, 40).map(x => `<li>${esc(x)}</li>`).join("")}${arr.length > 40 ? `<li>…and ${arr.length - 40} more</li>` : ""}</ul>` : `<p class="muted">None.</p>`;
   const fn = (m, id) => tx(m.get(id) || {}) || "an external";

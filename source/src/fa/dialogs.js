@@ -3,7 +3,7 @@ function openNew() {
   if (dirty && !confirm("You have unsaved changes. Start a new function analysis anyway?")) return;
   $("#new-main").innerHTML = Object.keys(LANG_NAMES).map(l => `<option value="${l}">${esc(langName(l))}</option>`).join("");
   $("#new-main").value = "en"; drawNewExtra();
-  ["#new-title", "#new-variant", "#new-root", "#new-boundary"].forEach(s => ($(s).value = ""));
+  ["#new-title", "#new-variant", "#new-root", "#new-boundary", "#new-goal"].forEach(s => ($(s).value = ""));
   $("#m-new").hidden = false; $("#new-title").focus();
 }
 function drawNewExtra() {
@@ -26,6 +26,7 @@ $("#new-form").onsubmit = e => {
   V.boundary = $("#new-boundary").value.trim();
   d.functions = [root]; d.variants = [V]; d.activeVariant = V.id;
   d.system = defaultSystem(langs);
+  d.goals.root.text = $("#new-goal").value.trim();
   d.versions = [mkVersion(d, "Started", "")];
   $("#m-new").hidden = true;
   setDoc(d, "function-analysis.json", null); view.lang = null; view.depth = "all";

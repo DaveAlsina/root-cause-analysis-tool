@@ -26,7 +26,7 @@ def fresh(b, base, langs=("en",)):
 def build_nested(p):
     """root > f1, f2 > (f21, f22); grower -> f1 -> f21 -> f22 -> importer"""
     return p.js("""() => { const A = window.__fa, V = A.curVar(), d = A.doc;
-      const mk = (t, parent, x, y) => { const f = { id: 'f' + t.replace(/\\W/g, ''), text: t, textTr: {}, kind: 'main', key: false, actsOn: [], notes: '', sources: [], tags: [], rcaLinks: [] };
+      const mk = (t, parent, x, y) => { const f = { id: 'f' + t.replace(/\\W/g, ''), text: t, textTr: {}, kind: 'main', key: false, actsOn: [], serves: [], notes: '', sources: [], tags: [], rcaLinks: [] };
         d.functions.push(f); V.placed[f.id] = { x, y, parent }; return f.id; };
       let ids;
       return A.commit(() => {

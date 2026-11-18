@@ -59,6 +59,7 @@ function renderPanel() {
   const p = $("#panel");
   if (!doc || !lastRender) return;
   if (view.mode === "system") return sysPanel(p);
+  if (view.mode === "goals") return goalsPanel(p);
   const V = curVar();
   if (selFlow && flowById(selFlow)) return flowPanel(p, flowById(selFlow));
   if (multi.length > 1) {
@@ -92,6 +93,7 @@ function overviewPanel(p, V) {
       ${textFields(V, "inside", "Inside the system", 2, false, "what the design may change")}
       ${textFields(V, "outside", "Outside the system", 2, false, "what it must take as given")}</div>
     ${systemSection(V)}
+    ${goalsSection(V)}
     <div class="sec"><h2>Method · ${steps.filter(s => s.status === "done").length}/${steps.length}</h2>
       <ol class="steps">${steps.map((s, i) => `<li class="step ${s.status}">
         <div class="st-head"><span class="st-ico" aria-hidden="true">${ico[s.status]}</span><b>${i + 1}. ${esc(s.name)}</b>
@@ -133,7 +135,8 @@ function fnPanel(p, f) {
       ${isRoot ? `<p class="kicker">Overall function · the system boundary</p>` : `<p class="kicker">Level ${lv} function${f.kind === "aux" ? " · auxiliary" : ""}</p>`}
       ${textFields(f, "text", "Function", 3, true, VERB_HINT)}
       ${verbBad ? `<p class="ckwarn">“${esc(firstWord(txRaw(f, "text", mainLang())))}” is not in the functional-basis verb list. If this names a solution (“apply…”, “use…”) or a thing, rewrite it as what must happen. <button type="button" class="linkbtn" id="p-verbok">It is a function verb</button></p>` : ""}
-      <label class="chk keychk"><input type="checkbox" id="f-key"${f.key ? " checked" : ""}> <span><b>★ Key function</b> · critical to the design goals (RIO step F) <kbd>K</kbd></span></label>
+      <label class="chk keychk"><input type="checkbox" id="f-key"${f.key ? " checked" : ""}> <span><b>★ Key function</b> · critical to the design goals (RIO step F) <kbd>K</kbd> ${relPill(f, V)}</span></label>
+      ${servesField(f, V)}
       <div class="field"><span>Kind</span><div class="seg kindseg" role="group" aria-label="Kind">
         <button data-kind="main" aria-pressed="${f.kind !== "aux"}"><i class="kb main"></i>Main</button><button data-kind="aux" aria-pressed="${f.kind === "aux"}"><i class="kb aux"></i>Auxiliary</button></div></div>
       ${isRoot ? "" : `<label class="field"><span>Part of · its parent, which sets its level</span><select id="f-parent">${parentOpts}</select></label>`}
@@ -155,7 +158,7 @@ function fnPanel(p, f) {
   bindTextFields(f.id); bindNotesAndSources(f.id);
   $$(".kindseg [data-kind]").forEach(b => b.onclick = () => commit(() => { fnById(f.id).kind = b.dataset.kind; }));
   $("#f-key").onchange = e => commit(() => { fnById(f.id).key = e.target.checked; });
-  bindActsOn(f);
+  bindActsOn(f); bindServes(f);
   $("#f-parent") && ($("#f-parent").onchange = e => setParent(f.id, e.target.value));
   $$("#f-tags [data-tag]").forEach(b => b.onclick = () => toggleTag([f.id], b.dataset.tag));
   $("#p-sub").onclick = () => addSubfunction(f.id);
@@ -225,9 +228,10 @@ $("#panel").addEventListener("click", e => { const b = e.target.closest("[data-g
 function updateChrome() {
   const title = tx(doc, "title") || "Untitled function analysis";
   $("#doc-title").textContent = title;
-  document.title = (dirty ? "● " : "") + title + (view.mode === "system" ? " · System" : " · Functions");
+  document.title = (dirty ? "● " : "") + title + (view.mode === "system" ? " · System" : view.mode === "goals" ? " · Goals" : " · Functions");
   $$("#modeseg [data-mode]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.mode === view.mode)));
   $("#hint").innerHTML = view.mode === "system" ? `Double-click: new element · drag into another ring: change its level · <kbd>?</kbd> help`
+    : view.mode === "goals" ? `Double-click: new family · <kbd>Tab</kbd> subgoal · <kbd>1</kbd>–<kbd>5</kbd> score · drag onto a goal: move under it · <kbd>?</kbd> help`
     : `Double-click: new box · drag <span class="dot"></span> onto a box: flow · <kbd>?</kbd> help`;
   const ls = $("#langseg"); ls.hidden = doc.languages.length < 2;
   ls.innerHTML = doc.languages.map(l => `<button data-lang="${esc(l)}" aria-pressed="${l === curLang()}" title="${esc(langName(l))}${l === mainLang() ? " (main)" : ""}">${esc(l.toUpperCase())}</button>`).join("");
@@ -240,6 +244,11 @@ function updateChrome() {
   $("#ver-count").textContent = doc.versions.length || "";
   const V = curVar();
   $("#variant").innerHTML = doc.variants.map(v => `<option value="${esc(v.id)}"${v.id === V.id ? " selected" : ""}>${esc(tx(v, "name") || "Variant")}</option>`).join("") + `<option disabled>──────────</option><option value="__manage">Manage variants…</option>`;
+  if (view.mode === "goals") { const T = curTree(), Gs = doc.goals;
+    const nl = T ? goalLeaves(T).length : 0, sc = T ? T.nodes.filter(n => goalScore(T, n.goal)).length : 0;
+    $("#stats").innerHTML = T ? `<span><b>${T.nodes.length}</b> goal${T.nodes.length === 1 ? "" : "s"} · <b>${nl}</b> lea${nl === 1 ? "f" : "ves"}</span><span><b>${sc}</b>/${T.nodes.length} scored</span><span><b>${Gs.stakeholders.length}</b> stakeholder${Gs.stakeholders.length === 1 ? "" : "s"}</span><span>${esc(GOAL_METHODS[Gs.method].name.toLowerCase())} ${esc(GOAL_METHODS[Gs.method].short)} · ${esc(GOAL_AGGREGATES[Gs.aggregate].name.toLowerCase())}</span><span><b>${Gs.trees.length}</b> tree${Gs.trees.length === 1 ? "" : "s"} of ${doc.system.boundaries.length} boundar${doc.system.boundaries.length === 1 ? "y" : "ies"}</span>`
+      : `<span>No goals tree yet</span>`;
+    return; }
   if (view.mode === "system") { const Sy = doc.system;
     $("#stats").innerHTML = `<span><b>${Sy.elements.length}</b> element${Sy.elements.length === 1 ? "" : "s"} on <b>${Sy.levels.length}</b> level${Sy.levels.length === 1 ? "" : "s"}${Sy.elements.some(e => e.at.length > 1) ? ` · <b>${Sy.elements.filter(e => e.at.length > 1).length}</b> on several` : ""}</span><span><b>${Sy.groups.length}</b> group${Sy.groups.length === 1 ? "" : "s"}</span><span><b>${Sy.boundaries.length}</b> boundar${Sy.boundaries.length === 1 ? "y" : "ies"}</span>` +
       `<span><b>${Sy.elements.filter(e => e.kind === "actor").length}</b> actors</span>` + (Sy.chain.on ? `<span>chain of <b>${doc.tags.filter(t => t.group === Sy.chain.group).length}</b> stages</span>` : "");
@@ -252,6 +261,13 @@ function updateChrome() {
 function renderLegend() {
   const lg = $("#legend"), V = curVar();
   if (view.legendOpen === false) { lg.innerHTML = `<div class="h"><span>Key</span><button data-lg="open">Show</button></div>`; return; }
+  if (view.mode === "goals") {
+    lg.innerHTML = `<div class="h"><span>Goals</span><button data-lg="close">Hide</button></div>` +
+      `<span class="st"><span class="sw gsw groot"></span><span>Main goal</span></span><span class="st"><span class="sw gsw"></span><span>Goal</span></span><span class="st"><span class="sw gsw gout"></span><span>Out of scope here</span></span><hr>` +
+      `<span class="st"><span class="lgchip gscore">4 · 2–5</span><span>Score, spread</span></span><span class="st"><span class="lgchip grel">${doc.goals.method === "normalised" ? "26.0 %" : "0.80"}</span><span>${esc(GOAL_METHODS[doc.goals.method].name)} ${esc(GOAL_METHODS[doc.goals.method].short)}</span></span>` +
+      `<span class="st"><span class="sw gsw shade"></span><span>Shade: next to the most relevant</span></span>`;
+    return;
+  }
   if (view.mode === "system") {
     lg.innerHTML = `<div class="h"><span>Elements</span><button data-lg="close">Hide</button></div>` +
       Object.keys(KINDS).map(k => `<span class="st" title="${esc(KINDS[k].hint)}">${elSwatch({ kind: k })}<span>${esc(kindName(k))}</span><span class="n">${doc.system.elements.filter(e => e.kind === k).length}</span></span>`).join("") +
@@ -274,6 +290,7 @@ $("#legend").addEventListener("click", e => {
 });
 function renderTagbar() {
   const bar = $("#tagbar");
+  if (view.mode === "goals") { bar.hidden = true; return; }
   if (!doc.tags.length) { bar.hidden = false; bar.innerHTML = `<span class="tb-label">Tags</span><span class="muted">None yet. Tag functions and flows by stage of the chain (or import the RCA's tags), then click a tag here to highlight them.</span><button class="btn small" data-act="tags">Add tags</button>`; return; }
   bar.hidden = false;
   const count = id => tagHolders().filter(o => (o.tags || []).includes(id)).length;
@@ -298,11 +315,22 @@ function syncControls() {
   $("#depth").innerHTML = opts.map(([v, n]) => `<option value="${v}"${String(view.depth) === v ? " selected" : ""}>${n}</option>`).join("");
   $("#flowtype").innerHTML = doc.flowTypes.map(t => `<option value="${esc(t.id)}"${t.id === view.flowType ? " selected" : ""}>New flows: ${esc(tx(t, "name"))}</option>`).join("");
   if (!doc.flowTypes.some(t => t.id === view.flowType)) view.flowType = doc.flowTypes[0].id;
-  $("#v-labels").checked = view.labels !== false;
+  $("#v-labels").checked = view.labels !== false; $("#v-rel").checked = view.relBadges !== false;
+  if (view.scorer !== "all" && !shById(view.scorer)) view.scorer = "all";
+  const T = curTree(), Gs = doc.goals, missing = [...doc.system.boundaries.filter(b => !treeOfBoundary(b.id)), ...(treeOfBoundary(null) ? [] : [null])];
+  $("#goaltree").innerHTML = (Gs.trees.length ? Gs.trees.map(t => `<option value="${esc(t.id)}"${T && t.id === T.id ? " selected" : ""}>Goals · ${esc(treeName(t))}</option>`).join("") : `<option value="" selected>No goals tree yet</option>`) +
+    (missing.length ? `<option disabled>──────────</option>` + missing.map(b => `<option value="__start:${b ? esc(b.id) : ""}">＋ Start for ${b ? `“${esc(tx(b, "name"))}”` : "no boundary"}</option>`).join("") : "");
+  $("#scorer").innerHTML = (Gs.stakeholders.length > 1 ? `<option value="all"${view.scorer === "all" ? " selected" : ""}>Combined · ${esc(GOAL_AGGREGATES[Gs.aggregate].name.toLowerCase())}</option>` : "") +
+    Gs.stakeholders.map(s => `<option value="${esc(s.id)}"${view.scorer === s.id || (Gs.stakeholders.length === 1) ? " selected" : ""}>Scores of ${esc(s.name)}</option>`).join("") + `<option disabled>──────────</option><option value="__add">Add a stakeholder…</option>`;
 }
 $("#depth").onchange = e => { view.depth = e.target.value; saveView(); render({ fit: true }); };
 $("#flowtype").onchange = e => { view.flowType = e.target.value; saveView(); };
 $("#v-labels").onchange = e => { view.labels = e.target.checked; saveView(); render({ skipPanel: true }); };
+$("#v-rel").onchange = e => { view.relBadges = e.target.checked; saveView(); render({ skipPanel: true }); };
+$("#goaltree").onchange = e => { const v = e.target.value; if (v.startsWith("__start:")) return startTree(v.slice(8) || null); switchTree(v); };
+$("#scorer").onchange = e => { const v = e.target.value;
+  if (v === "__add") { const n = prompt("Name of the stakeholder, e.g. Exporter B"); if (n && n.trim()) addStakeholder(n.trim()); else syncControls(); return; }
+  view.scorer = v; saveView(); render(); };
 $("#variant").onchange = e => { const v = e.target.value; if (v === "__manage") { e.target.value = doc.activeVariant; return openVariants(); } switchVariant(v); };
 function switchVariant(id, focus) {
   if (!varById(id) || id === doc.activeVariant) return;
@@ -324,11 +352,11 @@ function doSearch(jump) {
   cy.elements().removeClass("match"); matches = [];
   if (!q) { $("#qcount").textContent = ""; return; }
   const V = curVar();
-  const hay = o => [...txAll(o), o.notes || "", ...(o.sources || []).map(sourceSearchText)].join(" ").toLowerCase();
+  const hay = o => [...txAll(o), ...(o.measure != null ? txAll(o, "measure") : []), o.notes || "", ...(o.sources || []).map(sourceSearchText)].join(" ").toLowerCase();
   const tagHit = o => q.startsWith("#") && orderedTags(o.tags || []).some(t => txAll(t, "name").some(n => n.toLowerCase().includes(q.slice(1))));
   const hit = o => o && (q.startsWith("#") ? tagHit(o) : hay(o).includes(q));
   const sysObj = id => { const r = apById(id); return r ? { ...r.el, tags: r.ap.tags } : findEditable(id); }; // the element's texts with this appearance's tags
-  (view.mode === "system" ? [...allAps().map(x => x.ap.id), ...doc.system.groups.map(g => g.id)] : [V.root, ...Object.keys(V.placed), ...V.externals.map(x => x.id), ...V.flows.map(l => l.id)])
+  (view.mode === "system" ? [...allAps().map(x => x.ap.id), ...doc.system.groups.map(g => g.id)] : view.mode === "goals" ? [GOAL_ROOT, ...(curTree() ? curTree().nodes.map(n => n.goal) : [])] : [V.root, ...Object.keys(V.placed), ...V.externals.map(x => x.id), ...V.flows.map(l => l.id)])
     .forEach(id => { const o = view.mode === "system" ? sysObj(id) : findEditable(id); if (hit(o) || (o && o.needs && !q.startsWith("#") && o.needs.toLowerCase().includes(q))) matches.push(id); });
   matches.forEach(id => cy.getElementById(id).addClass("match"));
   $("#qcount").textContent = matches.length ? `${matchIdx >= 0 ? matchIdx + 1 + "/" : ""}${matches.length}` : "0";

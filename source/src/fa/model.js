@@ -8,9 +8,9 @@
 function emptyDoc() {
   return { format: "function-analysis", schema: 3, app: APP_VERSION, title: "New function analysis", titleTr: {}, languages: ["en"],
     levels: clone(DEFAULT_LEVELS), flowTypes: clone(DEFAULT_FLOW_TYPES), tagGroups: clone(DEFAULT_TAG_GROUPS), tags: [], verbs: [],
-    rca: null, system: defaultSystem(), functions: [], variants: [], activeVariant: null, versions: [], meta: { created: nowISO(), modified: nowISO() } };
+    rca: null, system: defaultSystem(), goals: defaultGoals(), functions: [], variants: [], activeVariant: null, versions: [], meta: { created: nowISO(), modified: nowISO() } };
 }
-const newFunction = (text, kind = "main") => ({ id: uid("f"), text: text || "", textTr: {}, kind, key: false, actsOn: [], notes: "", sources: [], tags: [], rcaLinks: [] });
+const newFunction = (text, kind = "main") => ({ id: uid("f"), text: text || "", textTr: {}, kind, key: false, actsOn: [], serves: [], notes: "", sources: [], tags: [], rcaLinks: [] });
 const newExternal = (text, x, y) => ({ id: uid("x"), text: text || "", textTr: {}, notes: "", x: Math.round(x), y: Math.round(y) });
 const newFlow = (source, target, type) => ({ id: uid("l"), source, target, type, text: "", textTr: {}, element: null, unwanted: false, notes: "", sources: [], tags: [] });
 function newVariant(name, rootId) {
@@ -19,7 +19,7 @@ function newVariant(name, rootId) {
 }
 function coreOf(d) {
   return { title: d.title, titleTr: d.titleTr, languages: d.languages, levels: d.levels, flowTypes: d.flowTypes, tagGroups: d.tagGroups, tags: d.tags,
-    verbs: d.verbs, rca: d.rca, system: d.system, functions: d.functions, variants: d.variants, activeVariant: d.activeVariant };
+    verbs: d.verbs, rca: d.rca, system: d.system, goals: d.goals, functions: d.functions, variants: d.variants, activeVariant: d.activeVariant };
 }
 
 function normalizeDoc(d) {
@@ -46,8 +46,11 @@ function normalizeDoc(d) {
   out.system = normalizeSystem(d.system, out, remap);
   const elIds = new Set(out.system.elements.map(e => e.id)), bIds = new Set(out.system.boundaries.map(b => b.id));
   const apIds = new Set(out.system.elements.flatMap(e => e.at.map(p => p.id)));
+  out.goals = normalizeGoals(d.goals, out);
+  const goalIds = new Set(out.goals.catalogue.map(g => g.id));
   out.functions = d.functions.filter(f => f && f.id).map(f => ({ id: String(f.id), text: String(f.text ?? ""), textTr: trObj(f.textTr), kind: f.kind === "aux" ? "aux" : "main", key: !!f.key,
     actsOn: Array.isArray(f.actsOn) ? [...new Set(f.actsOn.map(id => remap.get(String(id)) || String(id)).filter(id => apIds.has(id)))] : [],
+    serves: Array.isArray(f.serves) ? [...new Set(f.serves.map(String).filter(id => goalIds.has(id)))] : [],
     notes: String(f.notes || ""), sources: srcOf(f), tags: tagsOf(f), rcaLinks: Array.isArray(f.rcaLinks) ? f.rcaLinks.map(String) : [] }));
   const fIds = new Set(out.functions.map(f => f.id));
   out.variants = d.variants.filter(v => v && v.id && fIds.has(v.root)).map(v => {
@@ -112,24 +115,26 @@ function snap() { return JSON.stringify(coreOf(doc)); }
 function restoreCore(s) {
   const c = typeof s === "string" ? JSON.parse(s) : clone(s);
   Object.assign(doc, { title: c.title, titleTr: c.titleTr || {}, languages: c.languages || doc.languages, levels: c.levels || doc.levels, flowTypes: c.flowTypes || doc.flowTypes,
-    tagGroups: c.tagGroups || doc.tagGroups, tags: c.tags || doc.tags, verbs: c.verbs || [], rca: c.rca || null, system: c.system || defaultSystem(c.languages || doc.languages), functions: c.functions, variants: c.variants,
+    tagGroups: c.tagGroups || doc.tagGroups, tags: c.tags || doc.tags, verbs: c.verbs || [], rca: c.rca || null, system: c.system || defaultSystem(c.languages || doc.languages), goals: c.goals || defaultGoals(), functions: c.functions, variants: c.variants,
     activeVariant: c.variants.some(v => v.id === c.activeVariant) ? c.activeVariant : c.variants[0].id });
 }
 function findEditable(ref) { // what a side-panel field edits: a function, external, flow or variant
   const V = curVar();
   const x = extById(ref, V); if (x && x.ref && elById(x.ref)) return elById(x.ref); // a linked external is the element itself
   // an appearance edits its element: the name, kind, needs, notes and sources are the same on every level
-  return fnById(ref) || x || flowById(ref, V) || varById(ref) || elOf(ref) || grpById(ref) || bndById(ref) || doc.flowTypes.find(t => t.id === ref) || null;
+  if (ref === GOAL_ROOT) return doc.goals.root;
+  return fnById(ref) || x || flowById(ref, V) || varById(ref) || elOf(ref) || grpById(ref) || bndById(ref) || goalById(ref) || goalTreeById(ref) || shById(ref) || doc.flowTypes.find(t => t.id === ref) || null;
 }
 function tagHolders() { return [...doc.functions, ...doc.variants.flatMap(v => v.flows), ...allAps().map(x => x.ap)]; }
 function everyTranslatable(d, fn) { // every text a reader sees, in every variant
   fn(d, "title"); d.tagGroups.forEach(g => fn(g, "name")); d.tags.forEach(t => fn(t, "name")); d.flowTypes.forEach(t => fn(t, "name"));
   d.functions.forEach(f => fn(f, "text"));
+  fn(d.goals.root, "text"); d.goals.catalogue.forEach(g => { fn(g, "text"); fn(g, "measure"); });
   d.system.levels.forEach(l => fn(l, "name")); d.system.groups.forEach(g => fn(g, "text")); d.system.boundaries.forEach(b => fn(b, "name")); d.system.elements.forEach(e => fn(e, "text"));
   d.variants.forEach(v => { fn(v, "name"); ["boundary", "inside", "outside"].forEach(k => fn(v, k)); v.externals.forEach(x => fn(x, "text")); v.flows.forEach(l => fn(l, "text")); });
 }
 function boxItems(d = doc) { // the texts walked through by a translation pass: functions, externals, flow labels
-  return [...d.functions.map(o => [o, "text"]), ...d.system.elements.map(o => [o, "text"]), ...d.system.groups.map(o => [o, "text"]), ...d.variants.flatMap(v => [...v.externals.map(o => [o, "text"]), ...v.flows.filter(l => txAll(l).length).map(o => [o, "text"])])];
+  return [...d.functions.map(o => [o, "text"]), ...(txAll(d.goals.root).length ? [[d.goals.root, "text"]] : []), ...d.goals.catalogue.map(o => [o, "text"]), ...d.system.elements.map(o => [o, "text"]), ...d.system.groups.map(o => [o, "text"]), ...d.variants.flatMap(v => [...v.externals.map(o => [o, "text"]), ...v.flows.filter(l => txAll(l).length).map(o => [o, "text"])])];
 }
 function missingSummary() { // per language: boxes and other visible texts still untranslated
   if (doc.languages.length < 2) return [];
@@ -164,10 +169,10 @@ function boxSize(o, extra = "", pre = "", boxW = null) { // big enough for the t
 }
 
 /* ================= View state ================= */
-const view = Object.assign({}, DEFAULT_VIEW, { tagFilter: new Set(), hiddenTypes: new Set(), diff: null });
+const view = Object.assign({}, DEFAULT_VIEW, { tagFilter: new Set(), hiddenTypes: new Set(), diff: null, scorer: "all" });
 try { Object.assign(view, JSON.parse(lsGet(LS_VIEW) || "{}")); } catch (e) {}
 view.tagFilter = new Set(); view.hiddenTypes = new Set(); view.diff = null;
-if (/^#(system|functions)$/.test(location.hash)) view.mode = location.hash.slice(1); // a link can open a mode
+if (/^#(system|goals|functions)$/.test(location.hash)) view.mode = location.hash.slice(1); // a link can open a mode
 function saveView() { const { tagFilter, hiddenTypes, diff, ...rest } = view; lsSet(LS_VIEW, JSON.stringify(rest)); }
 let selId = null, selFlow = null, multi = [];
 let lastRender = null;

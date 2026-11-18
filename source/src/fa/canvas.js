@@ -62,6 +62,8 @@ function styleSheet() {
     { selector: "node.badge", style: { shape: "round-rectangle", "corner-radius": 9, width: "data(w)", height: 21, "background-color": ground, "border-color": muted, "border-width": 1,
       label: "data(label)", color: ink, "font-family": EMOJI_FONT, "font-size": 13, "font-weight": 400, "font-style": "normal", events: "no", "z-index": 21, "text-valign": "center", "text-halign": "center" } },
     ...sysStyles(ink, ground, muted, dark),
+    ...goalStyles(ink, ground, muted, dark),
+    { selector: "node.relb", style: { "font-family": FONT_STACK, "font-size": 10.5, "font-weight": 600, "background-color": dark ? "#123D2E" : "#E2F3EA", "border-color": "#3E9A78" } },
   ];
 }
 
@@ -89,8 +91,9 @@ function syncExtRefs() { // a linked external shows its element's name in every 
 
 async function render(opts = {}) {
   if (!cy || !doc) return;
-  document.body.classList.toggle("sys", view.mode === "system");
+  document.body.classList.toggle("sys", view.mode === "system"); document.body.classList.toggle("goals", view.mode === "goals");
   if (view.mode === "system") return renderSystem(opts);
+  if (view.mode === "goals") { $("#sysover-g").innerHTML = ""; $("#sysbar").hidden = true; return renderGoals(opts); }
   $("#sysover-g").innerHTML = ""; $("#sysbar").hidden = true;
   syncExtRefs();
   const V = curVar(), M = computeView(V);
@@ -135,6 +138,11 @@ async function render(opts = {}) {
   const chips = [];
   [...M.visible].forEach(id => { const f = fnById(id), ch = chipFor(f); const el = cy.getElementById(id); if (!ch || el.empty()) return;
     const bb = el.boundingBox({ includeLabels: false }); chips.push({ group: "nodes", data: { id: "t:" + id, label: ch.label, w: ch.w }, classes: "badge", position: { x: bb.x1 + ch.w / 2 - 4, y: bb.y1 - 1 } }); });
+  const GT = view.relBadges !== false && treeForVariant(V), GR = GT ? goalResults(GT) : null; // relevance from the goals each function serves
+  if (GT) { mctx.font = `600 10.5px ${FONT_STACK}`;
+    [...M.visible].forEach(id => { if (id === V.root) return; const r = fnRelevance(fnById(id), GT, GR).rel, el = cy.getElementById(id); if (r == null || el.empty()) return;
+      const label = fmtRel(r), w = Math.ceil(mctx.measureText(label).width) + 12, bb = el.boundingBox({ includeLabels: false });
+      chips.push({ group: "nodes", data: { id: "r:" + id, label, w }, classes: "badge relb", position: { x: bb.x2 - w / 2 + 4, y: bb.y1 - 1 } }); }); }
   if (chips.length) cy.add(chips);
   cy.nodes().forEach(n => (n.hasClass("badge") || VIEWER) ? n.ungrabify() : n.grabify());
   lastRender = { V, M };
@@ -157,6 +165,7 @@ function fitView(anim) {
 /* ================= Selection ================= */
 function pruneSelection() {
   if (view.mode === "system") { const ok = id => apById(id) || grpById(id); if (selId && !ok(selId)) selId = null; selFlow = null; multi = multi.filter(ok); return; }
+  if (view.mode === "goals") { const ok = id => id === GOAL_ROOT || inTree(id); if (selId && !ok(selId)) selId = null; selFlow = null; multi = multi.filter(ok); return; }
   if (selId && !inVariant(selId)) selId = null;
   if (selFlow && !flowById(selFlow)) selFlow = null;
   multi = multi.filter(id => inVariant(id));
@@ -186,7 +195,7 @@ function markSiblings(ids) { // the other circles of a selected element glow, so
 function applyTagFilter() {
   cy.elements().removeClass("tagon tagoff");
   cy.nodes(".stage").removeClass("on");
-  if (!view.tagFilter.size) return;
+  if (!view.tagFilter.size || view.mode === "goals") return;
   const has = o => o && (o.tags || []).some(t => view.tagFilter.has(t));
   const skip = n => n.hasClass("badge") || n.hasClass("ring") || n.hasClass("ringlabel") || n.hasClass("chainlbl");
   cy.nodes(".stage").forEach(n => n.toggleClass("on", view.tagFilter.has(n.data("tag"))));
@@ -201,11 +210,17 @@ function applyDiff() {
 }
 function goTo(id) {
   if (elById(id)) id = elById(id).at[0].id; // an element: its first circle
+  if (id === GOAL_ROOT || goalById(id)) { // a goal: in the tree on screen, else the tree of the open variant, else any tree holding it
+    const go = () => { if (id !== GOAL_ROOT && !inTree(id)) { const T = [treeForVariant(curVar()), ...treesWith(id)].find(t => t && inTree(id, t)); if (!T) return toast("That goal is in no tree yet: place it from the catalogue in the side panel.");
+        if (T.id !== doc.goals.active) { doc.goals.active = T.id; return render({ fit: true }).then(go); } }
+      selId = id; selFlow = null; multi = [id]; openSide(true); applySelection(); renderPanel(); const el = cy.getElementById(id); if (el.nonempty()) cy.animate({ center: { eles: el }, zoom: Math.max(cy.zoom(), .8) }, { duration: 260 }); };
+    if (view.mode !== "goals") return setMode("goals").then(go); go(); return Promise.resolve();
+  }
   if (apById(id) || grpById(id)) { // an element of the system map
     const go = () => { selId = id; selFlow = null; multi = [id]; openSide(true); applySelection(); renderPanel(); const el = cy.getElementById(id); if (el.nonempty()) cy.animate({ center: { eles: el }, zoom: Math.max(cy.zoom(), .8) }, { duration: 260 }); };
     if (view.mode !== "system") return setMode("system").then(go); go(); return Promise.resolve();
   }
-  if (view.mode === "system" && (isFunction(id) || flowById(id) || extById(id))) return setMode("functions").then(() => goTo(id));
+  if (view.mode !== "functions" && (isFunction(id) || flowById(id) || extById(id))) return setMode("functions").then(() => goTo(id));
   const V = curVar();
   if (!inVariant(id) && !flowById(id)) return Promise.resolve();
   const f = flowById(id);
@@ -294,6 +309,7 @@ function placeFunction(fid) { // bring a catalogue function into this variant
 function deleteSelection() {
   if (VIEWER) return;
   if (view.mode === "system") { const ids = multi.length ? multi : selId ? [selId] : []; selId = null; multi = []; return deleteElements(ids); }
+  if (view.mode === "goals") { const ids = (multi.length ? multi : selId ? [selId] : []).filter(id => id !== GOAL_ROOT); if (!ids.length) return selId === GOAL_ROOT ? toast("The main goal is the root of every tree. Rename it instead.") : undefined; selId = null; multi = []; return removeGoals(ids); }
   const V = curVar();
   if (selFlow) { const id = selFlow; selFlow = null; commit(() => { V.flows = V.flows.filter(l => l.id !== id); }); toast("Flow deleted. Ctrl Z to undo."); return; }
   const ids = new Set((multi.length ? multi : selId ? [selId] : []).filter(id => id !== V.root));
@@ -326,7 +342,7 @@ function inlineEdit(id, isNew, opts = {}) {
   if (VIEWER) return;
   const el = cy.getElementById(id); if (el.empty()) return;
   const o = findEditable(id); if (!o) return;
-  const isFlow = el.isEdge(), isFn = !!fnById(id);
+  const isFlow = el.isEdge(), isFn = !!fnById(id), isGoal = id === GOAL_ROOT || !!goalById(id);
   const first = curLang();
   const langs = opts.langs || [first, ...doc.languages.filter(l => l !== first)];
   const many = doc.languages.length > 1;
@@ -341,7 +357,7 @@ function inlineEdit(id, isNew, opts = {}) {
   lab.style.left = left + "px"; lab.style.width = w + "px"; lab.style.bottom = (cy.height() - top + 4) + "px";
   vb.style.left = left + "px"; vb.style.top = (top + h + 4) + "px"; vb.style.width = w + "px";
   let i = 0, done = false;
-  const ph = () => isFlow ? "What flows? e.g. fruit, cold air, temperature reading" : isFn ? VERB_HINT : apById(id) ? "Element, e.g. grower, fruit, rain, Botrytis conidia" : grpById(id) ? "Group, e.g. asexual reproduction" : "Outside the boundary, e.g. grower, importer, environment";
+  const ph = () => isFlow ? "What flows? e.g. fruit, cold air, temperature reading" : isFn ? VERB_HINT : id === GOAL_ROOT ? "Main goal, e.g. improve export revenues while reducing Botrytis incidence" : isGoal ? "Goal: a desired state, e.g. lower decay at arrival" : apById(id) ? "Element, e.g. grower, fruit, rain, Botrytis conidia" : grpById(id) ? "Group, e.g. asexual reproduction" : "Outside the boundary, e.g. grower, importer, environment";
   const showVerbs = () => {
     const l = langs[i]; const caret = ta.selectionStart; const before = ta.value.slice(0, caret);
     const sug = isFn && !/\s/.test(before.trim()) ? verbSuggestions(before, l) : [];
@@ -383,6 +399,7 @@ function inlineEdit(id, isNew, opts = {}) {
       if (i < langs.length - 1) { i++; show(); return; }
       finish(true);
       if (e.key === "Tab" && !opts.pass && isFn) setTimeout(() => addSubfunction(id), 30);
+      if (e.key === "Tab" && !opts.pass && isGoal) setTimeout(() => addGoal(id), 30);
       return;
     }
     if (e.key === "Tab" && e.shiftKey) { e.preventDefault(); vals[langs[i]] = ta.value; if (i > 0) { i--; show(); } }
@@ -399,6 +416,7 @@ async function translatePass(lang) {
   if (VIEWER) return;
   const V = curVar();
   const todo = (view.mode === "system" ? [...doc.system.elements.map(e => e.at[0].id), ...doc.system.groups.map(g => g.id)]
+    : view.mode === "goals" ? [GOAL_ROOT, ...(curTree() ? curTree().nodes.map(n => n.goal) : [])]
     : [V.root, ...Object.keys(V.placed).sort((a, b) => depthOf(a, V) - depthOf(b, V)), ...V.externals.map(x => x.id), ...V.flows.filter(l => txAll(l).length).map(l => l.id)])
     .filter(id => txMissing(findEditable(id), "text", lang));
   if (!todo.length) return toast(`Everything in this variant already has ${langName(lang)} text.`);
@@ -526,7 +544,7 @@ function setFlowShape(flowId, shape) {
 }
 /* ---- a box's width: drag the grip on its bottom-right corner; double-click it to go back to the automatic width ---- */
 function widthTarget() {
-  if (VIEWER || view.mode === "system" || !selId || multi.length > 1 || selFlow) return null;
+  if (VIEWER || view.mode !== "functions" || !selId || multi.length > 1 || selFlow) return null;
   const n = cy.getElementById(selId); if (n.empty() || !n.visible() || n.isParent() || n.hasClass("root")) return null;
   return fnById(selId) || extById(selId) ? n : null;
 }
@@ -567,7 +585,7 @@ function setBoxWidth(id, w, keepLeft) { // w null: back to the automatic width. 
 
 function updateOverlays() {
   const h = $("#handle"), gs = $("#grip-s"), gt = $("#grip-t"), gm = $("#grip-m"), gl = $("#grip-l"), lbx = $("#lab-box"), gw = $("#grip-w");
-  if (VIEWER || !cy || view.mode === "system") { h.hidden = gs.hidden = gt.hidden = gm.hidden = gl.hidden = lbx.hidden = gw.hidden = true; return; }
+  if (VIEWER || !cy || view.mode !== "functions") { h.hidden = gs.hidden = gt.hidden = gm.hidden = gl.hidden = lbx.hidden = gw.hidden = true; return; }
   if (dragging) { gm.hidden = gl.hidden = gw.hidden = true; if (dragging.kind !== "label") lbx.hidden = true; } // the one being dragged shows itself
   else {
     const fe = selFlow ? cy.getElementById(selFlow) : null, ok = fe && fe.nonempty() && fe.visible() && !fe.hasClass("lifted");
@@ -667,6 +685,7 @@ let elk = null;
 async function autoArrange() {
   if (VIEWER) return;
   if (view.mode === "system") return toast("Arrange the system map by hand: an element's ring is its level.");
+  if (view.mode === "goals") return toast("The goals tree arranges itself: drag a goal onto another to move it under that one.");
   elk = elk || new ELK();
   const vis = cy.nodes().filter(n => !n.hasClass("badge") && n.visible());
   const elkNode = n => { const kids = n.children().filter(c => !c.hasClass("badge") && c.visible());

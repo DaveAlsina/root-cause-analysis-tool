@@ -6,7 +6,7 @@
 
 /* ================= Constants ================= */
 const APP_VERSION = "1.0";
-const MODE = "fa"; // this tool, for the mode switcher (it holds two modes: system and functions)
+const MODE = "fa"; // this tool, for the mode switcher (it holds three modes: system, goals and functions)
 const FONT_PX = 13, LINE = 17, MAXW = 150, PADX = 11, PADY = 8;
 const FONT_STACK = '"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif';
 const LS_DOC = "function-analysis:doc", LS_VIEW = "function-analysis:view", LS_FILE = "function-analysis:file";
@@ -104,7 +104,7 @@ const VERB_ROWS = [
   { en: "* keep maintain ensure assure guarantee support enable facilitate deliver communicate share clean sort grade select classify pack package wrap seal cover inspect harvest pick ventilate aerate humidify dehumidify optimize optimise manage train", es: "* mantener asegurar garantizar soportar facilitar entregar comunicar compartir limpiar clasificar seleccionar empacar embalar envolver sellar cubrir inspeccionar cosechar recolectar ventilar airear humidificar deshumidificar optimizar gestionar capacitar" },
 ];
 
-const DEFAULT_VIEW = { mode: "functions", lang: null, depth: "all", flowType: "material", legendOpen: true, tagChips: true, labels: true };
+const DEFAULT_VIEW = { mode: "functions", lang: null, depth: "all", flowType: "material", legendOpen: true, tagChips: true, labels: true, relBadges: true, scorer: "all" };
 
 /* The steps of the method, in order. `auto` steps are ticked when the diagram shows they are done. */
 const STEPS = [

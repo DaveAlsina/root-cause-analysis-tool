@@ -88,7 +88,7 @@ function sysOverview(p) {
     <div class="sec"><h2>Boundaries</h2>
       <p class="muted">Click a boundary to see it on the map; the rest fades. Each function-analysis variant can work inside one of them.</p>
       ${S.boundaries.length ? `<ul class="blist">${S.boundaries.map(b => `<li class="${b.id === sysFocus ? "on" : ""}">
-        <button class="bname" data-focus="${esc(b.id)}"><span class="bdash"></span><span><b>${esc(tx(b, "name"))}</b><span class="muted"> · ${insideCount(b).replace(/ inside$/, "")}${usedBy(b).length ? ` · used by ${usedBy(b).map(v => esc(tx(v, "name"))).join(", ")}` : ""}</span></span></button>
+        <button class="bname" data-focus="${esc(b.id)}"><span class="bdash"></span><span><b>${esc(tx(b, "name"))}</b><span class="muted"> · ${insideCount(b).replace(/ inside$/, "")}${usedBy(b).length ? ` · used by ${usedBy(b).map(v => esc(tx(v, "name"))).join(", ")}` : ""}${treeOfBoundary(b.id) ? ` · goals tree of ${treeOfBoundary(b.id).nodes.length}` : ""}</span></span></button>
         <span class="bacts"><button class="btn small" data-bedit="${esc(b.id)}">Edit members</button><button class="btn small" data-bdup="${esc(b.id)}" title="Duplicate">Copy</button><button class="btn small icon danger" data-bdel="${esc(b.id)}" aria-label="Delete boundary" title="Delete boundary">×</button></span></li>`).join("")}</ul>` : `<p class="muted">None yet.</p>`}
       <div class="row"><button class="btn" id="b-new">New boundary</button>${multi.length > 1 ? `<button class="btn" id="b-newsel">From the ${multi.length} selected</button>` : ""}</div>
       ${sysFocus ? `<div class="bfocus">${textFields(bndById(sysFocus), "name", "Name of the boundary in focus", 1)}
@@ -116,8 +116,10 @@ function sysOverview(p) {
   $$("[data-bedit]").forEach(b => b.onclick = () => focusBoundary(b.dataset.bedit, true));
   $$("[data-bdup]").forEach(b => b.onclick = () => { const s = bndById(b.dataset.bdup); const c = { ...clone(s), id: uid("b"), name: s.name + " (copy)", nameTr: {} }; commit(() => doc.system.boundaries.push(c)).then(() => focusBoundary(c.id)); });
   $$("[data-bdel]").forEach(b => b.onclick = () => { const s = bndById(b.dataset.bdel), vs = usedBy(s);
-    if (!confirm(`Delete the boundary “${s.name}”?${vs.length ? ` ${vs.length} variant${vs.length > 1 ? "s use" : " uses"} it and will have none.` : ""} Ctrl Z brings it back.`)) return;
-    commit(() => { doc.system.boundaries = doc.system.boundaries.filter(x => x !== s); doc.variants.forEach(v => { if (v.systemBoundary === s.id) v.systemBoundary = null; }); if (sysFocus === s.id) sysFocus = null; }); });
+    const gt = treeOfBoundary(s.id), orphan = gt && !treeOfBoundary(null);
+    if (!confirm(`Delete the boundary “${s.name}”?${vs.length ? ` ${vs.length} variant${vs.length > 1 ? "s use" : " uses"} it and will have none.` : ""}${gt ? ` Its goals tree ${orphan ? "becomes the tree with no boundary" : "is deleted (its goals stay in the catalogue)"}.` : ""} Ctrl Z brings it back.`)) return;
+    commit(() => { doc.system.boundaries = doc.system.boundaries.filter(x => x !== s); doc.variants.forEach(v => { if (v.systemBoundary === s.id) v.systemBoundary = null; }); if (sysFocus === s.id) sysFocus = null;
+      const t = treeOfBoundary(s.id); if (t) { if (orphan) t.boundary = null; else { doc.goals.trees = doc.goals.trees.filter(x => x !== t); if (doc.goals.active === t.id) doc.goals.active = (doc.goals.trees[0] || {}).id || null; } } }); });
   $("#b-new").onclick = () => newBoundary([]);
   $("#b-newsel") && ($("#b-newsel").onclick = () => newBoundary(multi.filter(id => apById(id))));
   $$("[data-same]").forEach(b => b.onclick = () => { const ids = b.dataset.same.split(" ").map(id => elById(id).at[0].id); selId = ids[ids.length - 1]; multi = ids; selFlow = null; applySelection(); renderPanel();

@@ -40,7 +40,7 @@ APPS = {
     },
     "fa": {
         "html": "fa/app.html", "css": ["core/base.css", "fa/fa.css"],
-        "js": ["fa/config.js", *CORE, "fa/model.js", "fa/system.js", "fa/checks.js", "fa/canvas.js", "fa/panel.js", "fa/syspanel.js", "fa/dialogs.js", "fa/io.js", "fa/boot.js"],
+        "js": ["fa/config.js", *CORE, "fa/model.js", "fa/system.js", "fa/goals.js", "fa/checks.js", "fa/canvas.js", "fa/panel.js", "fa/syspanel.js", "fa/goalspanel.js", "fa/dialogs.js", "fa/io.js", "fa/boot.js"],
         "out": "function-analysis.html", "docs": False,
     },
 }

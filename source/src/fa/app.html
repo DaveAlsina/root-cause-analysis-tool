@@ -20,7 +20,7 @@
       <div class="fileline"><span id="file-name">function-analysis.json</span><span id="dirty" class="dirty" hidden>● unsaved changes</span><span id="saved-at" class="savedat" hidden></span></div>
     </div>
     <div class="toolbar">
-      <div class="seg modeseg" id="modeseg" role="group" aria-label="Mode"><button data-mode="system" title="The system map: levels, elements, boundaries">System</button><button data-mode="functions" title="Function structures inside a boundary">Functions</button></div>
+      <div class="seg modeseg" id="modeseg" role="group" aria-label="Mode"><button data-mode="system" title="The system map: levels, elements, boundaries">System</button><button data-mode="goals" title="Goal trees per boundary, scored by stakeholders">Goals</button><button data-mode="functions" title="Function structures inside a boundary">Functions</button></div>
       <div class="group">
         <details class="menu" id="menu-file"><summary class="btn">File</summary>
           <div class="menu-list">
@@ -44,9 +44,10 @@
             <hr>
             <button data-act="exp-json">The whole file <small>.json, system, every variant and version</small></button>
             <button data-act="exp-elements">Elements table <small>the system map, .csv</small></button>
+            <button data-act="exp-goals">Goals table <small>every tree, scores, relevance, ranks under ±1, .csv</small></button>
             <button data-act="exp-functions">Functions table <small>the catalogue, .csv</small></button>
             <button data-act="exp-flows">Flows table <small>open variant, .csv</small></button>
-            <button data-act="exp-morph">Morphological chart starter <small>one row per function, .csv</small></button>
+            <button data-act="exp-morph">Morphological chart starter <small>one row per function, ★ and relevance, .csv</small></button>
           </div>
         </details>
         <button class="btn" data-act="variants" data-only="fa">Variants</button>
@@ -56,6 +57,8 @@
         <button class="btn" data-act="versions">Versions <span id="ver-count" class="pill"></span></button>
       </div>
       <select id="variant" class="btn" aria-label="Variant shown" title="The variant on screen" data-only="fa"></select>
+      <select id="goaltree" class="btn" aria-label="Goals tree shown" title="The goals tree on screen: one per system boundary" data-only="goals"></select>
+      <select id="scorer" class="btn" aria-label="Whose scores" title="Whose scores are on screen and edited with keys 1–5" data-only="goals"></select>
       <div class="seg" id="langseg" role="group" aria-label="Language" hidden></div>
       <div class="group">
         <button class="btn icon" data-act="undo" id="b-undo" title="Undo (Ctrl Z)" aria-label="Undo">↶</button>
@@ -80,6 +83,7 @@
         <summary><span>View</span></summary>
         <div class="vp-body">
           <label class="chk"><input type="checkbox" id="v-labels"> Show flow labels</label>
+          <label class="chk"><input type="checkbox" id="v-rel"> Show relevance on boxes <small class="muted">from the goals they serve</small></label>
           <div class="row"><button class="btn small" data-act="arrange" title="ELK layered layout, left to right, keeps boxes inside their containers">Auto-arrange left to right</button></div>
           <p class="note">Levels: <kbd>0</kbd> black box, <kbd>1</kbd>–<kbd>9</kbd> down to that level. Click a flow type in the key to hide it.</p>
         </div>
@@ -113,6 +117,7 @@
     <label class="field"><span>Main language, the one you write in</span><select id="new-main"></select></label>
     <div class="field"><span>Other languages: every box will be asked for in each one</span><div id="new-extra" class="newextra"></div></div>
     <label class="field"><span>Overall function: one verb + noun for the whole system</span><input id="new-root" maxlength="120" placeholder="e.g. Deliver sound uchuva"></label>
+    <label class="field"><span>Main goal: what the whole design should achieve (optional)</span><input id="new-goal" maxlength="200" placeholder="e.g. Improve export revenues while reducing Botrytis incidence"></label>
     <label class="field"><span>System boundary: where it starts and ends</span><input id="new-boundary" maxlength="200" placeholder="e.g. Farm gate → importer's distribution centre"></label>
     <label class="field"><span>Name of this first variant</span><input id="new-variant" maxlength="60" placeholder="Variant A"></label>
     <div class="foot"><span class="grow"></span><button type="button" class="btn" data-close>Cancel</button><button class="btn primary" type="submit">Create</button></div>
@@ -150,7 +155,7 @@
 <div class="overlay" id="m-help" hidden><div class="modal" role="dialog" aria-modal="true" aria-labelledby="mh-h">
   <div class="mhead"><h3 id="mh-h">How it works</h3><button class="btn icon" data-close aria-label="Close">×</button></div>
   <div class="help">
-    <p>The file has two modes. <b>System</b> maps what is there: elements on nested levels, groups, and boundaries drawn through them. <b>Functions</b> works out what must happen inside a boundary: boxes are <b>functions</b> (verb + noun), arrows are <b>flows</b> (material, energy, signal). The dashed box is the overall function and the system boundary; anything outside it is an external.</p>
+    <p>The file has three modes. <b>System</b> maps what is there: elements on nested levels, groups, and boundaries drawn through them. <b>Goals</b> says what the design must achieve inside each boundary, as a tree under one main goal, scored by stakeholders. <b>Functions</b> works out what must happen inside a boundary: boxes are <b>functions</b> (verb + noun), arrows are <b>flows</b> (material, energy, signal). The dashed box is the overall function and the system boundary; anything outside it is an external.</p>
     <h4>System</h4>
     <table>
       <tr><th>Add an element</th><td>Double-click where it belongs: the ring you click in is its level. Drag it into another ring to change the level</td></tr>
@@ -161,6 +166,16 @@
       <tr><th>Boundary</th><td>Side panel → <b>New boundary</b>, or click one in the list to focus on it; the rest fades. <b>Edit members</b>, then click elements, a group or a level name to include or exclude them</td></tr>
       <tr><th>Chain of stages</th><td>Side panel → <b>Draw the stages as a chain</b>. The stages are the tags of one tag group, in their order; ↑ ↓ reorder them. An element's stage is its tag</td></tr>
       <tr><th>Levels</th><td><b>Levels</b> in the toolbar, or double-click a level's name</td></tr>
+    </table>
+    <h4>Goals</h4>
+    <table>
+      <tr><th>A tree per boundary</th><td>The toolbar picks the tree on screen, or starts one for a boundary that has none (empty, or with the structure of another tree). The main goal is the root of every tree</td></tr>
+      <tr><th>Add goals</th><td>Double-click the canvas for a new family. <kbd>Tab</kbd> adds a subgoal to the selected goal; <kbd>Enter</kbd> renames it. Drag a goal onto another to move it under that one</td></tr>
+      <tr><th>Score</th><td>How much achieving a goal contributes to its parent, 1 (marginal) to 5 (the parent fails without it). Keys <kbd>1</kbd>–<kbd>5</kbd> score as the stakeholder picked in the toolbar, <kbd>0</kbd> clears; the side panel has every stakeholder's row</td></tr>
+      <tr><th>Relevance</th><td><b>Absolute</b> multiplies s/5 down the path; <b>normalised</b> divides each score by its siblings' sum, so the leaves sum to 100 %. Stakeholders combine by geometric mean, arithmetic mean or median. The ⓘ buttons in the side panel explain each</td></tr>
+      <tr><th>Sensitivity</th><td>The ranking of the leaves shows, for each, the ranks it takes when any one score moves by ±1, and whether the top three hold</td></tr>
+      <tr><th>Out of scope</th><td>A goal can stay in a tree but count for nothing inside this boundary: tick <b>Out of scope</b></td></tr>
+      <tr><th>Functions</th><td>In Functions, <b>Serves goals</b> on a function; its relevance shows beside the ★ and on its box. The checks list ★ functions with low relevance and relevant functions without ★</td></tr>
     </table>
     <h4>Functions</h4>
     <table>

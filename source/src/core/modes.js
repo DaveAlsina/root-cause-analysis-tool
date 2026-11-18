@@ -2,7 +2,8 @@
 /* Each tool is its own HTML file in the same folder; index.html is the home page. The app defines MODE in its config. */
 const MODES = [
   { id: "rca", file: "uchuva-rca.html", name: "Root causes" },
-  { id: "system", file: "function-analysis.html#system", name: "System" }, // system and functions: two modes of one file
+  { id: "system", file: "function-analysis.html#system", name: "System" }, // system, goals and functions: three modes of one file
+  { id: "goals", file: "function-analysis.html#goals", name: "Goals" },
   { id: "fa", file: "function-analysis.html#functions", name: "Functions" },
 ];
 function drawModeNav(current = MODE) {
