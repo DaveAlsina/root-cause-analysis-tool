@@ -9104,7 +9104,7 @@ function treeChecks(A) { // what still keeps the tree from being a proper fault 
   const real = doc.nodes.filter(x => !isQ(x));
   const noLogic = real.filter(x => A.out.get(x.id).length >= 2 && !x.logic);
   const mixed = real.filter(x => x.logic === "and" && A.out.get(x.id).some(c => isQ(nodeById(c))));
-  const noKind = real.filter(x => !x.kind && A.inn.get(x.id).length);
+  const noKind = real.filter(x => !x.kind && A.inn.get(x.id).length && (catById(x.cat).role || "none") !== "problem"); // problem statements need no kind
   return { noLogic, mixed, noKind, total: noLogic.length + mixed.length + noKind.length };
 }
 function tagPicker(nodes) { // grouped toggle chips; pressed = every given box has the tag

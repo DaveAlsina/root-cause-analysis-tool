@@ -223,3 +223,18 @@ def test_grade_anchors_dont_know_who(b, base):
     p.js("document.querySelector('#gb-pin').click()"); p.page.wait_for_timeout(200)
     assert p.js("!document.querySelector('#anchorpin').hidden")
     p.assert_clean(); p.close()
+
+
+def test_rca_v4_is_a_fault_tree(b, base):
+    """uchuva-rca-4.json: every box with two or more causes says AND or OR, every non-problem box has a kind."""
+    p = Page(b, base + APP)
+    p.js("t => window.__rca.loadText(t, 'uchuva-rca-4.json', null)", (REPO / "uchuva-rca-4.json").read_text(encoding="utf-8"))
+    p.page.wait_for_timeout(600)
+    r = p.js("""(() => { const R = window.__rca, A = R.analyze(), d = R.doc, q = n => n.text.trim() === '?';
+      const prob = new Set(d.categories.filter(c => c.role === 'problem').map(c => c.id));
+      return { cyc: A.cyc.size, noLogic: d.nodes.filter(n => A.out.get(n.id).length >= 2 && !n.logic).length,
+        badLogic: d.nodes.filter(n => n.logic && A.out.get(n.id).length < 2).length,
+        noKind: d.nodes.filter(n => !q(n) && !n.kind && !prob.has(n.cat)).length, roots: A.roots.length,
+        feas: d.scales.find(s => s.id === 'feasibility').who.length }; })()""")
+    assert r == {"cyc": 0, "noLogic": 0, "badLogic": 0, "noKind": 0, "roots": 1, "feas": 4}, r
+    p.assert_clean(); p.close()

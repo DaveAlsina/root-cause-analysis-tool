@@ -1,0 +1,7086 @@
+{
+  "format": "uchuva-rca",
+  "schema": 2,
+  "app": "2.0",
+  "title": "Root cause analysis — Botrytis cinerea (physalis)",
+  "titleTr": {
+    "es": "Análisis de causa raíz — Botrytis cinerea (uchuva)"
+  },
+  "languages": [
+    "en",
+    "es"
+  ],
+  "categories": [
+    {
+      "id": "problem",
+      "name": "Root problem",
+      "nameTr": {
+        "es": "Problema raíz"
+      },
+      "role": "problem",
+      "desc": "",
+      "fill": "#fff2cc",
+      "stroke": "#d6b656",
+      "font": "#1a1a1a"
+    },
+    {
+      "id": "cause",
+      "name": "Intermediate cause",
+      "nameTr": {
+        "es": "Causa intermedia"
+      },
+      "role": "intermediate",
+      "desc": "",
+      "fill": "#1ba1e2",
+      "stroke": "#006eaf",
+      "font": "#ffffff"
+    },
+    {
+      "id": "fact",
+      "name": "Root cause",
+      "nameTr": {
+        "es": "Causa raíz"
+      },
+      "role": "root",
+      "desc": "",
+      "fill": "#f5f5f5",
+      "stroke": "#666666",
+      "font": "#333333"
+    },
+    {
+      "id": "plant",
+      "name": "Unsure",
+      "nameTr": {
+        "es": "Incierto"
+      },
+      "role": "uncertain",
+      "desc": "",
+      "fill": "#e1d5e7",
+      "stroke": "#9673a6",
+      "font": "#1a1a1a"
+    },
+    {
+      "id": "question",
+      "name": "Open question",
+      "nameTr": {
+        "es": "Pregunta abierta"
+      },
+      "role": "question",
+      "desc": "",
+      "fill": "#d80073",
+      "stroke": "#a50040",
+      "font": "#ffffff"
+    }
+  ],
+  "tagGroups": [
+    {
+      "id": "product",
+      "name": "Product flow",
+      "nameTr": {
+        "es": "Flujo de producto"
+      }
+    },
+    {
+      "id": "info",
+      "name": "Information flow",
+      "nameTr": {
+        "es": "Flujo de información"
+      }
+    }
+  ],
+  "tags": [
+    {
+      "id": "t-culture",
+      "emoji": "🌱",
+      "name": "Culture care",
+      "nameTr": {
+        "es": "Cuidado del cultivo"
+      },
+      "group": "product",
+      "desc": "Field and pre-harvest crop management"
+    },
+    {
+      "id": "t-harvest",
+      "emoji": "🧺",
+      "name": "Harvest",
+      "nameTr": {
+        "es": "Cosecha"
+      },
+      "group": "product",
+      "desc": "Picking, harvest timing and field handling"
+    },
+    {
+      "id": "t-drying",
+      "emoji": "🌬️",
+      "name": "Calyx drying",
+      "nameTr": {
+        "es": "Secado del cáliz"
+      },
+      "group": "product",
+      "desc": "Drying the calyx after harvest"
+    },
+    {
+      "id": "t-sorting",
+      "emoji": "🔍",
+      "name": "Sorting",
+      "nameTr": {
+        "es": "Selección"
+      },
+      "group": "product",
+      "desc": "Grading and discarding fruit"
+    },
+    {
+      "id": "t-packing",
+      "emoji": "📦",
+      "name": "Packing",
+      "nameTr": {
+        "es": "Empaque"
+      },
+      "group": "product",
+      "desc": "Packing into punnets, boxes and pallets"
+    },
+    {
+      "id": "t-storage",
+      "emoji": "❄️",
+      "name": "Storage",
+      "nameTr": {
+        "es": "Almacenamiento"
+      },
+      "group": "product",
+      "desc": "Cold rooms at farm, packhouse or exporter"
+    },
+    {
+      "id": "t-inland",
+      "emoji": "🚚",
+      "name": "Inland transport",
+      "nameTr": {
+        "es": "Transporte terrestre"
+      },
+      "group": "product",
+      "desc": "Farm to packhouse, packhouse to port"
+    },
+    {
+      "id": "t-port",
+      "emoji": "🛃",
+      "name": "Port & inspection",
+      "nameTr": {
+        "es": "Puerto e inspección"
+      },
+      "group": "product",
+      "desc": "Port queues, phytosanitary and anti-narcotics checks, inspection at destination"
+    },
+    {
+      "id": "t-sea",
+      "emoji": "🚢",
+      "name": "Sea freight",
+      "nameTr": {
+        "es": "Transporte marítimo"
+      },
+      "group": "product",
+      "desc": "Reefer container, cold chain at sea"
+    },
+    {
+      "id": "t-monitor",
+      "emoji": "📈",
+      "name": "Monitoring",
+      "nameTr": {
+        "es": "Monitoreo"
+      },
+      "group": "info",
+      "desc": "Measuring conditions (°C, RH, rainfall) in the field and along the chain, and using the data for modelling and decisions"
+    },
+    {
+      "id": "t-comms",
+      "emoji": "💬",
+      "name": "Communication",
+      "nameTr": {
+        "es": "Comunicación"
+      },
+      "group": "info",
+      "desc": "Sharing information and relevant events along the chain, to build trust and improve the process"
+    }
+  ],
+  "scales": [
+    {
+      "id": "relevance",
+      "name": "Relevance",
+      "nameTr": {
+        "es": "Relevancia"
+      },
+      "min": 0,
+      "max": 5,
+      "low": "Not relevant",
+      "lowTr": {
+        "es": "No es relevante"
+      },
+      "high": "Critical",
+      "highTr": {
+        "es": "Crítico"
+      },
+      "gate": null,
+      "anchors": {},
+      "anchorsTr": {},
+      "who": [],
+      "kinds": [
+        "exogenous",
+        "actionable",
+        "barrier",
+        "infogap"
+      ]
+    },
+    {
+      "id": "feasibility",
+      "name": "Feasibility",
+      "nameTr": {
+        "es": "Factibilidad"
+      },
+      "min": 1,
+      "max": 5,
+      "low": "Very hard to act on",
+      "lowTr": {
+        "es": "Muy difícil de abordar"
+      },
+      "high": "Easy to act on",
+      "highTr": {
+        "es": "Fácil de abordar"
+      },
+      "gate": {
+        "scale": "relevance",
+        "min": 3
+      },
+      "anchors": {
+        "1": "Not possible with any known means: it would need research, new rules, or a change in weather or market.",
+        "2": "Possible only with a large investment (new equipment or facility) or a change that takes more than a season.",
+        "3": "Possible with a moderate investment or a new procedure; needs training or coordination; within a season.",
+        "4": "Possible with the staff and equipment already there, by changing how things are done; a few weeks.",
+        "5": "Can start right away at almost no cost: a setting, an instruction, a checklist."
+      },
+      "anchorsTr": {
+        "es": {
+          "1": "No es posible con ningún medio conocido: haría falta investigación, nuevas normas o un cambio en el clima o el mercado.",
+          "2": "Posible solo con una inversión grande (equipos o instalaciones nuevas) o con un cambio que toma más de una temporada.",
+          "3": "Posible con una inversión moderada o un procedimiento nuevo; requiere capacitación o coordinación; dentro de una temporada.",
+          "4": "Posible con el personal y los equipos que ya hay, cambiando la forma de hacer las cosas; unas pocas semanas.",
+          "5": "Se puede empezar de inmediato y casi sin costo: un ajuste, una instrucción, una lista de chequeo."
+        }
+      },
+      "who": [
+        {
+          "id": "w1",
+          "name": "Exporter directly",
+          "nameTr": {
+            "es": "La exportadora directamente"
+          }
+        },
+        {
+          "id": "w2",
+          "name": "Through the grower",
+          "nameTr": {
+            "es": "A través del productor"
+          }
+        },
+        {
+          "id": "w3",
+          "name": "Another actor",
+          "nameTr": {
+            "es": "Otro actor"
+          }
+        },
+        {
+          "id": "w4",
+          "name": "No one",
+          "nameTr": {
+            "es": "Nadie"
+          }
+        }
+      ],
+      "kinds": [
+        "actionable",
+        "barrier",
+        "infogap"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "id": "r4-loss",
+      "text": "Exporters lose revenue on physalis with calyx shipped to the Netherlands",
+      "textTr": {
+        "es": "Las exportadoras pierden ingresos con la uchuva con capacho enviada a Países Bajos"
+      },
+      "cat": "problem",
+      "kind": "",
+      "logic": "or",
+      "tags": [
+        "t-port"
+      ],
+      "status": "hypothesis",
+      "notes": "v4 restructure: new box, from the fault-tree restructure discussion, 2026-11-18.",
+      "sources": [],
+      "x": 98,
+      "y": 3620
+    },
+    {
+      "id": "n0",
+      "text": "Lots receive quality claims at destination (partial up to full rejection)",
+      "textTr": {
+        "es": "Los lotes reciben reclamos de calidad en destino (desde parciales hasta rechazo total)"
+      },
+      "cat": "problem",
+      "kind": "",
+      "logic": "and",
+      "tags": [
+        "t-port"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “Some goldenberry is rejected at destination”.",
+      "sources": [],
+      "x": 336,
+      "y": 3620
+    },
+    {
+      "id": "r4-q-loss",
+      "text": "?",
+      "textTr": {},
+      "cat": "question",
+      "kind": "",
+      "logic": "",
+      "tags": [],
+      "status": "unassessed",
+      "notes": "v4 restructure: new box, from the fault-tree restructure discussion, 2026-11-18.",
+      "sources": [],
+      "x": 268,
+      "y": 3549
+    },
+    {
+      "id": "r4-defects",
+      "text": "Lots show defects at the destination inspection",
+      "textTr": {
+        "es": "Los lotes muestran defectos en la inspección en destino"
+      },
+      "cat": "problem",
+      "kind": "",
+      "logic": "or",
+      "tags": [
+        "t-port"
+      ],
+      "status": "hypothesis",
+      "notes": "v4 restructure: new box, from the fault-tree restructure discussion, 2026-11-18.",
+      "sources": [],
+      "x": 573,
+      "y": 2358
+    },
+    {
+      "id": "r4-criteria",
+      "text": "The buyer applies or tightens its acceptance criteria",
+      "textTr": {
+        "es": "El comprador aplica o endurece sus criterios de aceptación"
+      },
+      "cat": "cause",
+      "kind": "exogenous",
+      "logic": "or",
+      "tags": [
+        "t-port",
+        "t-comms"
+      ],
+      "status": "hypothesis",
+      "notes": "v4 restructure: new box, from the fault-tree restructure discussion, 2026-11-18.",
+      "sources": [],
+      "x": 573,
+      "y": 3620
+    },
+    {
+      "id": "n1",
+      "text": "Visible Botrytis decay (grey mould) at the destination inspection",
+      "textTr": {
+        "es": "Pudrición visible por Botrytis (moho gris) en la inspección en destino"
+      },
+      "cat": "problem",
+      "kind": "",
+      "logic": "and",
+      "tags": [
+        "t-port"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “Some pallets are infested with botrytis cinerea”.",
+      "sources": [],
+      "x": 814,
+      "y": 2358
+    },
+    {
+      "id": "r4-otherpath",
+      "text": "Other fungal decay (e.g. Phoma)",
+      "textTr": {
+        "es": "Otras pudriciones por hongos (p. ej. Phoma)"
+      },
+      "cat": "fact",
+      "kind": "exogenous",
+      "logic": "",
+      "tags": [
+        "t-port"
+      ],
+      "status": "hypothesis",
+      "notes": "v4 restructure: new box, from the fault-tree restructure discussion, 2026-11-18.",
+      "sources": [],
+      "x": 809,
+      "y": 2430
+    },
+    {
+      "id": "r4-physio",
+      "text": "Physiological or handling defects (chilling injury, cracking, overripeness, calyx discoloration)",
+      "textTr": {
+        "es": "Defectos fisiológicos o de manejo (daño por frío, rajado, sobremaduración, decoloración del capacho)"
+      },
+      "cat": "fact",
+      "kind": "exogenous",
+      "logic": "",
+      "tags": [
+        "t-port"
+      ],
+      "status": "hypothesis",
+      "notes": "v4 restructure: new box, from the fault-tree restructure discussion, 2026-11-18.",
+      "sources": [],
+      "x": 814,
+      "y": 2260
+    },
+    {
+      "id": "nmvp6eyoq3hj0",
+      "text": "Importers' quality demands rise considerably in low-demand periods",
+      "textTr": {
+        "es": "Demandas de calidad de las empresas importadoras aumentan considerablemente en momentos de baja demanda"
+      },
+      "cat": "cause",
+      "kind": "exogenous",
+      "logic": "",
+      "tags": [
+        "t-comms",
+        "t-port"
+      ],
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 4183,
+      "y": 3633
+    },
+    {
+      "id": "r4-q-criteria",
+      "text": "?",
+      "textTr": {},
+      "cat": "question",
+      "kind": "",
+      "logic": "",
+      "tags": [
+        "t-comms"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: new box, from the fault-tree restructure discussion, 2026-11-18.",
+      "sources": [],
+      "x": 743,
+      "y": 3620
+    },
+    {
+      "id": "nmvp6gku3w5b4",
+      "text": "?",
+      "textTr": {},
+      "cat": "question",
+      "kind": "",
+      "logic": "",
+      "tags": [
+        "t-comms"
+      ],
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 4352,
+      "y": 3633
+    },
+    {
+      "id": "n2",
+      "text": "Fruit tissue is infected by Botrytis before the inspection",
+      "textTr": {
+        "es": "El tejido del fruto se infecta con Botrytis antes de la inspección"
+      },
+      "cat": "cause",
+      "kind": "mechanism",
+      "logic": "or",
+      "tags": [],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “Goldenberry is infected with the fungus”.",
+      "sources": [],
+      "x": 1055,
+      "y": 2358
+    },
+    {
+      "id": "n3",
+      "text": "The pathogen develops before the inspection",
+      "textTr": {
+        "es": "El patógeno se desarrolla antes de la inspección"
+      },
+      "cat": "cause",
+      "kind": "mechanism",
+      "logic": "and",
+      "tags": [],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “Conditions are favorable for the germination and growth of the pathogen”.",
+      "sources": [],
+      "x": 1055,
+      "y": 263
+    },
+    {
+      "id": "r4-notremoved",
+      "text": "The infection is not removed or suppressed before shipment",
+      "textTr": {
+        "es": "La infección no se elimina ni se controla antes del despacho"
+      },
+      "cat": "cause",
+      "kind": "mechanism",
+      "logic": "and",
+      "tags": [
+        "t-sorting"
+      ],
+      "status": "hypothesis",
+      "notes": "v4 restructure: new box, from the fault-tree restructure discussion, 2026-11-18.",
+      "sources": [],
+      "x": 1055,
+      "y": 3369
+    },
+    {
+      "id": "n7",
+      "text": "A latent infection through the flower stays quiescent inside the fruit",
+      "textTr": {
+        "es": "Una infección latente por la flor queda quiescente dentro del fruto"
+      },
+      "cat": "cause",
+      "kind": "mechanism",
+      "logic": "and",
+      "tags": [
+        "t-culture"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “Fungus was already inside the fruit in a quiescent state”.",
+      "sources": [],
+      "x": 1297,
+      "y": 2358
+    },
+    {
+      "id": "r4-surface",
+      "text": "Spores on the fruit surface enter the tissue",
+      "textTr": {
+        "es": "Las esporas sobre el fruto entran al tejido"
+      },
+      "cat": "cause",
+      "kind": "mechanism",
+      "logic": "and",
+      "tags": [],
+      "status": "hypothesis",
+      "notes": "v4 restructure: new box, from the fault-tree restructure discussion, 2026-11-18.",
+      "sources": [],
+      "x": 1297,
+      "y": 2144
+    },
+    {
+      "id": "n18",
+      "text": "There is a spore source near the crop",
+      "textTr": {
+        "es": "Hay una fuente de esporas cerca del cultivo"
+      },
+      "cat": "cause",
+      "kind": "actionable",
+      "logic": "or",
+      "tags": [
+        "t-culture"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “nearby contaminated material”.",
+      "sources": [],
+      "x": 2264,
+      "y": 3485
+    },
+    {
+      "id": "n14",
+      "text": "Spores are carried to the flowers",
+      "textTr": {
+        "es": "Las esporas llegan a las flores"
+      },
+      "cat": "cause",
+      "kind": "mechanism",
+      "logic": "or",
+      "tags": [
+        "t-culture"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “Spores reached the flower”.",
+      "sources": [],
+      "x": 1539,
+      "y": 2466
+    },
+    {
+      "id": "r4-wetflower",
+      "text": "Flowers stay wet or humid long enough for spores to germinate",
+      "textTr": {
+        "es": "Las flores permanecen mojadas o húmedas el tiempo suficiente para que germinen las esporas"
+      },
+      "cat": "fact",
+      "kind": "exogenous",
+      "logic": "",
+      "tags": [
+        "t-culture"
+      ],
+      "status": "hypothesis",
+      "notes": "v4 restructure: new box, from the fault-tree restructure discussion, 2026-11-18.",
+      "sources": [],
+      "x": 1539,
+      "y": 2306
+    },
+    {
+      "id": "n19",
+      "text": "Neighbouring crops carry the disease",
+      "textTr": {
+        "es": "Los cultivos vecinos tienen la enfermedad"
+      },
+      "cat": "fact",
+      "kind": "exogenous",
+      "logic": "",
+      "tags": [
+        "t-culture"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “neighboring crops have the disease”.",
+      "sources": [],
+      "x": 2505,
+      "y": 3450
+    },
+    {
+      "id": "n20",
+      "text": "Infected crop debris stays in the field",
+      "textTr": {
+        "es": "Quedan residuos de cultivo infectados en el campo"
+      },
+      "cat": "cause",
+      "kind": "actionable",
+      "logic": "",
+      "tags": [
+        "t-culture"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “infected crop debris in the field”.",
+      "sources": [],
+      "x": 2506,
+      "y": 3164
+    },
+    {
+      "id": "nmvp5otdguyn5",
+      "text": "Physalis is planted again on the same land too soon (inadequate rotation)",
+      "textTr": {
+        "es": "Se vuelve a sembrar uchuva en el mismo terreno demasiado pronto (rotación inadecuada)"
+      },
+      "cat": "cause",
+      "kind": "actionable",
+      "logic": "or",
+      "tags": [
+        "t-culture"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “Inadequate crop rotation”.",
+      "sources": [],
+      "x": 2748,
+      "y": 3485
+    },
+    {
+      "id": "r4-q-source",
+      "text": "?",
+      "textTr": {},
+      "cat": "question",
+      "kind": "",
+      "logic": "",
+      "tags": [
+        "t-culture"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: new box, from the fault-tree restructure discussion, 2026-11-18.",
+      "sources": [],
+      "x": 2435,
+      "y": 3511
+    },
+    {
+      "id": "nmumx4510rw1c",
+      "text": "The grower does not remove dead plant material",
+      "textTr": {
+        "es": "El productor no retira el material vegetal muerto"
+      },
+      "cat": "cause",
+      "kind": "actionable",
+      "logic": "or",
+      "tags": [
+        "t-culture"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “The farmer does not remove dead plant material from the plants”.",
+      "sources": [],
+      "x": 2748,
+      "y": 3164
+    },
+    {
+      "id": "nmvp5rl69dl0i",
+      "text": "Farmers tend to repeatedly grow the crops they already know",
+      "textTr": {
+        "es": "El agricultor suele trabajar con los cultivos que conoce repetidamente"
+      },
+      "cat": "fact",
+      "kind": "barrier",
+      "logic": "",
+      "tags": [
+        "t-culture"
+      ],
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2986,
+      "y": 3538
+    },
+    {
+      "id": "nmvp5uc0d2qq5",
+      "text": "Farmers' knowledge of how to design an adequate crop rotation is limited",
+      "textTr": {
+        "es": "Conocimiento del agricultor sobre construcción de rotación de cultivo adecuada es limitado"
+      },
+      "cat": "fact",
+      "kind": "infogap",
+      "logic": "",
+      "tags": [
+        "t-culture"
+      ],
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2988,
+      "y": 3424
+    },
+    {
+      "id": "nmvp66n5x2chz",
+      "text": "Rotation must leave at least 4 years between physalis crops",
+      "textTr": {
+        "es": "La rotación debe dejar al menos 4 años entre cultivos de uchuva"
+      },
+      "cat": "fact",
+      "kind": "constraint",
+      "logic": "",
+      "tags": [
+        "t-culture"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “Crop rotation must be at least 4 years”.",
+      "sources": [],
+      "x": 3703,
+      "y": 3590
+    },
+    {
+      "id": "nmvp65yqiyhnk",
+      "text": "The grower has little land",
+      "textTr": {
+        "es": "El productor tiene poca tierra"
+      },
+      "cat": "fact",
+      "kind": "exogenous",
+      "logic": "",
+      "tags": [
+        "t-culture"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “The farmer has little land”.",
+      "sources": [],
+      "x": 3705,
+      "y": 3517
+    },
+    {
+      "id": "n15",
+      "text": "Wind carries spores in the field",
+      "textTr": {
+        "es": "El viento transporta esporas en el campo"
+      },
+      "cat": "fact",
+      "kind": "exogenous",
+      "logic": "",
+      "tags": [
+        "t-culture"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “Air conduction”.",
+      "sources": [],
+      "x": 1771,
+      "y": 2539
+    },
+    {
+      "id": "n16",
+      "text": "Rain splash carries spores onto flowers",
+      "textTr": {
+        "es": "Las salpicaduras de lluvia llevan esporas a las flores"
+      },
+      "cat": "fact",
+      "kind": "exogenous",
+      "logic": "",
+      "tags": [
+        "t-culture"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “Water droplets”.",
+      "sources": [],
+      "x": 1781,
+      "y": 2466
+    },
+    {
+      "id": "n17",
+      "text": "Insects carry spores to flowers",
+      "textTr": {
+        "es": "Los insectos llevan esporas a las flores"
+      },
+      "cat": "fact",
+      "kind": "actionable",
+      "logic": "",
+      "tags": [
+        "t-culture"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “Insect dispersal”.",
+      "sources": [],
+      "x": 1773,
+      "y": 2394
+    },
+    {
+      "id": "r4-onsurface",
+      "text": "Spores are on the fruit surface",
+      "textTr": {
+        "es": "Hay esporas sobre el fruto"
+      },
+      "cat": "cause",
+      "kind": "mechanism",
+      "logic": "or",
+      "tags": [],
+      "status": "hypothesis",
+      "notes": "v4 restructure: new box, from the fault-tree restructure discussion, 2026-11-18.",
+      "sources": [],
+      "x": 1539,
+      "y": 2144
+    },
+    {
+      "id": "n12",
+      "text": "There is a way into the fruit tissue",
+      "textTr": {
+        "es": "Existe una vía de entrada al tejido del fruto"
+      },
+      "cat": "cause",
+      "kind": "mechanism",
+      "logic": "or",
+      "tags": [],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “Pathogen gets access to sugars”.",
+      "sources": [],
+      "x": 1539,
+      "y": 1653
+    },
+    {
+      "id": "n8",
+      "text": "Spores from the field survive on the fruit until harvest",
+      "textTr": {
+        "es": "Las esporas del campo sobreviven sobre el fruto hasta la cosecha"
+      },
+      "cat": "cause",
+      "kind": "mechanism",
+      "logic": "and",
+      "tags": [
+        "t-culture",
+        "t-harvest"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “Spores survived on the fruit surface since before harvest”.",
+      "sources": [],
+      "x": 2023,
+      "y": 2314
+    },
+    {
+      "id": "n9",
+      "text": "Spores spread between fruits at the packhouse",
+      "textTr": {
+        "es": "Las esporas se diseminan entre frutos en la planta de empaque"
+      },
+      "cat": "cause",
+      "kind": "actionable",
+      "logic": "or",
+      "tags": [
+        "t-drying",
+        "t-sorting"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “Spores spread on the fruit surface at sorting facilities”.",
+      "sources": [],
+      "x": 1781,
+      "y": 2144
+    },
+    {
+      "id": "n10",
+      "text": "Spores spread between fruits in transport",
+      "textTr": {
+        "es": "Las esporas se diseminan entre frutos durante el transporte"
+      },
+      "cat": "cause",
+      "kind": "actionable",
+      "logic": "or",
+      "tags": [
+        "t-inland",
+        "t-sea"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “Spores spread on the fruit surface during transport”.",
+      "sources": [],
+      "x": 1781,
+      "y": 1973
+    },
+    {
+      "id": "n21",
+      "text": "The environment lets spores survive",
+      "textTr": {
+        "es": "El ambiente permite que las esporas sobrevivan"
+      },
+      "cat": "cause",
+      "kind": "exogenous",
+      "logic": "or",
+      "tags": [
+        "t-culture"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “Conditions were favorable for spore survival”.",
+      "sources": [],
+      "x": 2264,
+      "y": 2077
+    },
+    {
+      "id": "r4-control",
+      "text": "Fungicide control in the field fails",
+      "textTr": {
+        "es": "Falla el control con fungicidas en el campo"
+      },
+      "cat": "cause",
+      "kind": "actionable",
+      "logic": "or",
+      "tags": [
+        "t-culture"
+      ],
+      "status": "hypothesis",
+      "notes": "v4 restructure: new box, from the fault-tree restructure discussion, 2026-11-18.",
+      "sources": [],
+      "x": 2264,
+      "y": 2314
+    },
+    {
+      "id": "nmwkw4vnxacqn",
+      "text": "Little exposure to solar radiation",
+      "textTr": {
+        "es": "Poca exposición a la radiación solar"
+      },
+      "cat": "fact",
+      "kind": "exogenous",
+      "logic": "",
+      "tags": [
+        "t-culture"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “poca exposición a radiación solar”.",
+      "sources": [],
+      "origin": {
+        "session": "Carlos Suarez - Ocati",
+        "at": "2026-11-17T16:12:23.757Z"
+      },
+      "x": 2498,
+      "y": 2141
+    },
+    {
+      "id": "r4-canopyrh",
+      "text": "High humidity in the crop canopy",
+      "textTr": {
+        "es": "Alta humedad en el follaje del cultivo"
+      },
+      "cat": "fact",
+      "kind": "exogenous",
+      "logic": "",
+      "tags": [
+        "t-culture"
+      ],
+      "status": "hypothesis",
+      "notes": "v4 restructure: new box, from the fault-tree restructure discussion, 2026-11-18.",
+      "sources": [],
+      "x": 2504,
+      "y": 2077
+    },
+    {
+      "id": "nmvp5jdw4e951",
+      "text": "Fruit is harvested during rainy periods",
+      "textTr": {
+        "es": "Se cosecha durante periodos lluviosos"
+      },
+      "cat": "cause",
+      "kind": "actionable",
+      "logic": "or",
+      "tags": [
+        "t-harvest"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “Harvesting takes place during rainy periods”.",
+      "sources": [],
+      "x": 2506,
+      "y": 1969
+    },
+    {
+      "id": "n22",
+      "text": "?",
+      "textTr": {},
+      "cat": "question",
+      "kind": "",
+      "logic": "",
+      "tags": [
+        "t-culture"
+      ],
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2435,
+      "y": 2023
+    },
+    {
+      "id": "nmw2aqj9gdkwa",
+      "text": "No fungicide is applied",
+      "textTr": {
+        "es": "No se aplica fungicida"
+      },
+      "cat": "cause",
+      "kind": "actionable",
+      "logic": "or",
+      "tags": [
+        "t-culture"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “No fungicides were applied”.",
+      "sources": [],
+      "x": 2506,
+      "y": 2196
+    },
+    {
+      "id": "nmw2aps32iurk",
+      "text": "Fungicide is applied but spores survive it",
+      "textTr": {
+        "es": "Se aplica fungicida pero las esporas sobreviven"
+      },
+      "cat": "cause",
+      "kind": "actionable",
+      "logic": "",
+      "tags": [
+        "t-culture"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “Spores survive fungicide applications”.",
+      "sources": [],
+      "x": 2506,
+      "y": 2314
+    },
+    {
+      "id": "nmw2ar8xlmnno",
+      "text": "It was not in the spraying schedule",
+      "textTr": {
+        "es": "No estaba en el calendario de fumigación"
+      },
+      "cat": "fact",
+      "kind": "actionable",
+      "logic": "",
+      "tags": [
+        "t-culture"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “It was not included in the spraying schedule”.",
+      "sources": [],
+      "x": 2747,
+      "y": 2260
+    },
+    {
+      "id": "nmw2as249wnrb",
+      "text": "The risk was not known",
+      "textTr": {
+        "es": "No se sabía que había riesgo"
+      },
+      "cat": "cause",
+      "kind": "infogap",
+      "logic": "or",
+      "tags": [
+        "t-culture",
+        "t-monitor"
+      ],
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2748,
+      "y": 2196
+    },
+    {
+      "id": "nmw2axgstrtl5",
+      "text": "?",
+      "textTr": {},
+      "cat": "question",
+      "kind": "",
+      "logic": "",
+      "tags": [
+        "t-culture"
+      ],
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2677,
+      "y": 2142
+    },
+    {
+      "id": "nmw2av0ox2clv",
+      "text": "Little knowledge about the fungus",
+      "textTr": {
+        "es": "Poco conocimiento sobre el hongo"
+      },
+      "cat": "fact",
+      "kind": "infogap",
+      "logic": "",
+      "tags": [
+        "t-culture"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “Lack of knowledge about the fungus”.",
+      "sources": [],
+      "x": 2989,
+      "y": 3335
+    },
+    {
+      "id": "nmw2avikx2b9w",
+      "text": "Field conditions (temperature, humidity, rain) are not measured precisely",
+      "textTr": {
+        "es": "Las condiciones del campo (temperatura, humedad, lluvia) no se miden con precisión"
+      },
+      "cat": "fact",
+      "kind": "infogap",
+      "logic": "",
+      "tags": [
+        "t-culture",
+        "t-monitor"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “Lack of precise knowledge of environmental conditions”.",
+      "sources": [],
+      "x": 2984,
+      "y": 3254
+    },
+    {
+      "id": "nmw2ay58t6d7w",
+      "text": "?",
+      "textTr": {},
+      "cat": "question",
+      "kind": "",
+      "logic": "",
+      "tags": [
+        "t-culture"
+      ],
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2677,
+      "y": 2314
+    },
+    {
+      "id": "n23",
+      "text": "Drying fans blow spores from infected onto healthy fruit",
+      "textTr": {
+        "es": "Los ventiladores de secado soplan esporas de frutos infectados a frutos sanos"
+      },
+      "cat": "fact",
+      "kind": "actionable",
+      "logic": "",
+      "tags": [
+        "t-drying"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “The drying process uses fans that blow air over a batch of goldenberries”.",
+      "sources": [],
+      "x": 2018,
+      "y": 2144
+    },
+    {
+      "id": "n24",
+      "text": "Manual inspection touches fruits with and without spores",
+      "textTr": {
+        "es": "La inspección manual toca frutos con y sin esporas"
+      },
+      "cat": "cause",
+      "kind": "actionable",
+      "logic": "",
+      "tags": [
+        "t-sorting"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “Inspection requires a manual process that involves touching fruits with and without spores”.",
+      "sources": [],
+      "x": 2023,
+      "y": 2233
+    },
+    {
+      "id": "r4-rooms",
+      "text": "Cold rooms and surfaces carry spores between lots",
+      "textTr": {
+        "es": "Los cuartos fríos y las superficies llevan esporas entre lotes"
+      },
+      "cat": "fact",
+      "kind": "actionable",
+      "logic": "",
+      "tags": [
+        "t-storage",
+        "t-sorting"
+      ],
+      "status": "hypothesis",
+      "notes": "v4 restructure: new box, from the fault-tree restructure discussion, 2026-11-18.",
+      "sources": [],
+      "x": 2021,
+      "y": 2054
+    },
+    {
+      "id": "n25",
+      "text": "The fruit is hidden inside the calyx, so it has to be handled to be inspected",
+      "textTr": {
+        "es": "El fruto está dentro del capacho, así que hay que manipularlo para inspeccionarlo"
+      },
+      "cat": "fact",
+      "kind": "constraint",
+      "logic": "",
+      "tags": [
+        "t-sorting"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “The fruit is not directly visible because it is inside a calyx”.",
+      "sources": [],
+      "x": 2263,
+      "y": 3404
+    },
+    {
+      "id": "n26",
+      "text": "Vehicles and containers already carry spores",
+      "textTr": {
+        "es": "Los vehículos y contenedores ya traen esporas"
+      },
+      "cat": "fact",
+      "kind": "actionable",
+      "logic": "",
+      "tags": [
+        "t-inland",
+        "t-sea"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “Transport means may already be contaminated with spores”.",
+      "sources": [],
+      "x": 2018,
+      "y": 1973
+    },
+    {
+      "id": "n27",
+      "text": "Fruit travels in open air during inland transport",
+      "textTr": {
+        "es": "La fruta viaja al aire libre en el transporte terrestre"
+      },
+      "cat": "fact",
+      "kind": "actionable",
+      "logic": "",
+      "tags": [
+        "t-inland"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “Transport happens in contact with open air”.",
+      "sources": [],
+      "x": 2022,
+      "y": 1901
+    },
+    {
+      "id": "n33",
+      "text": "The fruit skin is damaged",
+      "textTr": {
+        "es": "La piel del fruto está dañada"
+      },
+      "cat": "cause",
+      "kind": "actionable",
+      "logic": "or",
+      "tags": [],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “Fruit membrane is damaged”.",
+      "sources": [],
+      "x": 1781,
+      "y": 1474
+    },
+    {
+      "id": "n34",
+      "text": "The fruit skin is too fragile",
+      "textTr": {
+        "es": "La piel del fruto es demasiado frágil"
+      },
+      "cat": "cause",
+      "kind": "actionable",
+      "logic": "or",
+      "tags": [
+        "t-culture"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “Fruit membrane is too fragile”.",
+      "sources": [],
+      "x": 1781,
+      "y": 1653
+    },
+    {
+      "id": "n29",
+      "text": "The fruit is overripe",
+      "textTr": {
+        "es": "El fruto está sobremaduro"
+      },
+      "cat": "cause",
+      "kind": "actionable",
+      "logic": "or",
+      "tags": [
+        "t-harvest"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “Fruit is too ripe”.",
+      "sources": [],
+      "x": 2023,
+      "y": 843
+    },
+    {
+      "id": "n38",
+      "text": "Mechanical damage during harvest",
+      "textTr": {
+        "es": "Daño mecánico durante la cosecha"
+      },
+      "cat": "cause",
+      "kind": "actionable",
+      "logic": "or",
+      "tags": [
+        "t-harvest"
+      ],
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2023,
+      "y": 1474
+    },
+    {
+      "id": "n39",
+      "text": "Mechanical damage during sorting",
+      "textTr": {
+        "es": "Daño mecánico durante la selección"
+      },
+      "cat": "cause",
+      "kind": "actionable",
+      "logic": "or",
+      "tags": [
+        "t-sorting"
+      ],
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2023,
+      "y": 1538
+    },
+    {
+      "id": "n40",
+      "text": "Mechanical damage during transport",
+      "textTr": {
+        "es": "Daño mecánico durante el transporte"
+      },
+      "cat": "cause",
+      "kind": "actionable",
+      "logic": "or",
+      "tags": [
+        "t-inland"
+      ],
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2023,
+      "y": 1410
+    },
+    {
+      "id": "n48",
+      "text": "The fruit cracks or micro-cracks",
+      "textTr": {
+        "es": "El fruto se raja o presenta microrajaduras"
+      },
+      "cat": "cause",
+      "kind": "actionable",
+      "logic": "or",
+      "tags": [
+        "t-culture"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “Plant has a high cracking rate”.",
+      "sources": [],
+      "x": 2023,
+      "y": 1228
+    },
+    {
+      "id": "nmumxh500b1pg",
+      "text": "Manual handling is highly variable",
+      "textTr": {
+        "es": "El manejo manual es muy variable"
+      },
+      "cat": "fact",
+      "kind": "actionable",
+      "logic": "",
+      "tags": [
+        "t-harvest",
+        "t-sorting"
+      ],
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2264,
+      "y": 1538
+    },
+    {
+      "id": "nmumxhvmdilbk",
+      "text": "Knocks during on-site transport",
+      "textTr": {
+        "es": "Golpes durante el transporte en el lugar"
+      },
+      "cat": "fact",
+      "kind": "actionable",
+      "logic": "",
+      "tags": [
+        "t-harvest",
+        "t-sorting"
+      ],
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2253,
+      "y": 1474
+    },
+    {
+      "id": "nmumxkhbiavz3",
+      "text": "Vehicle vibration during the trip",
+      "textTr": {
+        "es": "Vibración del vehículo durante el trayecto"
+      },
+      "cat": "fact",
+      "kind": "actionable",
+      "logic": "",
+      "tags": [
+        "t-inland"
+      ],
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2258,
+      "y": 1346
+    },
+    {
+      "id": "nmumxlcuhklxc",
+      "text": "Handling of crates during loading and unloading",
+      "textTr": {
+        "es": "Manejo de las canastillas al cargar y descargar"
+      },
+      "cat": "fact",
+      "kind": "actionable",
+      "logic": "",
+      "tags": [
+        "t-inland"
+      ],
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2263,
+      "y": 1410
+    },
+    {
+      "id": "n41",
+      "text": "In the field, the fruit takes up water too quickly",
+      "textTr": {
+        "es": "En el campo, el fruto se llena de agua demasiado rápido"
+      },
+      "cat": "cause",
+      "kind": "actionable",
+      "logic": "",
+      "tags": [
+        "t-culture"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “In the field, the fruit fills with water too quickly”.",
+      "sources": [],
+      "x": 2264,
+      "y": 1166
+    },
+    {
+      "id": "r4-variety",
+      "text": "The variety or plant is prone to cracking",
+      "textTr": {
+        "es": "La variedad o la planta es propensa al rajado"
+      },
+      "cat": "fact",
+      "kind": "actionable",
+      "logic": "",
+      "tags": [
+        "t-culture"
+      ],
+      "status": "hypothesis",
+      "notes": "v4 restructure: new box, from the fault-tree restructure discussion, 2026-11-18.",
+      "sources": [],
+      "x": 2263,
+      "y": 1282
+    },
+    {
+      "id": "n56",
+      "text": "?",
+      "textTr": {},
+      "cat": "question",
+      "kind": "",
+      "logic": "",
+      "tags": [
+        "t-culture"
+      ],
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2193,
+      "y": 1228
+    },
+    {
+      "id": "n47",
+      "text": "Sudden changes in soil moisture",
+      "textTr": {
+        "es": "Cambios repentinos en la humedad del suelo"
+      },
+      "cat": "cause",
+      "kind": "actionable",
+      "logic": "or",
+      "tags": [
+        "t-culture"
+      ],
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2506,
+      "y": 1166
+    },
+    {
+      "id": "n54",
+      "text": "Changes in rainfall patterns",
+      "textTr": {
+        "es": "Cambios en los patrones de lluvia"
+      },
+      "cat": "cause",
+      "kind": "exogenous",
+      "logic": "",
+      "tags": [
+        "t-culture"
+      ],
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2748,
+      "y": 1166
+    },
+    {
+      "id": "n55",
+      "text": "Uneven irrigation",
+      "textTr": {
+        "es": "Riego desigual"
+      },
+      "cat": "cause",
+      "kind": "actionable",
+      "logic": "or",
+      "tags": [
+        "t-culture"
+      ],
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2748,
+      "y": 1110
+    },
+    {
+      "id": "nmumx9w0dr7f8",
+      "text": "Climate change",
+      "textTr": {
+        "es": "Cambio climático"
+      },
+      "cat": "fact",
+      "kind": "exogenous",
+      "logic": "",
+      "tags": [
+        "t-culture"
+      ],
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2966,
+      "y": 1166
+    },
+    {
+      "id": "nmumxb0zs7mjr",
+      "text": "Lack of knowledge about how much to irrigate",
+      "textTr": {
+        "es": "Falta de conocimiento sobre cuánto regar"
+      },
+      "cat": "fact",
+      "kind": "infogap",
+      "logic": "",
+      "tags": [
+        "t-culture"
+      ],
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2988,
+      "y": 1046
+    },
+    {
+      "id": "nmumxbw56jlok",
+      "text": "Lack of information about when to irrigate",
+      "textTr": {
+        "es": "Falta de información sobre cuándo regar"
+      },
+      "cat": "fact",
+      "kind": "infogap",
+      "logic": "",
+      "tags": [
+        "t-culture",
+        "t-monitor"
+      ],
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2990,
+      "y": 1110
+    },
+    {
+      "id": "n42",
+      "text": "Plant absorbs less calcium",
+      "textTr": {
+        "es": "La planta absorbe menos calcio"
+      },
+      "cat": "cause",
+      "kind": "actionable",
+      "logic": "or",
+      "tags": [
+        "t-culture"
+      ],
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2023,
+      "y": 1837
+    },
+    {
+      "id": "nmumx5xard0i9",
+      "text": "Poor soil conditioning",
+      "textTr": {
+        "es": "Deficiente acondicionamiento del suelo"
+      },
+      "cat": "cause",
+      "kind": "actionable",
+      "logic": "or",
+      "tags": [
+        "t-culture"
+      ],
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2023,
+      "y": 1653
+    },
+    {
+      "id": "n49",
+      "text": "Root inactivity",
+      "textTr": {
+        "es": "Inactividad radicular"
+      },
+      "cat": "plant",
+      "kind": "exogenous",
+      "logic": "",
+      "tags": [
+        "t-culture"
+      ],
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2250,
+      "y": 1837
+    },
+    {
+      "id": "n50",
+      "text": "High air humidity lowers calcium transport to the fruit",
+      "textTr": {
+        "es": "La alta humedad del aire reduce el transporte de calcio al fruto"
+      },
+      "cat": "plant",
+      "kind": "exogenous",
+      "logic": "",
+      "tags": [
+        "t-culture"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “High humidity”.",
+      "sources": [],
+      "x": 2261,
+      "y": 1773
+    },
+    {
+      "id": "nmumxd265hz9h",
+      "text": "No soil analysis is done",
+      "textTr": {
+        "es": "No hay análisis de suelo"
+      },
+      "cat": "fact",
+      "kind": "infogap",
+      "logic": "",
+      "tags": [
+        "t-culture",
+        "t-monitor"
+      ],
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2259,
+      "y": 1709
+    },
+    {
+      "id": "nmumxdtt6tiaz",
+      "text": "Inadequate fertilizer application",
+      "textTr": {
+        "es": "Aplicación inadecuada de fertilización"
+      },
+      "cat": "cause",
+      "kind": "actionable",
+      "logic": "or",
+      "tags": [
+        "t-culture"
+      ],
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2264,
+      "y": 1653
+    },
+    {
+      "id": "nmw2b9q2fzl2e",
+      "text": "?",
+      "textTr": {},
+      "cat": "question",
+      "kind": "",
+      "logic": "",
+      "tags": [
+        "t-culture"
+      ],
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2193,
+      "y": 1599
+    },
+    {
+      "id": "nmumxf8zahqpv",
+      "text": "Suitable fertilizers are not available locally",
+      "textTr": {
+        "es": "No hay fertilizantes adecuados disponibles localmente"
+      },
+      "cat": "fact",
+      "kind": "exogenous",
+      "logic": "",
+      "tags": [
+        "t-culture"
+      ],
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2506,
+      "y": 1653
+    },
+    {
+      "id": "nmumxg8651bo7",
+      "text": "The grower is unwilling to apply the advice given",
+      "textTr": {
+        "es": "El productor no está dispuesto a aplicar la asesoría recibida"
+      },
+      "cat": "fact",
+      "kind": "barrier",
+      "logic": "",
+      "tags": [
+        "t-culture",
+        "t-comms"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “The farmer is unwilling to apply the advice given”.",
+      "sources": [],
+      "x": 2506,
+      "y": 1734
+    },
+    {
+      "id": "n60",
+      "text": "Ripening speeds up in the chain (high ethylene production and transpiration)",
+      "textTr": {
+        "es": "La maduración se acelera en la cadena (alta producción de etileno y transpiración)"
+      },
+      "cat": "cause",
+      "kind": "actionable",
+      "logic": "or",
+      "tags": [
+        "t-storage",
+        "t-sea"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “High ethylene production and transpiration”.",
+      "sources": [],
+      "x": 2264,
+      "y": 924
+    },
+    {
+      "id": "n35",
+      "text": "Overripe fruit passes the sorting",
+      "textTr": {
+        "es": "Fruto sobremaduro pasa la selección"
+      },
+      "cat": "cause",
+      "kind": "actionable",
+      "logic": "or",
+      "tags": [
+        "t-sorting"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “Overripe fruit passes the selection stage”.",
+      "sources": [],
+      "x": 2264,
+      "y": 843
+    },
+    {
+      "id": "n44",
+      "text": "The sorter's judgement of ripeness is not objective",
+      "textTr": {
+        "es": "El criterio de madurez del seleccionador no es objetivo"
+      },
+      "cat": "fact",
+      "kind": "barrier",
+      "logic": "",
+      "tags": [
+        "t-sorting"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “Observer is not objective”.",
+      "sources": [],
+      "x": 2506,
+      "y": 1093
+    },
+    {
+      "id": "r4-rejectcost",
+      "text": "Rejecting overripe fruit shifts the cost to the grower",
+      "textTr": {
+        "es": "Rechazar fruto sobremaduro le traslada el costo al productor"
+      },
+      "cat": "fact",
+      "kind": "barrier",
+      "logic": "",
+      "tags": [
+        "t-sorting",
+        "t-comms"
+      ],
+      "status": "hypothesis",
+      "notes": "v4 restructure: new box, from the Carlos Suárez (Ocati), interview 2026-11-17.",
+      "sources": [],
+      "x": 2503,
+      "y": 1005
+    },
+    {
+      "id": "n13",
+      "text": "Temperature lets the pathogen grow",
+      "textTr": {
+        "es": "La temperatura permite que el patógeno crezca"
+      },
+      "cat": "cause",
+      "kind": "actionable",
+      "logic": "or",
+      "tags": [
+        "t-storage",
+        "t-inland",
+        "t-sea"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “Temperature allows the pathogen to develop”.",
+      "sources": [],
+      "x": 2264,
+      "y": 127
+    },
+    {
+      "id": "r4-moisture",
+      "text": "Free water or high humidity reaches the fruit surface",
+      "textTr": {
+        "es": "Hay agua libre o humedad alta sobre el fruto"
+      },
+      "cat": "cause",
+      "kind": "actionable",
+      "logic": "or",
+      "tags": [
+        "t-storage",
+        "t-sea",
+        "t-harvest"
+      ],
+      "status": "hypothesis",
+      "notes": "v4 restructure: new box, from the fault-tree restructure discussion, 2026-11-18.",
+      "sources": [],
+      "x": 1297,
+      "y": 843
+    },
+    {
+      "id": "nmwmcq6viwgsl",
+      "text": "The pathogen has enough time to develop",
+      "textTr": {
+        "es": "El patógeno tiene tiempo suficiente para desarrollarse"
+      },
+      "cat": "cause",
+      "kind": "actionable",
+      "logic": "or",
+      "tags": [
+        "t-sorting",
+        "t-sea"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “the pathogen has enough time to develop”.",
+      "sources": [],
+      "x": 2506,
+      "y": 263
+    },
+    {
+      "id": "n32",
+      "text": "The container setpoint (2–8 °C) is a compromise between Botrytis growth and chilling injury",
+      "textTr": {
+        "es": "La temperatura del contenedor (2–8 °C) es un compromiso entre el crecimiento de Botrytis y el daño por frío"
+      },
+      "cat": "cause",
+      "kind": "actionable",
+      "logic": "and",
+      "tags": [
+        "t-sea"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “Container temperatures are between 2°C and 8°C”.",
+      "sources": [],
+      "x": 2506,
+      "y": 127
+    },
+    {
+      "id": "n36",
+      "text": "The cold chain breaks",
+      "textTr": {
+        "es": "La cadena de frío se rompe"
+      },
+      "cat": "cause",
+      "kind": "actionable",
+      "logic": "or",
+      "tags": [
+        "t-storage",
+        "t-inland",
+        "t-port"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “Cold chain is broken”.",
+      "sources": [],
+      "x": 2506,
+      "y": 710
+    },
+    {
+      "id": "n30",
+      "text": "Uneven ventilation creates warm, humid spots",
+      "textTr": {
+        "es": "La ventilación desigual crea puntos cálidos y húmedos"
+      },
+      "cat": "cause",
+      "kind": "actionable",
+      "logic": "or",
+      "tags": [
+        "t-packing",
+        "t-storage",
+        "t-sea"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “There is uneven ventilation that generates favorable microclimates”.",
+      "sources": [],
+      "x": 2506,
+      "y": 924
+    },
+    {
+      "id": "n31",
+      "text": "Botrytis can grow at temperatures as low as 0 °C",
+      "textTr": {
+        "es": "Botrytis puede crecer a temperaturas tan bajas como 0 °C"
+      },
+      "cat": "fact",
+      "kind": "constraint",
+      "logic": "",
+      "tags": [
+        "t-storage",
+        "t-sea"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “Fungi can develop at temperatures as low as 0°C”.",
+      "sources": [],
+      "x": 2747,
+      "y": 46
+    },
+    {
+      "id": "n37",
+      "text": "Fresh fruit suffers chilling injury at lower temperatures",
+      "textTr": {
+        "es": "El fruto fresco sufre daño por frío a temperaturas más bajas"
+      },
+      "cat": "fact",
+      "kind": "constraint",
+      "logic": "",
+      "tags": [
+        "t-storage",
+        "t-sea"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “Fresh fruit cannot endure lower temperatures”.",
+      "sources": [],
+      "x": 2747,
+      "y": 127
+    },
+    {
+      "id": "n45",
+      "text": "At port, 2–3 day queue for inspection",
+      "textTr": {
+        "es": "En puerto, fila de 2-3 días para inspección"
+      },
+      "cat": "cause",
+      "kind": "actionable",
+      "logic": "or",
+      "tags": [
+        "t-port"
+      ],
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2748,
+      "y": 327
+    },
+    {
+      "id": "nmumxp6nszrom",
+      "text": "Before sorting, fruit is cooled and taken out again (temperature shocks)",
+      "textTr": {
+        "es": "Antes de la selección, la fruta se enfría y se vuelve a sacar (choques de temperatura)"
+      },
+      "cat": "cause",
+      "kind": "actionable",
+      "logic": "or",
+      "tags": [
+        "t-sorting",
+        "t-storage"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “Before sorting, fruit is sometimes stored until it can be graded”.",
+      "sources": [],
+      "x": 2748,
+      "y": 408
+    },
+    {
+      "id": "r4-afterunload",
+      "text": "After the container is opened in Europe, the cold chain is not kept",
+      "textTr": {
+        "es": "Al abrir el contenedor en Europa no se mantiene la cadena de frío"
+      },
+      "cat": "fact",
+      "kind": "actionable",
+      "logic": "",
+      "tags": [
+        "t-port",
+        "t-storage"
+      ],
+      "status": "hypothesis",
+      "notes": "v4 restructure: new box, from the Carlos Suárez (Ocati), interview 2026-11-17.",
+      "sources": [],
+      "x": 2747,
+      "y": 710
+    },
+    {
+      "id": "n46",
+      "text": "?",
+      "textTr": {},
+      "cat": "question",
+      "kind": "",
+      "logic": "",
+      "tags": [
+        "t-storage",
+        "t-inland",
+        "t-port"
+      ],
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2677,
+      "y": 772
+    },
+    {
+      "id": "n51",
+      "text": "High port utilization",
+      "textTr": {
+        "es": "Alta utilización del puerto"
+      },
+      "cat": "fact",
+      "kind": "exogenous",
+      "logic": "",
+      "tags": [
+        "t-port"
+      ],
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2990,
+      "y": 617
+    },
+    {
+      "id": "n52",
+      "text": "Anti-narcotics check at the port",
+      "textTr": {
+        "es": "Control antinarcóticos en el puerto"
+      },
+      "cat": "fact",
+      "kind": "constraint",
+      "logic": "",
+      "tags": [
+        "t-port"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “Anti-narcotics check”.",
+      "sources": [],
+      "x": 2989,
+      "y": 562
+    },
+    {
+      "id": "n53",
+      "text": "Phytosanitary inspection at the port",
+      "textTr": {
+        "es": "Inspección fitosanitaria en el puerto"
+      },
+      "cat": "fact",
+      "kind": "constraint",
+      "logic": "",
+      "tags": [
+        "t-port"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “Phytosanitary inspections”.",
+      "sources": [],
+      "x": 2987,
+      "y": 498
+    },
+    {
+      "id": "nmumxqcadxnbs",
+      "text": "High fruit demand forces queuing",
+      "textTr": {
+        "es": "La alta demanda de fruta obliga a hacer fila"
+      },
+      "cat": "fact",
+      "kind": "exogenous",
+      "logic": "",
+      "tags": [
+        "t-sorting"
+      ],
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2988,
+      "y": 673
+    },
+    {
+      "id": "nmumxr9tgljfa",
+      "text": "The sorting process is slow",
+      "textTr": {
+        "es": "El proceso de selección es lento"
+      },
+      "cat": "cause",
+      "kind": "actionable",
+      "logic": "",
+      "tags": [
+        "t-sorting"
+      ],
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2990,
+      "y": 199
+    },
+    {
+      "id": "nmvp55q0gt14o",
+      "text": "Sorting lines and cold rooms are shared with other exotic fruits (gulupa, granadilla)",
+      "textTr": {
+        "es": "Las líneas de selección y los cuartos fríos se comparten con otras frutas exóticas (gulupa, granadilla)"
+      },
+      "cat": "fact",
+      "kind": "exogenous",
+      "logic": "",
+      "tags": [
+        "t-sorting",
+        "t-storage"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “high utilization of sorting and grading lines for other fruits”.",
+      "sources": [],
+      "x": 2987,
+      "y": 408
+    },
+    {
+      "id": "nmumxsbrq9fat",
+      "text": "Sorting and grading are manual",
+      "textTr": {
+        "es": "La selección y la clasificación son manuales"
+      },
+      "cat": "fact",
+      "kind": "actionable",
+      "logic": "",
+      "tags": [
+        "t-sorting"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “manual process”.",
+      "sources": [],
+      "x": 4416,
+      "y": 3382
+    },
+    {
+      "id": "nmwkvyu6bsuml",
+      "text": "Pallets are positioned in a way that blocks airflow",
+      "textTr": {
+        "es": "Las estibas se ubican de forma que bloquean la circulación del aire"
+      },
+      "cat": "cause",
+      "kind": "actionable",
+      "logic": "or",
+      "tags": [
+        "t-packing",
+        "t-sea"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “Posicionamiento de las estibas es subóptimo para circulación de aire”.",
+      "sources": [],
+      "origin": {
+        "session": "Carlos Suarez - Ocati",
+        "at": "2026-11-17T16:07:41.891Z"
+      },
+      "x": 2748,
+      "y": 835
+    },
+    {
+      "id": "nmwkw1dl8wgzk",
+      "text": "Pre-packed boxes block airflow; perforated bulk boxes ventilate better",
+      "textTr": {
+        "es": "Las cajas preempacadas bloquean el aire; las cajas a granel perforadas ventilan mejor"
+      },
+      "cat": "fact",
+      "kind": "actionable",
+      "logic": "",
+      "tags": [
+        "t-packing"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “Las cajas no permiten una mejor circulación del aire”.",
+      "sources": [],
+      "origin": {
+        "session": "Carlos Suarez - Ocati",
+        "at": "2026-11-17T16:09:40.364Z"
+      },
+      "x": 2747,
+      "y": 924
+    },
+    {
+      "id": "nmwm9e0sm0zyw",
+      "text": "Staff do not know which pallet layout keeps air moving",
+      "textTr": {
+        "es": "El personal no sabe qué ubicación de estibas mantiene el aire circulando"
+      },
+      "cat": "fact",
+      "kind": "infogap",
+      "logic": "",
+      "tags": [
+        "t-packing"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “Lack of knowledge”.",
+      "sources": [],
+      "x": 2985,
+      "y": 916
+    },
+    {
+      "id": "nmwm9ei5793ul",
+      "text": "Loading instructions do not reach the people stowing the container",
+      "textTr": {
+        "es": "Las instrucciones de cargue no llegan a quienes acomodan el contenedor"
+      },
+      "cat": "fact",
+      "kind": "infogap",
+      "logic": "",
+      "tags": [
+        "t-packing",
+        "t-comms"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “Communication problems”.",
+      "sources": [],
+      "x": 2983,
+      "y": 754
+    },
+    {
+      "id": "nmwm9fbarz4sa",
+      "text": "Human error when positioning pallets",
+      "textTr": {
+        "es": "Error humano al ubicar estibas"
+      },
+      "cat": "fact",
+      "kind": "actionable",
+      "logic": "",
+      "tags": [
+        "t-packing"
+      ],
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2982,
+      "y": 835
+    },
+    {
+      "id": "n57",
+      "text": "There is condensation on the fruit surface",
+      "textTr": {
+        "es": "Hay condensación en la superficie del fruto"
+      },
+      "cat": "cause",
+      "kind": "actionable",
+      "logic": "or",
+      "tags": [
+        "t-storage",
+        "t-sea"
+      ],
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2264,
+      "y": 710
+    },
+    {
+      "id": "n58",
+      "text": "Damaged or cracked fruit exudes juice",
+      "textTr": {
+        "es": "El fruto dañado o rajado exuda jugo"
+      },
+      "cat": "cause",
+      "kind": "mechanism",
+      "logic": "or",
+      "tags": [],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “Fruits exude liquid”.",
+      "sources": [],
+      "x": 1539,
+      "y": 843
+    },
+    {
+      "id": "nmvp5k7bp5hhu",
+      "text": "There is strong pressure for product during high-demand periods",
+      "textTr": {
+        "es": "Hay mucha presión por producto durante periodos de alta demanda"
+      },
+      "cat": "fact",
+      "kind": "exogenous",
+      "logic": "",
+      "tags": [
+        "t-harvest"
+      ],
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2744,
+      "y": 2058
+    },
+    {
+      "id": "nmwkyk74sanqx",
+      "text": "High-demand periods coincide with the rainy season",
+      "textTr": {
+        "es": "Los periodos de alta demanda coinciden con la temporada de lluvias"
+      },
+      "cat": "fact",
+      "kind": "exogenous",
+      "logic": "",
+      "tags": [
+        "t-harvest"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “high demand periods might overlap with high rainfall periods”.",
+      "sources": [],
+      "origin": {
+        "session": "Carlos Suarez - Ocati",
+        "at": "2026-11-17T17:20:17.692Z"
+      },
+      "x": 2743,
+      "y": 1969
+    },
+    {
+      "id": "nmw2bc6bah7lv",
+      "text": "The effect of harvesting in rain on quality is not gauged",
+      "textTr": {
+        "es": "No se dimensiona el efecto de cosechar con lluvia sobre la calidad"
+      },
+      "cat": "cause",
+      "kind": "infogap",
+      "logic": "",
+      "tags": [
+        "t-harvest",
+        "t-monitor"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “The impact this can have on quality is not gauged”.",
+      "sources": [],
+      "x": 2748,
+      "y": 1888
+    },
+    {
+      "id": "nmw2bctr2peil",
+      "text": "It is not measured",
+      "textTr": {
+        "es": "No se mide"
+      },
+      "cat": "plant",
+      "kind": "infogap",
+      "logic": "",
+      "tags": [
+        "t-harvest",
+        "t-monitor"
+      ],
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 2969,
+      "y": 1888
+    },
+    {
+      "id": "n11",
+      "text": "Sea freight takes about 21 days",
+      "textTr": {
+        "es": "El transporte marítimo toma unos 21 días"
+      },
+      "cat": "fact",
+      "kind": "constraint",
+      "logic": "",
+      "tags": [
+        "t-sea"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “travel time of ~21 days by sea”.",
+      "sources": [],
+      "x": 2741,
+      "y": 263
+    },
+    {
+      "id": "nmvp54yxg58u7",
+      "text": "Processing takes 1–3 days",
+      "textTr": {
+        "es": "El procesamiento toma 1–3 días"
+      },
+      "cat": "cause",
+      "kind": "actionable",
+      "logic": "or",
+      "tags": [
+        "t-sorting"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “1–3 days of processing time”.",
+      "sources": [],
+      "x": 2748,
+      "y": 199
+    },
+    {
+      "id": "n4",
+      "text": "Infected fruit is not discarded at sorting",
+      "textTr": {
+        "es": "La fruta infectada no se descarta en la selección"
+      },
+      "cat": "cause",
+      "kind": "actionable",
+      "logic": "and",
+      "tags": [
+        "t-sorting"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “Infected fruits are not discarded”.",
+      "sources": [],
+      "x": 1297,
+      "y": 3369
+    },
+    {
+      "id": "r4-treat",
+      "text": "No whole-lot treatment works on the infection",
+      "textTr": {
+        "es": "Ningún tratamiento al lote completo actúa sobre la infección"
+      },
+      "cat": "cause",
+      "kind": "actionable",
+      "logic": "or",
+      "tags": [
+        "t-sorting",
+        "t-storage"
+      ],
+      "status": "hypothesis",
+      "notes": "v4 restructure: new box, from the Carlos Suárez (Ocati), interview 2026-11-17.",
+      "sources": [],
+      "x": 1297,
+      "y": 2978
+    },
+    {
+      "id": "r4-invisible",
+      "text": "The infection is invisible at sorting",
+      "textTr": {
+        "es": "La infección no se ve en la selección"
+      },
+      "cat": "cause",
+      "kind": "constraint",
+      "logic": "or",
+      "tags": [
+        "t-sorting"
+      ],
+      "status": "hypothesis",
+      "notes": "v4 restructure: new box, from the fault-tree restructure discussion, 2026-11-18.",
+      "sources": [],
+      "x": 1539,
+      "y": 3369
+    },
+    {
+      "id": "nmw2bjvijnu0h",
+      "text": "The sorting criterion is purely visual",
+      "textTr": {
+        "es": "El criterio de selección es exclusivamente visual"
+      },
+      "cat": "cause",
+      "kind": "actionable",
+      "logic": "or",
+      "tags": [
+        "t-sorting"
+      ],
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1539,
+      "y": 3177
+    },
+    {
+      "id": "n5",
+      "text": "Spores are very small",
+      "textTr": {
+        "es": "Las esporas son muy pequeñas"
+      },
+      "cat": "fact",
+      "kind": "constraint",
+      "logic": "",
+      "tags": [
+        "t-sorting"
+      ],
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1769,
+      "y": 3305
+    },
+    {
+      "id": "n6",
+      "text": "Early damage is not visible",
+      "textTr": {
+        "es": "El daño temprano no es visible"
+      },
+      "cat": "fact",
+      "kind": "constraint",
+      "logic": "",
+      "tags": [
+        "t-sorting"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “damage is not visible”.",
+      "sources": [],
+      "x": 1775,
+      "y": 3369
+    },
+    {
+      "id": "nmw2bkprqnl8u",
+      "text": "Visual sorting is cheap, intuitive and fast",
+      "textTr": {
+        "es": "La selección visual es barata, intuitiva y rápida"
+      },
+      "cat": "fact",
+      "kind": "barrier",
+      "logic": "",
+      "tags": [
+        "t-sorting"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “It is cheap, intuitive and fast”.",
+      "sources": [],
+      "x": 1777,
+      "y": 3241
+    },
+    {
+      "id": "nmw2bmt1sfxi0",
+      "text": "Other alternatives are not known",
+      "textTr": {
+        "es": "No se conocen otras alternativas"
+      },
+      "cat": "plant",
+      "kind": "infogap",
+      "logic": "",
+      "tags": [
+        "t-sorting"
+      ],
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1781,
+      "y": 3177
+    },
+    {
+      "id": "nmw2bnet3vbim",
+      "text": "Other alternatives are perceived as complex",
+      "textTr": {
+        "es": "Se perciben otras alternativas como complejas"
+      },
+      "cat": "plant",
+      "kind": "barrier",
+      "logic": "",
+      "tags": [
+        "t-sorting"
+      ],
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1770,
+      "y": 3104
+    },
+    {
+      "id": "nmw2bom93eo3f",
+      "text": "Other alternatives are not trusted",
+      "textTr": {
+        "es": "No se confía en otras alternativas"
+      },
+      "cat": "plant",
+      "kind": "barrier",
+      "logic": "",
+      "tags": [
+        "t-sorting"
+      ],
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 1781,
+      "y": 3032
+    },
+    {
+      "id": "r4-notreat",
+      "text": "No whole-lot treatment is applied",
+      "textTr": {
+        "es": "No se aplica ningún tratamiento al lote completo"
+      },
+      "cat": "cause",
+      "kind": "actionable",
+      "logic": "or",
+      "tags": [
+        "t-sorting",
+        "t-storage"
+      ],
+      "status": "hypothesis",
+      "notes": "v4 restructure: new box, from the Carlos Suárez (Ocati), interview 2026-11-17.",
+      "sources": [],
+      "x": 1539,
+      "y": 2978
+    },
+    {
+      "id": "r4-survives",
+      "text": "A treatment is applied but the fungus survives it",
+      "textTr": {
+        "es": "Se aplica un tratamiento pero el hongo sobrevive"
+      },
+      "cat": "cause",
+      "kind": "actionable",
+      "logic": "or",
+      "tags": [
+        "t-sorting",
+        "t-storage"
+      ],
+      "status": "hypothesis",
+      "notes": "v4 restructure: new box, from the fault-tree restructure discussion, 2026-11-18.",
+      "sources": [],
+      "x": 1539,
+      "y": 2711
+    },
+    {
+      "id": "r4-notapproved",
+      "text": "Active ingredients that work in other fruit are not approved for physalis (e.g. SO₂)",
+      "textTr": {
+        "es": "Los ingredientes activos que funcionan en otras frutas no están aprobados para uchuva (p. ej. SO₂)"
+      },
+      "cat": "fact",
+      "kind": "constraint",
+      "logic": "",
+      "tags": [
+        "t-sorting"
+      ],
+      "status": "hypothesis",
+      "notes": "v4 restructure: new box, from the Carlos Suárez (Ocati), interview 2026-11-17.",
+      "sources": [],
+      "x": 1781,
+      "y": 2898
+    },
+    {
+      "id": "r4-q-notreat",
+      "text": "?",
+      "textTr": {},
+      "cat": "question",
+      "kind": "",
+      "logic": "",
+      "tags": [
+        "t-sorting"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: new box, from the fault-tree restructure discussion, 2026-11-18.",
+      "sources": [],
+      "x": 1710,
+      "y": 2978
+    },
+    {
+      "id": "r4-dose",
+      "text": "The dose is wrong",
+      "textTr": {
+        "es": "La dosis es incorrecta"
+      },
+      "cat": "fact",
+      "kind": "actionable",
+      "logic": "",
+      "tags": [
+        "t-storage"
+      ],
+      "status": "hypothesis",
+      "notes": "v4 restructure: new box, from the fault-tree restructure discussion, 2026-11-18.",
+      "sources": [],
+      "x": 1769,
+      "y": 2638
+    },
+    {
+      "id": "r4-exposure",
+      "text": "The exposure is too short (e.g. ozone in the cold room)",
+      "textTr": {
+        "es": "La exposición es demasiado corta (p. ej. ozono en el cuarto frío)"
+      },
+      "cat": "fact",
+      "kind": "actionable",
+      "logic": "",
+      "tags": [
+        "t-storage"
+      ],
+      "status": "hypothesis",
+      "notes": "v4 restructure: new box, from the fault-tree restructure discussion, 2026-11-18.",
+      "sources": [],
+      "x": 1780,
+      "y": 2800
+    },
+    {
+      "id": "r4-reach",
+      "text": "The treatment does not reach infections inside the fruit or under the calyx",
+      "textTr": {
+        "es": "El tratamiento no alcanza las infecciones dentro del fruto o bajo el capacho"
+      },
+      "cat": "fact",
+      "kind": "constraint",
+      "logic": "",
+      "tags": [
+        "t-storage"
+      ],
+      "status": "hypothesis",
+      "notes": "v4 restructure: new box, from the fault-tree restructure discussion, 2026-11-18.",
+      "sources": [],
+      "x": 1781,
+      "y": 2711
+    },
+    {
+      "id": "r4-q-survives",
+      "text": "?",
+      "textTr": {},
+      "cat": "question",
+      "kind": "",
+      "logic": "",
+      "tags": [
+        "t-storage"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: new box, from the fault-tree restructure discussion, 2026-11-18.",
+      "sources": [],
+      "x": 1710,
+      "y": 2593
+    },
+    {
+      "id": "nmw2bt6p56akc",
+      "text": "Growers get no feedback on how their fruit arrives",
+      "textTr": {
+        "es": "Los productores no reciben retroalimentación sobre cómo llega su fruta"
+      },
+      "cat": "cause",
+      "kind": "infogap",
+      "logic": "or",
+      "tags": [
+        "t-comms"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “The farmer is disconnected from the final outcome at the other end of the chain”.",
+      "sources": [],
+      "x": 4183,
+      "y": 3047
+    },
+    {
+      "id": "nmw2btv6mk5h5",
+      "text": "Some importers' quality reports do not reach the farmer",
+      "textTr": {
+        "es": "Los reportes de calidad de algunas importadoras no llegan al agricultor"
+      },
+      "cat": "fact",
+      "kind": "infogap",
+      "logic": "",
+      "tags": [
+        "t-comms"
+      ],
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 4421,
+      "y": 3047
+    },
+    {
+      "id": "r4-priceonly",
+      "text": "Growers only see price changes, not their reasons",
+      "textTr": {
+        "es": "Los productores solo ven cambios de precio, no sus razones"
+      },
+      "cat": "fact",
+      "kind": "infogap",
+      "logic": "",
+      "tags": [
+        "t-comms"
+      ],
+      "status": "hypothesis",
+      "notes": "v4 restructure: new box, from the Carlos Suárez (Ocati), interview 2026-11-17.",
+      "sources": [],
+      "x": 4421,
+      "y": 3128
+    },
+    {
+      "id": "nmw2bu8h5m31c",
+      "text": "?",
+      "textTr": {},
+      "cat": "question",
+      "kind": "",
+      "logic": "",
+      "tags": [
+        "t-comms"
+      ],
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 4352,
+      "y": 2985
+    },
+    {
+      "id": "nmvp5xnjrd2ue",
+      "text": "Exporter–grower relationships are short-term and low-trust",
+      "textTr": {
+        "es": "Las relaciones entre exportadora y productor son de corto plazo y con poca confianza"
+      },
+      "cat": "cause",
+      "kind": "barrier",
+      "logic": "or",
+      "tags": [
+        "t-comms"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “Long-term relationships with physalis growers are complex”.",
+      "sources": [],
+      "x": 3229,
+      "y": 3517
+    },
+    {
+      "id": "nmvp65fwe074n",
+      "text": "The grower who supplies the exporter changes often",
+      "textTr": {
+        "es": "El productor que abastece a la exportadora cambia con frecuencia"
+      },
+      "cat": "cause",
+      "kind": "barrier",
+      "logic": "or",
+      "tags": [
+        "t-comms"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “The supplier changes relatively often”.",
+      "sources": [],
+      "x": 3466,
+      "y": 3517
+    },
+    {
+      "id": "nmvp5yos0azq9",
+      "text": "Mutual trust issues",
+      "textTr": {
+        "es": "Problemas de confianza mutuos"
+      },
+      "cat": "cause",
+      "kind": "barrier",
+      "logic": "or",
+      "tags": [
+        "t-comms"
+      ],
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 3466,
+      "y": 3364
+    },
+    {
+      "id": "nmvp61quyqvpy",
+      "text": "The grower sells to other exporters in parallel",
+      "textTr": {
+        "es": "El productor vende a otras exportadoras en paralelo"
+      },
+      "cat": "fact",
+      "kind": "barrier",
+      "logic": "",
+      "tags": [
+        "t-comms"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “Farmer sells to other exporters in parallel”.",
+      "sources": [],
+      "x": 3704,
+      "y": 3364
+    },
+    {
+      "id": "nmvp63352rhwi",
+      "text": "The grower sometimes does not understand or review the contract",
+      "textTr": {
+        "es": "El productor a veces no entiende o no revisa el contrato"
+      },
+      "cat": "fact",
+      "kind": "barrier",
+      "logic": "",
+      "tags": [
+        "t-comms"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “Farmer sometimes does not properly understand/review the contract”.",
+      "sources": [],
+      "x": 3699,
+      "y": 3283
+    },
+    {
+      "id": "nmvp69q1t7ymu",
+      "text": "Growers do not trust the sorting and grading",
+      "textTr": {
+        "es": "Los productores no confían en la selección y la clasificación"
+      },
+      "cat": "cause",
+      "kind": "barrier",
+      "logic": "or",
+      "tags": [
+        "t-sorting",
+        "t-comms"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “Lack of trust and transparency in the sorting and grading system”.",
+      "sources": [],
+      "x": 3705,
+      "y": 3445
+    },
+    {
+      "id": "nmvp6b6zzbea1",
+      "text": "Considerable differences between exporters' quality assessments",
+      "textTr": {
+        "es": "Diferencias considerables entre evaluaciones de calidad de exportadoras"
+      },
+      "cat": "cause",
+      "kind": "barrier",
+      "logic": "or",
+      "tags": [
+        "t-sorting",
+        "t-comms"
+      ],
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 4183,
+      "y": 3445
+    },
+    {
+      "id": "nmvp6d15dodfp",
+      "text": "Suspected manipulation of quality assessments in low-demand periods",
+      "textTr": {
+        "es": "Sospecha de adulteración de evaluaciones de calidad en tiempos de baja demanda"
+      },
+      "cat": "cause",
+      "kind": "barrier",
+      "logic": "or",
+      "tags": [
+        "t-sorting",
+        "t-comms"
+      ],
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 3945,
+      "y": 3445
+    },
+    {
+      "id": "nmvp6cbm8aie8",
+      "text": "?",
+      "textTr": {},
+      "cat": "question",
+      "kind": "",
+      "logic": "",
+      "tags": [
+        "t-sorting",
+        "t-comms"
+      ],
+      "status": "unassessed",
+      "notes": "",
+      "sources": [],
+      "x": 4352,
+      "y": 3445
+    },
+    {
+      "id": "nmvp5w6oanvlz",
+      "text": "Technical advice is short-term and thinly spread",
+      "textTr": {
+        "es": "La asesoría técnica es de corto plazo y no alcanza para todos"
+      },
+      "cat": "cause",
+      "kind": "barrier",
+      "logic": "or",
+      "tags": [
+        "t-culture",
+        "t-comms"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “Technical advice focuses on short-term operational aspects”.",
+      "sources": [],
+      "x": 2990,
+      "y": 3164
+    },
+    {
+      "id": "nmvp64doceioa",
+      "text": "There are many growers to visit and support",
+      "textTr": {
+        "es": "Hay muchos productores que visitar y acompañar"
+      },
+      "cat": "cause",
+      "kind": "barrier",
+      "logic": "",
+      "tags": [
+        "t-culture",
+        "t-comms"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “There are many farmers to visit and support”.",
+      "sources": [],
+      "x": 3466,
+      "y": 3083
+    },
+    {
+      "id": "nmumxexqxjhjo",
+      "text": "Growers lack technical advice",
+      "textTr": {
+        "es": "Los productores no tienen asesoría técnica"
+      },
+      "cat": "fact",
+      "kind": "infogap",
+      "logic": "",
+      "tags": [
+        "t-culture",
+        "t-comms"
+      ],
+      "status": "unassessed",
+      "notes": "v4 restructure: reworded. Was “Lack of technical advice”.",
+      "sources": [],
+      "x": 3224,
+      "y": 3164
+    },
+    {
+      "id": "r4-h4",
+      "text": "Growers aim for appearance and price, not shelf life",
+      "textTr": {
+        "es": "Los productores buscan apariencia y precio, no vida útil"
+      },
+      "cat": "cause",
+      "kind": "barrier",
+      "logic": "or",
+      "tags": [
+        "t-culture",
+        "t-comms"
+      ],
+      "status": "hypothesis",
+      "notes": "v4 restructure: new box, from the Carlos Suárez (Ocati), interview 2026-11-17.",
+      "sources": [],
+      "x": 2990,
+      "y": 3083
+    }
+  ],
+  "edges": [
+    {
+      "id": "e4-0",
+      "source": "r4-loss",
+      "target": "n0"
+    },
+    {
+      "id": "e4-1",
+      "source": "r4-loss",
+      "target": "r4-q-loss"
+    },
+    {
+      "id": "e4-2",
+      "source": "n0",
+      "target": "r4-defects"
+    },
+    {
+      "id": "e4-3",
+      "source": "n0",
+      "target": "r4-criteria"
+    },
+    {
+      "id": "e4-4",
+      "source": "r4-defects",
+      "target": "n1"
+    },
+    {
+      "id": "e4-5",
+      "source": "r4-defects",
+      "target": "r4-otherpath"
+    },
+    {
+      "id": "e4-6",
+      "source": "r4-defects",
+      "target": "r4-physio"
+    },
+    {
+      "id": "e4-7",
+      "source": "nmvp6eyoq3hj0",
+      "target": "nmvp6gku3w5b4"
+    },
+    {
+      "id": "e4-8",
+      "source": "r4-criteria",
+      "target": "nmvp6eyoq3hj0"
+    },
+    {
+      "id": "e4-9",
+      "source": "r4-criteria",
+      "target": "r4-q-criteria"
+    },
+    {
+      "id": "e4-10",
+      "source": "n1",
+      "target": "n2"
+    },
+    {
+      "id": "e4-11",
+      "source": "n1",
+      "target": "n3"
+    },
+    {
+      "id": "e4-12",
+      "source": "n1",
+      "target": "r4-notremoved"
+    },
+    {
+      "id": "e4-13",
+      "source": "n2",
+      "target": "n7"
+    },
+    {
+      "id": "e4-14",
+      "source": "n2",
+      "target": "r4-surface"
+    },
+    {
+      "id": "e4-15",
+      "source": "n7",
+      "target": "n18"
+    },
+    {
+      "id": "e4-16",
+      "source": "n7",
+      "target": "n14"
+    },
+    {
+      "id": "e4-17",
+      "source": "n7",
+      "target": "r4-wetflower"
+    },
+    {
+      "id": "e4-18",
+      "source": "n18",
+      "target": "n19"
+    },
+    {
+      "id": "e4-19",
+      "source": "n18",
+      "target": "n20"
+    },
+    {
+      "id": "e4-20",
+      "source": "n18",
+      "target": "nmvp5otdguyn5"
+    },
+    {
+      "id": "e4-21",
+      "source": "n18",
+      "target": "r4-q-source"
+    },
+    {
+      "id": "e4-22",
+      "source": "n20",
+      "target": "nmumx4510rw1c"
+    },
+    {
+      "id": "e4-23",
+      "source": "nmvp5otdguyn5",
+      "target": "nmvp5rl69dl0i"
+    },
+    {
+      "id": "e4-24",
+      "source": "nmvp5otdguyn5",
+      "target": "nmvp5uc0d2qq5"
+    },
+    {
+      "id": "e4-25",
+      "source": "nmvp5otdguyn5",
+      "target": "nmvp66n5x2chz"
+    },
+    {
+      "id": "e4-26",
+      "source": "nmvp5otdguyn5",
+      "target": "nmvp65yqiyhnk"
+    },
+    {
+      "id": "e4-27",
+      "source": "n14",
+      "target": "n15"
+    },
+    {
+      "id": "e4-28",
+      "source": "n14",
+      "target": "n16"
+    },
+    {
+      "id": "e4-29",
+      "source": "n14",
+      "target": "n17"
+    },
+    {
+      "id": "e4-30",
+      "source": "r4-surface",
+      "target": "r4-onsurface"
+    },
+    {
+      "id": "e4-31",
+      "source": "r4-surface",
+      "target": "n12"
+    },
+    {
+      "id": "e4-32",
+      "source": "r4-onsurface",
+      "target": "n8"
+    },
+    {
+      "id": "e4-33",
+      "source": "r4-onsurface",
+      "target": "n9"
+    },
+    {
+      "id": "e4-34",
+      "source": "r4-onsurface",
+      "target": "n10"
+    },
+    {
+      "id": "e4-35",
+      "source": "n8",
+      "target": "n18"
+    },
+    {
+      "id": "e4-36",
+      "source": "n8",
+      "target": "n21"
+    },
+    {
+      "id": "e4-37",
+      "source": "n8",
+      "target": "r4-control"
+    },
+    {
+      "id": "e4-38",
+      "source": "n21",
+      "target": "nmwkw4vnxacqn"
+    },
+    {
+      "id": "e4-39",
+      "source": "n21",
+      "target": "r4-canopyrh"
+    },
+    {
+      "id": "e4-40",
+      "source": "n21",
+      "target": "nmvp5jdw4e951"
+    },
+    {
+      "id": "e4-41",
+      "source": "n21",
+      "target": "n22"
+    },
+    {
+      "id": "e4-42",
+      "source": "r4-control",
+      "target": "nmw2aqj9gdkwa"
+    },
+    {
+      "id": "e4-43",
+      "source": "r4-control",
+      "target": "nmw2aps32iurk"
+    },
+    {
+      "id": "e4-44",
+      "source": "nmw2aqj9gdkwa",
+      "target": "nmw2ar8xlmnno"
+    },
+    {
+      "id": "e4-45",
+      "source": "nmw2aqj9gdkwa",
+      "target": "nmw2as249wnrb"
+    },
+    {
+      "id": "e4-46",
+      "source": "nmw2aqj9gdkwa",
+      "target": "nmvp5w6oanvlz"
+    },
+    {
+      "id": "e4-47",
+      "source": "nmw2aqj9gdkwa",
+      "target": "nmw2axgstrtl5"
+    },
+    {
+      "id": "e4-48",
+      "source": "nmw2as249wnrb",
+      "target": "nmw2av0ox2clv"
+    },
+    {
+      "id": "e4-49",
+      "source": "nmw2as249wnrb",
+      "target": "nmw2avikx2b9w"
+    },
+    {
+      "id": "e4-50",
+      "source": "nmw2aps32iurk",
+      "target": "nmw2ay58t6d7w"
+    },
+    {
+      "id": "e4-51",
+      "source": "n9",
+      "target": "n23"
+    },
+    {
+      "id": "e4-52",
+      "source": "n9",
+      "target": "n24"
+    },
+    {
+      "id": "e4-53",
+      "source": "n9",
+      "target": "r4-rooms"
+    },
+    {
+      "id": "e4-54",
+      "source": "n24",
+      "target": "n25"
+    },
+    {
+      "id": "e4-55",
+      "source": "n10",
+      "target": "n26"
+    },
+    {
+      "id": "e4-56",
+      "source": "n10",
+      "target": "n27"
+    },
+    {
+      "id": "e4-57",
+      "source": "n12",
+      "target": "n33"
+    },
+    {
+      "id": "e4-58",
+      "source": "n12",
+      "target": "n34"
+    },
+    {
+      "id": "e4-59",
+      "source": "n12",
+      "target": "n29"
+    },
+    {
+      "id": "e4-60",
+      "source": "n33",
+      "target": "n38"
+    },
+    {
+      "id": "e4-61",
+      "source": "n33",
+      "target": "n39"
+    },
+    {
+      "id": "e4-62",
+      "source": "n33",
+      "target": "n40"
+    },
+    {
+      "id": "e4-63",
+      "source": "n33",
+      "target": "n48"
+    },
+    {
+      "id": "e4-64",
+      "source": "n38",
+      "target": "nmumxh500b1pg"
+    },
+    {
+      "id": "e4-65",
+      "source": "n38",
+      "target": "nmumxhvmdilbk"
+    },
+    {
+      "id": "e4-66",
+      "source": "n39",
+      "target": "nmumxh500b1pg"
+    },
+    {
+      "id": "e4-67",
+      "source": "n39",
+      "target": "nmumxhvmdilbk"
+    },
+    {
+      "id": "e4-68",
+      "source": "n40",
+      "target": "nmumxkhbiavz3"
+    },
+    {
+      "id": "e4-69",
+      "source": "n40",
+      "target": "nmumxlcuhklxc"
+    },
+    {
+      "id": "e4-70",
+      "source": "n48",
+      "target": "n41"
+    },
+    {
+      "id": "e4-71",
+      "source": "n48",
+      "target": "r4-variety"
+    },
+    {
+      "id": "e4-72",
+      "source": "n48",
+      "target": "n56"
+    },
+    {
+      "id": "e4-73",
+      "source": "n41",
+      "target": "n47"
+    },
+    {
+      "id": "e4-74",
+      "source": "n47",
+      "target": "n54"
+    },
+    {
+      "id": "e4-75",
+      "source": "n47",
+      "target": "n55"
+    },
+    {
+      "id": "e4-76",
+      "source": "n54",
+      "target": "nmumx9w0dr7f8"
+    },
+    {
+      "id": "e4-77",
+      "source": "n55",
+      "target": "nmumxb0zs7mjr"
+    },
+    {
+      "id": "e4-78",
+      "source": "n55",
+      "target": "nmumxbw56jlok"
+    },
+    {
+      "id": "e4-79",
+      "source": "n55",
+      "target": "nmvp5w6oanvlz"
+    },
+    {
+      "id": "e4-80",
+      "source": "n34",
+      "target": "n42"
+    },
+    {
+      "id": "e4-81",
+      "source": "n34",
+      "target": "nmumx5xard0i9"
+    },
+    {
+      "id": "e4-82",
+      "source": "n34",
+      "target": "n29"
+    },
+    {
+      "id": "e4-83",
+      "source": "n42",
+      "target": "n49"
+    },
+    {
+      "id": "e4-84",
+      "source": "n42",
+      "target": "n50"
+    },
+    {
+      "id": "e4-85",
+      "source": "nmumx5xard0i9",
+      "target": "nmumxd265hz9h"
+    },
+    {
+      "id": "e4-86",
+      "source": "nmumx5xard0i9",
+      "target": "nmumxdtt6tiaz"
+    },
+    {
+      "id": "e4-87",
+      "source": "nmumx5xard0i9",
+      "target": "nmw2b9q2fzl2e"
+    },
+    {
+      "id": "e4-88",
+      "source": "nmumxdtt6tiaz",
+      "target": "nmumxf8zahqpv"
+    },
+    {
+      "id": "e4-89",
+      "source": "nmumxdtt6tiaz",
+      "target": "nmumxg8651bo7"
+    },
+    {
+      "id": "e4-90",
+      "source": "nmumxdtt6tiaz",
+      "target": "nmvp5w6oanvlz"
+    },
+    {
+      "id": "e4-91",
+      "source": "n29",
+      "target": "n60"
+    },
+    {
+      "id": "e4-92",
+      "source": "n29",
+      "target": "n35"
+    },
+    {
+      "id": "e4-93",
+      "source": "n60",
+      "target": "n30"
+    },
+    {
+      "id": "e4-94",
+      "source": "n60",
+      "target": "n36"
+    },
+    {
+      "id": "e4-95",
+      "source": "n35",
+      "target": "n44"
+    },
+    {
+      "id": "e4-96",
+      "source": "n35",
+      "target": "r4-rejectcost"
+    },
+    {
+      "id": "e4-97",
+      "source": "n35",
+      "target": "r4-h4"
+    },
+    {
+      "id": "e4-98",
+      "source": "n3",
+      "target": "n13"
+    },
+    {
+      "id": "e4-99",
+      "source": "n3",
+      "target": "r4-moisture"
+    },
+    {
+      "id": "e4-100",
+      "source": "n3",
+      "target": "nmwmcq6viwgsl"
+    },
+    {
+      "id": "e4-101",
+      "source": "n3",
+      "target": "n29"
+    },
+    {
+      "id": "e4-102",
+      "source": "n13",
+      "target": "n32"
+    },
+    {
+      "id": "e4-103",
+      "source": "n13",
+      "target": "n36"
+    },
+    {
+      "id": "e4-104",
+      "source": "n13",
+      "target": "n30"
+    },
+    {
+      "id": "e4-105",
+      "source": "n32",
+      "target": "n31"
+    },
+    {
+      "id": "e4-106",
+      "source": "n32",
+      "target": "n37"
+    },
+    {
+      "id": "e4-107",
+      "source": "n36",
+      "target": "n45"
+    },
+    {
+      "id": "e4-108",
+      "source": "n36",
+      "target": "nmumxp6nszrom"
+    },
+    {
+      "id": "e4-109",
+      "source": "n36",
+      "target": "r4-afterunload"
+    },
+    {
+      "id": "e4-110",
+      "source": "n36",
+      "target": "n46"
+    },
+    {
+      "id": "e4-111",
+      "source": "n45",
+      "target": "n51"
+    },
+    {
+      "id": "e4-112",
+      "source": "n45",
+      "target": "n52"
+    },
+    {
+      "id": "e4-113",
+      "source": "n45",
+      "target": "n53"
+    },
+    {
+      "id": "e4-114",
+      "source": "nmumxp6nszrom",
+      "target": "nmumxqcadxnbs"
+    },
+    {
+      "id": "e4-115",
+      "source": "nmumxp6nszrom",
+      "target": "nmumxr9tgljfa"
+    },
+    {
+      "id": "e4-116",
+      "source": "nmumxp6nszrom",
+      "target": "nmvp55q0gt14o"
+    },
+    {
+      "id": "e4-117",
+      "source": "nmumxr9tgljfa",
+      "target": "nmumxsbrq9fat"
+    },
+    {
+      "id": "e4-118",
+      "source": "n30",
+      "target": "nmwkvyu6bsuml"
+    },
+    {
+      "id": "e4-119",
+      "source": "n30",
+      "target": "nmwkw1dl8wgzk"
+    },
+    {
+      "id": "e4-120",
+      "source": "nmwkvyu6bsuml",
+      "target": "nmwm9e0sm0zyw"
+    },
+    {
+      "id": "e4-121",
+      "source": "nmwkvyu6bsuml",
+      "target": "nmwm9ei5793ul"
+    },
+    {
+      "id": "e4-122",
+      "source": "nmwkvyu6bsuml",
+      "target": "nmwm9fbarz4sa"
+    },
+    {
+      "id": "e4-123",
+      "source": "r4-moisture",
+      "target": "n57"
+    },
+    {
+      "id": "e4-124",
+      "source": "r4-moisture",
+      "target": "nmvp5jdw4e951"
+    },
+    {
+      "id": "e4-125",
+      "source": "r4-moisture",
+      "target": "n58"
+    },
+    {
+      "id": "e4-126",
+      "source": "r4-moisture",
+      "target": "n30"
+    },
+    {
+      "id": "e4-127",
+      "source": "r4-moisture",
+      "target": "n60"
+    },
+    {
+      "id": "e4-128",
+      "source": "n57",
+      "target": "n36"
+    },
+    {
+      "id": "e4-129",
+      "source": "n57",
+      "target": "n30"
+    },
+    {
+      "id": "e4-130",
+      "source": "n58",
+      "target": "n33"
+    },
+    {
+      "id": "e4-131",
+      "source": "n58",
+      "target": "n29"
+    },
+    {
+      "id": "e4-132",
+      "source": "nmvp5jdw4e951",
+      "target": "nmvp5k7bp5hhu"
+    },
+    {
+      "id": "e4-133",
+      "source": "nmvp5jdw4e951",
+      "target": "nmwkyk74sanqx"
+    },
+    {
+      "id": "e4-134",
+      "source": "nmvp5jdw4e951",
+      "target": "nmw2bc6bah7lv"
+    },
+    {
+      "id": "e4-135",
+      "source": "nmvp5jdw4e951",
+      "target": "r4-h4"
+    },
+    {
+      "id": "e4-136",
+      "source": "nmw2bc6bah7lv",
+      "target": "nmw2bctr2peil"
+    },
+    {
+      "id": "e4-137",
+      "source": "nmwmcq6viwgsl",
+      "target": "n11"
+    },
+    {
+      "id": "e4-138",
+      "source": "nmwmcq6viwgsl",
+      "target": "nmvp54yxg58u7"
+    },
+    {
+      "id": "e4-139",
+      "source": "nmwmcq6viwgsl",
+      "target": "n45"
+    },
+    {
+      "id": "e4-140",
+      "source": "nmvp54yxg58u7",
+      "target": "nmvp55q0gt14o"
+    },
+    {
+      "id": "e4-141",
+      "source": "nmvp54yxg58u7",
+      "target": "nmumxr9tgljfa"
+    },
+    {
+      "id": "e4-142",
+      "source": "r4-notremoved",
+      "target": "n4"
+    },
+    {
+      "id": "e4-143",
+      "source": "r4-notremoved",
+      "target": "r4-treat"
+    },
+    {
+      "id": "e4-144",
+      "source": "n4",
+      "target": "r4-invisible"
+    },
+    {
+      "id": "e4-145",
+      "source": "n4",
+      "target": "nmw2bjvijnu0h"
+    },
+    {
+      "id": "e4-146",
+      "source": "r4-invisible",
+      "target": "n5"
+    },
+    {
+      "id": "e4-147",
+      "source": "r4-invisible",
+      "target": "n6"
+    },
+    {
+      "id": "e4-148",
+      "source": "r4-invisible",
+      "target": "n25"
+    },
+    {
+      "id": "e4-149",
+      "source": "nmw2bjvijnu0h",
+      "target": "nmw2bkprqnl8u"
+    },
+    {
+      "id": "e4-150",
+      "source": "nmw2bjvijnu0h",
+      "target": "nmw2bmt1sfxi0"
+    },
+    {
+      "id": "e4-151",
+      "source": "nmw2bjvijnu0h",
+      "target": "nmw2bnet3vbim"
+    },
+    {
+      "id": "e4-152",
+      "source": "nmw2bjvijnu0h",
+      "target": "nmw2bom93eo3f"
+    },
+    {
+      "id": "e4-153",
+      "source": "r4-treat",
+      "target": "r4-notreat"
+    },
+    {
+      "id": "e4-154",
+      "source": "r4-treat",
+      "target": "r4-survives"
+    },
+    {
+      "id": "e4-155",
+      "source": "r4-notreat",
+      "target": "r4-notapproved"
+    },
+    {
+      "id": "e4-156",
+      "source": "r4-notreat",
+      "target": "r4-q-notreat"
+    },
+    {
+      "id": "e4-157",
+      "source": "r4-survives",
+      "target": "r4-dose"
+    },
+    {
+      "id": "e4-158",
+      "source": "r4-survives",
+      "target": "r4-exposure"
+    },
+    {
+      "id": "e4-159",
+      "source": "r4-survives",
+      "target": "r4-reach"
+    },
+    {
+      "id": "e4-160",
+      "source": "r4-survives",
+      "target": "r4-q-survives"
+    },
+    {
+      "id": "e4-161",
+      "source": "nmw2bt6p56akc",
+      "target": "nmw2btv6mk5h5"
+    },
+    {
+      "id": "e4-162",
+      "source": "nmw2bt6p56akc",
+      "target": "r4-priceonly"
+    },
+    {
+      "id": "e4-163",
+      "source": "nmw2bt6p56akc",
+      "target": "nmw2bu8h5m31c"
+    },
+    {
+      "id": "e4-164",
+      "source": "nmvp5xnjrd2ue",
+      "target": "nmvp65fwe074n"
+    },
+    {
+      "id": "e4-165",
+      "source": "nmvp5xnjrd2ue",
+      "target": "nmvp5yos0azq9"
+    },
+    {
+      "id": "e4-166",
+      "source": "nmvp65fwe074n",
+      "target": "nmvp65yqiyhnk"
+    },
+    {
+      "id": "e4-167",
+      "source": "nmvp65fwe074n",
+      "target": "nmvp66n5x2chz"
+    },
+    {
+      "id": "e4-168",
+      "source": "nmvp5yos0azq9",
+      "target": "nmvp61quyqvpy"
+    },
+    {
+      "id": "e4-169",
+      "source": "nmvp5yos0azq9",
+      "target": "nmvp63352rhwi"
+    },
+    {
+      "id": "e4-170",
+      "source": "nmvp5yos0azq9",
+      "target": "nmvp69q1t7ymu"
+    },
+    {
+      "id": "e4-171",
+      "source": "nmvp69q1t7ymu",
+      "target": "nmvp6b6zzbea1"
+    },
+    {
+      "id": "e4-172",
+      "source": "nmvp69q1t7ymu",
+      "target": "nmvp6d15dodfp"
+    },
+    {
+      "id": "e4-173",
+      "source": "nmvp6b6zzbea1",
+      "target": "nmumxsbrq9fat"
+    },
+    {
+      "id": "e4-174",
+      "source": "nmvp6b6zzbea1",
+      "target": "nmvp6cbm8aie8"
+    },
+    {
+      "id": "e4-175",
+      "source": "nmvp6d15dodfp",
+      "target": "nmvp6eyoq3hj0"
+    },
+    {
+      "id": "e4-176",
+      "source": "nmvp6d15dodfp",
+      "target": "nmvp6b6zzbea1"
+    },
+    {
+      "id": "e4-177",
+      "source": "nmvp6d15dodfp",
+      "target": "nmw2bt6p56akc"
+    },
+    {
+      "id": "e4-178",
+      "source": "nmvp5w6oanvlz",
+      "target": "nmvp64doceioa"
+    },
+    {
+      "id": "e4-179",
+      "source": "nmvp5w6oanvlz",
+      "target": "nmumxexqxjhjo"
+    },
+    {
+      "id": "e4-180",
+      "source": "nmvp5w6oanvlz",
+      "target": "nmvp5xnjrd2ue"
+    },
+    {
+      "id": "e4-181",
+      "source": "nmvp64doceioa",
+      "target": "nmvp65yqiyhnk"
+    },
+    {
+      "id": "e4-182",
+      "source": "r4-h4",
+      "target": "nmw2bt6p56akc"
+    },
+    {
+      "id": "e4-183",
+      "source": "r4-h4",
+      "target": "nmvp5xnjrd2ue"
+    },
+    {
+      "id": "e4-184",
+      "source": "nmvp5otdguyn5",
+      "target": "nmvp5w6oanvlz"
+    },
+    {
+      "id": "e4-185",
+      "source": "nmvp5otdguyn5",
+      "target": "nmvp5xnjrd2ue"
+    },
+    {
+      "id": "e4-186",
+      "source": "nmumx4510rw1c",
+      "target": "nmvp5w6oanvlz"
+    },
+    {
+      "id": "e4-187",
+      "source": "nmumx4510rw1c",
+      "target": "r4-h4"
+    }
+  ],
+  "versions": [
+    {
+      "id": "v3-before-fault-tree",
+      "name": "v3, before the fault-tree restructure",
+      "note": "uchuva-rca-3.json as it was; compare to see every change",
+      "at": "2026-11-18T16:46:40.338Z",
+      "snapshot": {
+        "title": "Root cause analysis — Botrytis cinerea (goldenberry)",
+        "titleTr": {
+          "es": "Análisis de causa raíz — Botrytis cinerea (uchuva)"
+        },
+        "languages": [
+          "en",
+          "es"
+        ],
+        "categories": [
+          {
+            "id": "problem",
+            "name": "Root problem",
+            "nameTr": {
+              "es": "Problema raíz"
+            },
+            "role": "problem",
+            "desc": "",
+            "fill": "#fff2cc",
+            "stroke": "#d6b656",
+            "font": "#1a1a1a"
+          },
+          {
+            "id": "cause",
+            "name": "Intermediate cause",
+            "nameTr": {
+              "es": "Causa intermedia"
+            },
+            "role": "intermediate",
+            "desc": "",
+            "fill": "#1ba1e2",
+            "stroke": "#006eaf",
+            "font": "#ffffff"
+          },
+          {
+            "id": "fact",
+            "name": "Root cause",
+            "nameTr": {
+              "es": "Causa raíz"
+            },
+            "role": "root",
+            "desc": "",
+            "fill": "#f5f5f5",
+            "stroke": "#666666",
+            "font": "#333333"
+          },
+          {
+            "id": "plant",
+            "name": "Unsure",
+            "nameTr": {
+              "es": "Incierto"
+            },
+            "role": "uncertain",
+            "desc": "",
+            "fill": "#e1d5e7",
+            "stroke": "#9673a6",
+            "font": "#1a1a1a"
+          },
+          {
+            "id": "question",
+            "name": "Open question",
+            "nameTr": {
+              "es": "Pregunta abierta"
+            },
+            "role": "question",
+            "desc": "",
+            "fill": "#d80073",
+            "stroke": "#a50040",
+            "font": "#ffffff"
+          }
+        ],
+        "tagGroups": [
+          {
+            "id": "product",
+            "name": "Product flow",
+            "nameTr": {
+              "es": "Flujo de producto"
+            }
+          },
+          {
+            "id": "info",
+            "name": "Information flow",
+            "nameTr": {
+              "es": "Flujo de información"
+            }
+          }
+        ],
+        "tags": [
+          {
+            "id": "t-culture",
+            "emoji": "🌱",
+            "name": "Culture care",
+            "nameTr": {
+              "es": "Cuidado del cultivo"
+            },
+            "group": "product",
+            "desc": "Field and pre-harvest crop management"
+          },
+          {
+            "id": "t-harvest",
+            "emoji": "🧺",
+            "name": "Harvest",
+            "nameTr": {
+              "es": "Cosecha"
+            },
+            "group": "product",
+            "desc": "Picking, harvest timing and field handling"
+          },
+          {
+            "id": "t-drying",
+            "emoji": "🌬️",
+            "name": "Calyx drying",
+            "nameTr": {
+              "es": "Secado del cáliz"
+            },
+            "group": "product",
+            "desc": "Drying the calyx after harvest"
+          },
+          {
+            "id": "t-sorting",
+            "emoji": "🔍",
+            "name": "Sorting",
+            "nameTr": {
+              "es": "Selección"
+            },
+            "group": "product",
+            "desc": "Grading and discarding fruit"
+          },
+          {
+            "id": "t-packing",
+            "emoji": "📦",
+            "name": "Packing",
+            "nameTr": {
+              "es": "Empaque"
+            },
+            "group": "product",
+            "desc": "Packing into punnets, boxes and pallets"
+          },
+          {
+            "id": "t-storage",
+            "emoji": "❄️",
+            "name": "Storage",
+            "nameTr": {
+              "es": "Almacenamiento"
+            },
+            "group": "product",
+            "desc": "Cold rooms at farm, packhouse or exporter"
+          },
+          {
+            "id": "t-inland",
+            "emoji": "🚚",
+            "name": "Inland transport",
+            "nameTr": {
+              "es": "Transporte terrestre"
+            },
+            "group": "product",
+            "desc": "Farm to packhouse, packhouse to port"
+          },
+          {
+            "id": "t-port",
+            "emoji": "🛃",
+            "name": "Port & inspection",
+            "nameTr": {
+              "es": "Puerto e inspección"
+            },
+            "group": "product",
+            "desc": "Port queues, phytosanitary and anti-narcotics checks, inspection at destination"
+          },
+          {
+            "id": "t-sea",
+            "emoji": "🚢",
+            "name": "Sea freight",
+            "nameTr": {
+              "es": "Transporte marítimo"
+            },
+            "group": "product",
+            "desc": "Reefer container, cold chain at sea"
+          },
+          {
+            "id": "t-monitor",
+            "emoji": "📈",
+            "name": "Monitoring",
+            "nameTr": {
+              "es": "Monitoreo"
+            },
+            "group": "info",
+            "desc": "Measuring conditions (°C, RH, rainfall) in the field and along the chain, and using the data for modelling and decisions"
+          },
+          {
+            "id": "t-comms",
+            "emoji": "💬",
+            "name": "Communication",
+            "nameTr": {
+              "es": "Comunicación"
+            },
+            "group": "info",
+            "desc": "Sharing information and relevant events along the chain, to build trust and improve the process"
+          }
+        ],
+        "scales": [
+          {
+            "id": "relevance",
+            "name": "Relevance",
+            "nameTr": {
+              "es": "Relevancia"
+            },
+            "min": 0,
+            "max": 5,
+            "low": "Not relevant",
+            "lowTr": {
+              "es": "No es relevante"
+            },
+            "high": "Critical",
+            "highTr": {
+              "es": "Crítico"
+            },
+            "gate": null
+          },
+          {
+            "id": "feasibility",
+            "name": "Feasibility",
+            "nameTr": {
+              "es": "Factibilidad"
+            },
+            "min": 1,
+            "max": 5,
+            "low": "Very hard to act on",
+            "lowTr": {
+              "es": "Muy difícil de abordar"
+            },
+            "high": "Easy to act on",
+            "highTr": {
+              "es": "Fácil de abordar"
+            },
+            "gate": {
+              "scale": "relevance",
+              "min": 3
+            }
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n0",
+            "text": "Some goldenberry is rejected at destination",
+            "textTr": {
+              "es": "Alguna uchuva es rechazada en destino"
+            },
+            "cat": "problem",
+            "tags": [
+              "t-port"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 86,
+            "y": 1397
+          },
+          {
+            "id": "n1",
+            "text": "Some pallets are infested with botrytis cinerea",
+            "textTr": {
+              "es": "Algunas paletas están infestadas con botrytis cinerea"
+            },
+            "cat": "problem",
+            "tags": [],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 307,
+            "y": 1397
+          },
+          {
+            "id": "n2",
+            "text": "Goldenberry is infected with the fungus",
+            "textTr": {
+              "es": "La uchuva está infectada con el hongo"
+            },
+            "cat": "cause",
+            "tags": [],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 577,
+            "y": 345
+          },
+          {
+            "id": "n3",
+            "text": "Conditions are favorable for the germination and growth of the pathogen",
+            "textTr": {
+              "es": "Las condiciones son favorables para la germinación y el crecimiento del patógeno"
+            },
+            "cat": "cause",
+            "tags": [],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 575,
+            "y": 1397
+          },
+          {
+            "id": "n4",
+            "text": "Infected fruits are not discarded",
+            "textTr": {
+              "es": "Los frutos infectados no se descartan"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-sorting"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 525,
+            "y": 2004
+          },
+          {
+            "id": "n5",
+            "text": "Spores are very small",
+            "textTr": {
+              "es": "Las esporas son muy pequeñas"
+            },
+            "cat": "fact",
+            "tags": [
+              "t-sorting"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 753,
+            "y": 1959
+          },
+          {
+            "id": "n6",
+            "text": "damage is not visible",
+            "textTr": {
+              "es": "el daño no es visible"
+            },
+            "cat": "fact",
+            "tags": [
+              "t-sorting"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 713,
+            "y": 1895
+          },
+          {
+            "id": "n7",
+            "text": "Fungus was already inside the fruit in a quiescent state",
+            "textTr": {
+              "es": "El hongo ya estaba dentro del fruto en estado quiescente"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-culture"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 835,
+            "y": 76,
+            "outline": "#000000"
+          },
+          {
+            "id": "n8",
+            "text": "Spores survived on the fruit surface since before harvest",
+            "textTr": {
+              "es": "Las esporas sobrevivieron en la superficie del fruto desde antes de la cosecha"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-culture",
+              "t-harvest"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 844,
+            "y": 208,
+            "outline": "#000000"
+          },
+          {
+            "id": "n9",
+            "text": "Spores spread on the fruit surface at sorting facilities",
+            "textTr": {
+              "es": "Las esporas se diseminan en la superficie del fruto en las plantas de selección"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-drying",
+              "t-sorting"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 834,
+            "y": 343,
+            "outline": "#000000"
+          },
+          {
+            "id": "n10",
+            "text": "Spores spread on the fruit surface during transport",
+            "textTr": {
+              "es": "Las esporas se diseminan en la superficie del fruto durante el transporte"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-inland",
+              "t-sea"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 835,
+            "y": 490,
+            "outline": "#000000"
+          },
+          {
+            "id": "n11",
+            "text": "travel time of ~21 days by sea",
+            "textTr": {
+              "es": "tiempo de viaje de ~21 días por mar"
+            },
+            "cat": "fact",
+            "tags": [
+              "t-sea"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1368,
+            "y": 1475
+          },
+          {
+            "id": "n12",
+            "text": "Pathogen gets access to sugars",
+            "textTr": {
+              "es": "El patógeno accede a los azúcares"
+            },
+            "cat": "cause",
+            "tags": [],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 836,
+            "y": 886,
+            "outline": "#000000"
+          },
+          {
+            "id": "n13",
+            "text": "Temperature allows the pathogen to develop",
+            "textTr": {
+              "es": "La temperatura permite que el patógeno se desarrolle"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-storage",
+              "t-inland",
+              "t-sea"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 900,
+            "y": 1242,
+            "outline": "#000000"
+          },
+          {
+            "id": "n14",
+            "text": "Spores reached the flower",
+            "textTr": {
+              "es": "Las esporas alcanzaron la flor"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-culture"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1086,
+            "y": 76,
+            "outline": "#000000"
+          },
+          {
+            "id": "n15",
+            "text": "Air conduction",
+            "textTr": {
+              "es": "Conducción por aire"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-culture"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1325,
+            "y": -41,
+            "outline": "#000000"
+          },
+          {
+            "id": "n16",
+            "text": "Water droplets",
+            "textTr": {
+              "es": "Gotas de agua"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-culture"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1328,
+            "y": 32,
+            "outline": "#000000"
+          },
+          {
+            "id": "n17",
+            "text": "Insect dispersal",
+            "textTr": {
+              "es": "Dispersión por insectos"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-culture"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1332,
+            "y": 82,
+            "outline": "#000000"
+          },
+          {
+            "id": "n18",
+            "text": "nearby contaminated material",
+            "textTr": {
+              "es": "material contaminado cercano"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-culture"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1574,
+            "y": 55,
+            "outline": "#000000"
+          },
+          {
+            "id": "n19",
+            "text": "neighboring crops have the disease",
+            "textTr": {
+              "es": "los cultivos vecinos tienen la enfermedad"
+            },
+            "cat": "fact",
+            "tags": [
+              "t-culture"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1817,
+            "y": 54
+          },
+          {
+            "id": "n20",
+            "text": "infected crop debris in the field",
+            "textTr": {
+              "es": "residuos de cultivo infectados en el campo"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-culture"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1829,
+            "y": 118,
+            "outline": "#000000"
+          },
+          {
+            "id": "n21",
+            "text": "Conditions were favorable for spore survival",
+            "textTr": {
+              "es": "Las condiciones fueron favorables para la supervivencia de las esporas"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-culture"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1086,
+            "y": 168,
+            "outline": "#000000"
+          },
+          {
+            "id": "n22",
+            "text": "?",
+            "textTr": {},
+            "cat": "question",
+            "tags": [
+              "t-culture"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1466,
+            "y": 175
+          },
+          {
+            "id": "n23",
+            "text": "The drying process uses fans that blow air over a batch of goldenberries",
+            "textTr": {
+              "es": "El proceso de secado usa ventiladores que soplan aire sobre un lote de uchuva"
+            },
+            "cat": "fact",
+            "tags": [
+              "t-drying"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1085,
+            "y": 266
+          },
+          {
+            "id": "n24",
+            "text": "Inspection requires a manual process that involves touching fruits with and without spores",
+            "textTr": {
+              "es": "La inspección requiere un proceso manual que implica tocar frutos con y sin esporas"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-sorting"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1086,
+            "y": 364,
+            "outline": "#000000"
+          },
+          {
+            "id": "n25",
+            "text": "The fruit is not directly visible because it is inside a calyx",
+            "textTr": {
+              "es": "El fruto no es visible directamente porque está dentro de un cáliz"
+            },
+            "cat": "fact",
+            "tags": [
+              "t-sorting"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1291,
+            "y": 366
+          },
+          {
+            "id": "n26",
+            "text": "Transport means may already be contaminated with spores",
+            "textTr": {
+              "es": "Los medios de transporte pueden estar ya contaminados con esporas"
+            },
+            "cat": "fact",
+            "tags": [
+              "t-inland",
+              "t-sea"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1085,
+            "y": 462
+          },
+          {
+            "id": "n27",
+            "text": "Transport happens in contact with open air",
+            "textTr": {
+              "es": "El transporte ocurre en contacto con aire abierto"
+            },
+            "cat": "fact",
+            "tags": [
+              "t-inland"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1083,
+            "y": 543
+          },
+          {
+            "id": "n28",
+            "text": "Pathogen can break through the fruit's outer membrane",
+            "textTr": {
+              "es": "El patógeno puede atravesar la membrana externa del fruto"
+            },
+            "cat": "cause",
+            "tags": [],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1088,
+            "y": 616,
+            "outline": "#000000"
+          },
+          {
+            "id": "n29",
+            "text": "Fruit is too ripe",
+            "textTr": {
+              "es": "El fruto está demasiado maduro"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-harvest"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1309,
+            "y": 1090,
+            "outline": "#000000"
+          },
+          {
+            "id": "n30",
+            "text": "There is uneven ventilation that generates favorable microclimates",
+            "textTr": {
+              "es": "Hay ventilación desigual que genera microclimas favorables"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-packing",
+              "t-storage",
+              "t-sea"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1804,
+            "y": 1284
+          },
+          {
+            "id": "n31",
+            "text": "Fungi can develop at temperatures as low as 0°C",
+            "textTr": {
+              "es": "Los hongos pueden desarrollarse a temperaturas tan bajas como 0°C"
+            },
+            "cat": "fact",
+            "tags": [
+              "t-storage",
+              "t-sea"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1125,
+            "y": 1184
+          },
+          {
+            "id": "n32",
+            "text": "Container temperatures are between 2°C and 8°C",
+            "textTr": {
+              "es": "Las temperaturas del contenedor están entre 2°C y 8°C"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-sea"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 923,
+            "y": 1088,
+            "outline": "#000000"
+          },
+          {
+            "id": "n33",
+            "text": "Fruit membrane is damaged",
+            "textTr": {
+              "es": "La membrana del fruto está dañada"
+            },
+            "cat": "cause",
+            "tags": [],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1401,
+            "y": 871,
+            "outline": "#000000"
+          },
+          {
+            "id": "n34",
+            "text": "Fruit membrane is too fragile",
+            "textTr": {
+              "es": "La membrana del fruto es demasiado frágil"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-culture"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1292,
+            "y": 616,
+            "outline": "#000000"
+          },
+          {
+            "id": "n35",
+            "text": "Overripe fruit passes the selection stage",
+            "textTr": {
+              "es": "Fruto demasiado maduro pasa la etapa de selección"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-sorting"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1585,
+            "y": 1083,
+            "outline": "#000000"
+          },
+          {
+            "id": "n36",
+            "text": "Cold chain is broken",
+            "textTr": {
+              "es": "La cadena de frío se rompe"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-storage",
+              "t-inland",
+              "t-port"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1833,
+            "y": 1397,
+            "outline": "#000000"
+          },
+          {
+            "id": "n37",
+            "text": "Fresh fruit cannot endure lower temperatures",
+            "textTr": {
+              "es": "El fruto fresco no soporta temperaturas más bajas"
+            },
+            "cat": "fact",
+            "tags": [
+              "t-storage",
+              "t-sea"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1117,
+            "y": 1074
+          },
+          {
+            "id": "n38",
+            "text": "Mechanical damage during harvest",
+            "textTr": {
+              "es": "Daño mecánico durante la cosecha"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-harvest"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1581,
+            "y": 697,
+            "outline": "#000000"
+          },
+          {
+            "id": "n39",
+            "text": "Mechanical damage during sorting",
+            "textTr": {
+              "es": "Daño mecánico durante la selección"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-sorting"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1600,
+            "y": 781,
+            "outline": "#000000"
+          },
+          {
+            "id": "n40",
+            "text": "Mechanical damage during transport",
+            "textTr": {
+              "es": "Daño mecánico durante el transporte"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-inland"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1587,
+            "y": 877,
+            "outline": "#000000"
+          },
+          {
+            "id": "n41",
+            "text": "In the field, the fruit fills with water too quickly",
+            "textTr": {
+              "es": "En el campo, el fruto se llena de agua demasiado rápido"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-culture"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1585,
+            "y": 1002,
+            "outline": "#000000"
+          },
+          {
+            "id": "n42",
+            "text": "Plant absorbs less calcium",
+            "textTr": {
+              "es": "La planta absorbe menos calcio"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-culture"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1585,
+            "y": 513,
+            "outline": "#000000"
+          },
+          {
+            "id": "n44",
+            "text": "Observer is not objective",
+            "textTr": {
+              "es": "El observador no es objetivo"
+            },
+            "cat": "fact",
+            "tags": [
+              "t-sorting"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1812,
+            "y": 1083
+          },
+          {
+            "id": "n45",
+            "text": "At port, 2–3 day queue for inspection",
+            "textTr": {
+              "es": "En puerto, fila de 2-3 días para inspección"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-port"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2075,
+            "y": 1335,
+            "outline": "#000000"
+          },
+          {
+            "id": "n46",
+            "text": "?",
+            "textTr": {},
+            "cat": "question",
+            "tags": [
+              "t-storage",
+              "t-inland",
+              "t-port"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2004,
+            "y": 1397
+          },
+          {
+            "id": "n47",
+            "text": "Sudden changes in soil moisture",
+            "textTr": {
+              "es": "Cambios repentinos en la humedad del suelo"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-culture"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1830,
+            "y": 950,
+            "outline": "#000000"
+          },
+          {
+            "id": "n48",
+            "text": "Plant has a high cracking rate",
+            "textTr": {
+              "es": "La planta tiene una alta tasa de agrietamiento"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-culture"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1829,
+            "y": 1014,
+            "outline": "#000000"
+          },
+          {
+            "id": "n49",
+            "text": "Root inactivity",
+            "textTr": {
+              "es": "Inactividad radicular"
+            },
+            "cat": "plant",
+            "tags": [
+              "t-culture"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1812,
+            "y": 480
+          },
+          {
+            "id": "n50",
+            "text": "High humidity",
+            "textTr": {
+              "es": "Alta humedad"
+            },
+            "cat": "plant",
+            "tags": [
+              "t-culture"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1799,
+            "y": 523
+          },
+          {
+            "id": "n51",
+            "text": "High port utilization",
+            "textTr": {
+              "es": "Alta utilización del puerto"
+            },
+            "cat": "fact",
+            "tags": [
+              "t-port"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2318,
+            "y": 1288,
+            "outline": "#000000"
+          },
+          {
+            "id": "n52",
+            "text": "Anti-narcotics check",
+            "textTr": {
+              "es": "Control antinarcóticos"
+            },
+            "cat": "fact",
+            "tags": [
+              "t-port"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2308,
+            "y": 1335,
+            "outline": "#000000"
+          },
+          {
+            "id": "n53",
+            "text": "Phytosanitary inspections",
+            "textTr": {
+              "es": "Inspecciones fitosanitarias"
+            },
+            "cat": "fact",
+            "tags": [
+              "t-port"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2283,
+            "y": 1390,
+            "outline": "#000000"
+          },
+          {
+            "id": "n54",
+            "text": "Changes in rainfall patterns",
+            "textTr": {
+              "es": "Cambios en los patrones de lluvia"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-culture"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2075,
+            "y": 844,
+            "outline": "#000000"
+          },
+          {
+            "id": "n55",
+            "text": "Uneven irrigation",
+            "textTr": {
+              "es": "Riego desigual"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-culture"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2063,
+            "y": 951,
+            "outline": "#000000"
+          },
+          {
+            "id": "n56",
+            "text": "?",
+            "textTr": {},
+            "cat": "question",
+            "tags": [
+              "t-culture"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2004,
+            "y": 1014
+          },
+          {
+            "id": "n57",
+            "text": "There is condensation on the fruit surface",
+            "textTr": {
+              "es": "Hay condensación en la superficie del fruto"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-storage",
+              "t-sea"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1529,
+            "y": 1414
+          },
+          {
+            "id": "n58",
+            "text": "Fruits exude liquid",
+            "textTr": {
+              "es": "Los frutos exudan líquido"
+            },
+            "cat": "cause",
+            "tags": [],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1086,
+            "y": 886
+          },
+          {
+            "id": "n60",
+            "text": "High ethylene production and transpiration",
+            "textTr": {
+              "es": "Alta producción de etileno y transpiración"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-storage",
+              "t-sea"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1527,
+            "y": 1337
+          },
+          {
+            "id": "nmumx4510rw1c",
+            "text": "The farmer does not remove dead plant material from the plants",
+            "textTr": {
+              "es": "El agricultor no retira el material vegetal muerto de las plantas"
+            },
+            "cat": "fact",
+            "tags": [
+              "t-culture"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2070,
+            "y": 118
+          },
+          {
+            "id": "nmumx5xard0i9",
+            "text": "Poor soil conditioning",
+            "textTr": {
+              "es": "Deficiente acondicionamiento del suelo"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-culture"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1588,
+            "y": 613
+          },
+          {
+            "id": "nmumx9w0dr7f8",
+            "text": "Climate change",
+            "textTr": {
+              "es": "Cambio climático"
+            },
+            "cat": "fact",
+            "tags": [
+              "t-culture"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2294,
+            "y": 844
+          },
+          {
+            "id": "nmumxb0zs7mjr",
+            "text": "Lack of knowledge about how much to irrigate",
+            "textTr": {
+              "es": "Falta de conocimiento sobre cuánto regar"
+            },
+            "cat": "fact",
+            "tags": [
+              "t-culture"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2308,
+            "y": 899
+          },
+          {
+            "id": "nmumxbw56jlok",
+            "text": "Lack of information about when to irrigate",
+            "textTr": {
+              "es": "Falta de información sobre cuándo regar"
+            },
+            "cat": "fact",
+            "tags": [
+              "t-culture",
+              "t-monitor"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2304,
+            "y": 963
+          },
+          {
+            "id": "nmumxd265hz9h",
+            "text": "No soil analysis is done",
+            "textTr": {
+              "es": "No hay análisis de suelo"
+            },
+            "cat": "fact",
+            "tags": [
+              "t-culture",
+              "t-monitor"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1824,
+            "y": 568
+          },
+          {
+            "id": "nmumxdtt6tiaz",
+            "text": "Inadequate fertilizer application",
+            "textTr": {
+              "es": "Aplicación inadecuada de fertilización"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-culture"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1829,
+            "y": 624
+          },
+          {
+            "id": "nmumxexqxjhjo",
+            "text": "Lack of technical advice",
+            "textTr": {
+              "es": "Falta de asesoría"
+            },
+            "cat": "fact",
+            "tags": [
+              "t-culture",
+              "t-comms"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2049,
+            "y": 560
+          },
+          {
+            "id": "nmumxf8zahqpv",
+            "text": "Suitable fertilizers are not available locally",
+            "textTr": {
+              "es": "No hay fertilizantes adecuados disponibles localmente"
+            },
+            "cat": "fact",
+            "tags": [
+              "t-culture"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2067,
+            "y": 624
+          },
+          {
+            "id": "nmumxg8651bo7",
+            "text": "The farmer is unwilling to apply the advice given",
+            "textTr": {
+              "es": "El agricultor no está dispuesto a aplicar la asesoría dada"
+            },
+            "cat": "fact",
+            "tags": [
+              "t-culture",
+              "t-comms"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2062,
+            "y": 705
+          },
+          {
+            "id": "nmumxh500b1pg",
+            "text": "Manual handling is highly variable",
+            "textTr": {
+              "es": "El manejo manual es muy variable"
+            },
+            "cat": "fact",
+            "tags": [
+              "t-harvest",
+              "t-sorting"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1820,
+            "y": 764
+          },
+          {
+            "id": "nmumxhvmdilbk",
+            "text": "Knocks during on-site transport",
+            "textTr": {
+              "es": "Golpes durante el transporte en el lugar"
+            },
+            "cat": "fact",
+            "tags": [
+              "t-harvest",
+              "t-sorting"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1821,
+            "y": 701
+          },
+          {
+            "id": "nmumxkhbiavz3",
+            "text": "Vehicle vibration during the trip",
+            "textTr": {
+              "es": "Vibración del vehículo durante el trayecto"
+            },
+            "cat": "fact",
+            "tags": [
+              "t-inland"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1818,
+            "y": 822
+          },
+          {
+            "id": "nmumxlcuhklxc",
+            "text": "Handling of crates during loading and unloading",
+            "textTr": {
+              "es": "Manejo de las canastillas al cargar y descargar"
+            },
+            "cat": "fact",
+            "tags": [
+              "t-inland"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1827,
+            "y": 886
+          },
+          {
+            "id": "nmumxp6nszrom",
+            "text": "Before sorting, fruit is sometimes stored until it can be graded",
+            "textTr": {
+              "es": "Antes de la selección, a veces el fruto se almacena hasta poder clasificarlo"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-sorting",
+              "t-storage"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2076,
+            "y": 1487
+          },
+          {
+            "id": "nmumxqcadxnbs",
+            "text": "High fruit demand forces queuing",
+            "textTr": {
+              "es": "La alta demanda de fruta obliga a hacer fila"
+            },
+            "cat": "fact",
+            "tags": [
+              "t-sorting"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2317,
+            "y": 1454
+          },
+          {
+            "id": "nmumxr9tgljfa",
+            "text": "The sorting process is slow",
+            "textTr": {
+              "es": "El proceso de selección es lento"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-sorting"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2244,
+            "y": 1572
+          },
+          {
+            "id": "nmumxsbrq9fat",
+            "text": "manual process",
+            "textTr": {
+              "es": "proceso manual"
+            },
+            "cat": "fact",
+            "tags": [
+              "t-sorting"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2367,
+            "y": 1716
+          },
+          {
+            "id": "nmvp54yxg58u7",
+            "text": "1–3 days of processing time",
+            "textTr": {
+              "es": "1-3 días de tiempo de procesado"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-sorting"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1227,
+            "y": 1553
+          },
+          {
+            "id": "nmvp55q0gt14o",
+            "text": "high utilization of sorting and grading lines for other fruits",
+            "textTr": {
+              "es": "alta utilización de selección y ordenamiento en otras frutas"
+            },
+            "cat": "fact",
+            "tags": [
+              "t-sorting"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1436,
+            "y": 1645
+          },
+          {
+            "id": "nmvp5jdw4e951",
+            "text": "Harvesting takes place during rainy periods",
+            "textTr": {
+              "es": "Se cosecha durante periodos lluviosos"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-harvest"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 814,
+            "y": 1603
+          },
+          {
+            "id": "nmvp5k7bp5hhu",
+            "text": "There is strong pressure for product during high-demand periods",
+            "textTr": {
+              "es": "Hay mucha presión por producto durante periodos de alta demanda"
+            },
+            "cat": "fact",
+            "tags": [
+              "t-harvest"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1026,
+            "y": 1588
+          },
+          {
+            "id": "nmvp5otdguyn5",
+            "text": "Inadequate crop rotation",
+            "textTr": {
+              "es": "Rotación de cultivo inadecuada"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-culture"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 789,
+            "y": 1781
+          },
+          {
+            "id": "nmvp5rl69dl0i",
+            "text": "Farmers tend to repeatedly grow the crops they already know",
+            "textTr": {
+              "es": "El agricultor suele trabajar con los cultivos que conoce repetidamente"
+            },
+            "cat": "fact",
+            "tags": [
+              "t-culture"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1347,
+            "y": 1791
+          },
+          {
+            "id": "nmvp5uc0d2qq5",
+            "text": "Farmers' knowledge of how to design an adequate crop rotation is limited",
+            "textTr": {
+              "es": "Conocimiento del agricultor sobre construcción de rotación de cultivo adecuada es limitado"
+            },
+            "cat": "fact",
+            "tags": [
+              "t-culture"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1101,
+            "y": 1874
+          },
+          {
+            "id": "nmvp5w6oanvlz",
+            "text": "Technical advice focuses on short-term operational aspects",
+            "textTr": {
+              "es": "La asesoría se centra en aspectos más operativos en el corto plazo"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-culture",
+              "t-comms"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1087,
+            "y": 1987
+          },
+          {
+            "id": "nmvp5xnjrd2ue",
+            "text": "Long-term relationships with physalis growers are complex",
+            "textTr": {
+              "es": "Las relaciones con productor de physalis son complejas en el largo plazo"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-comms"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1342,
+            "y": 1906
+          },
+          {
+            "id": "nmvp5yos0azq9",
+            "text": "Mutual trust issues",
+            "textTr": {
+              "es": "Problemas de confianza mutuos"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-comms"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1567,
+            "y": 1803
+          },
+          {
+            "id": "nmvp61quyqvpy",
+            "text": "Farmer sells to other exporters in parallel",
+            "textTr": {
+              "es": "Agricultor vende a otros exportadores en paralelo"
+            },
+            "cat": "fact",
+            "tags": [
+              "t-comms"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1828,
+            "y": 1648
+          },
+          {
+            "id": "nmvp63352rhwi",
+            "text": "Farmer sometimes does not properly understand/review the contract",
+            "textTr": {
+              "es": "Agricultor a veces no entiende/revisa adecuadamente el contrato"
+            },
+            "cat": "fact",
+            "tags": [
+              "t-comms"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1815,
+            "y": 1729
+          },
+          {
+            "id": "nmvp64doceioa",
+            "text": "There are many farmers to visit and support",
+            "textTr": {
+              "es": "Hay muchos agricultores que visitar y atender"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-culture",
+              "t-comms"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1402,
+            "y": 1990
+          },
+          {
+            "id": "nmvp65fwe074n",
+            "text": "The supplier changes relatively often",
+            "textTr": {
+              "es": "El proveedor cambia con relativa frecuencia"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-comms"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1586,
+            "y": 1925
+          },
+          {
+            "id": "nmvp65yqiyhnk",
+            "text": "The farmer has little land",
+            "textTr": {
+              "es": "El agricultor tiene pocas tierras"
+            },
+            "cat": "fact",
+            "tags": [
+              "t-culture"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1657,
+            "y": 2032
+          },
+          {
+            "id": "nmvp66n5x2chz",
+            "text": "Crop rotation must be at least 4 years",
+            "textTr": {
+              "es": "La rotación del cultivo debe de ser de mínimo 4 años"
+            },
+            "cat": "fact",
+            "tags": [
+              "t-culture"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1796,
+            "y": 1949
+          },
+          {
+            "id": "nmvp69q1t7ymu",
+            "text": "Lack of trust and transparency in the sorting and grading system",
+            "textTr": {
+              "es": "Falta de confianza y transparencia en el sistema de selección y clasificación"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-sorting",
+              "t-comms"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1832,
+            "y": 1827
+          },
+          {
+            "id": "nmvp6b6zzbea1",
+            "text": "Considerable differences between exporters' quality assessments",
+            "textTr": {
+              "es": "Diferencias considerables entre evaluaciones de calidad de exportadoras"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-sorting",
+              "t-comms"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2069,
+            "y": 1723
+          },
+          {
+            "id": "nmvp6cbm8aie8",
+            "text": "?",
+            "textTr": {},
+            "cat": "question",
+            "tags": [
+              "t-sorting",
+              "t-comms"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2226,
+            "y": 1667
+          },
+          {
+            "id": "nmvp6d15dodfp",
+            "text": "Suspected manipulation of quality assessments in low-demand periods",
+            "textTr": {
+              "es": "Sospecha de adulteración de evaluaciones de calidad en tiempos de baja demanda"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-sorting",
+              "t-comms"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2070,
+            "y": 1847
+          },
+          {
+            "id": "nmvp6eyoq3hj0",
+            "text": "Importers' quality demands rise considerably in low-demand periods",
+            "textTr": {
+              "es": "Demandas de calidad de las empresas importadoras aumentan considerablemente en momentos de baja demanda"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-comms"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2314,
+            "y": 1816
+          },
+          {
+            "id": "nmvp6gku3w5b4",
+            "text": "?",
+            "textTr": {},
+            "cat": "question",
+            "tags": [
+              "t-comms"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2477,
+            "y": 1813
+          },
+          {
+            "id": "nmw2aps32iurk",
+            "text": "Spores survive fungicide applications",
+            "textTr": {
+              "es": "Esporas sobreviven a aplicación de fungicidas"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-culture"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1356,
+            "y": 222
+          },
+          {
+            "id": "nmw2aqj9gdkwa",
+            "text": "No fungicides were applied",
+            "textTr": {
+              "es": "No se aplicaron fungicidas"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-culture"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1346,
+            "y": 289
+          },
+          {
+            "id": "nmw2ar8xlmnno",
+            "text": "It was not included in the spraying schedule",
+            "textTr": {
+              "es": "No estaba contemplado en el calendario de fumigación"
+            },
+            "cat": "fact",
+            "tags": [
+              "t-culture"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1543,
+            "y": 293
+          },
+          {
+            "id": "nmw2as249wnrb",
+            "text": "The risk was not known",
+            "textTr": {
+              "es": "No se sabía que había riesgo"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-culture",
+              "t-monitor"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1548,
+            "y": 374
+          },
+          {
+            "id": "nmw2av0ox2clv",
+            "text": "Lack of knowledge about the fungus",
+            "textTr": {
+              "es": "Falta de conocimiento del hongo"
+            },
+            "cat": "fact",
+            "tags": [
+              "t-culture"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1759,
+            "y": 332
+          },
+          {
+            "id": "nmw2avikx2b9w",
+            "text": "Lack of precise knowledge of environmental conditions",
+            "textTr": {
+              "es": "Falta de conocimiento preciso de las condiciones ambientales"
+            },
+            "cat": "fact",
+            "tags": [
+              "t-culture",
+              "t-monitor"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1743,
+            "y": 398
+          },
+          {
+            "id": "nmw2axgstrtl5",
+            "text": "?",
+            "textTr": {},
+            "cat": "question",
+            "tags": [
+              "t-culture"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1452,
+            "y": 427
+          },
+          {
+            "id": "nmw2ay58t6d7w",
+            "text": "?",
+            "textTr": {},
+            "cat": "question",
+            "tags": [
+              "t-culture"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1506,
+            "y": 222
+          },
+          {
+            "id": "nmw2b9q2fzl2e",
+            "text": "?",
+            "textTr": {},
+            "cat": "question",
+            "tags": [
+              "t-culture"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1706,
+            "y": 657
+          },
+          {
+            "id": "nmw2bc6bah7lv",
+            "text": "The impact this can have on quality is not gauged",
+            "textTr": {
+              "es": "No se dimensiona el impacto en calidad que esto puede tener"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-harvest",
+              "t-monitor"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 920,
+            "y": 1714
+          },
+          {
+            "id": "nmw2bctr2peil",
+            "text": "It is not measured",
+            "textTr": {
+              "es": "No se mide"
+            },
+            "cat": "plant",
+            "tags": [
+              "t-harvest",
+              "t-monitor"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1102,
+            "y": 1753
+          },
+          {
+            "id": "nmw2bjvijnu0h",
+            "text": "The sorting criterion is purely visual",
+            "textTr": {
+              "es": "El criterio de selección es exclusivamente visual"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-sorting"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 723,
+            "y": 2050
+          },
+          {
+            "id": "nmw2bkprqnl8u",
+            "text": "It is cheap, intuitive and fast",
+            "textTr": {
+              "es": "Es barato, intuitivo y rápido"
+            },
+            "cat": "fact",
+            "tags": [
+              "t-sorting"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 913,
+            "y": 2053
+          },
+          {
+            "id": "nmw2bmt1sfxi0",
+            "text": "Other alternatives are not known",
+            "textTr": {
+              "es": "No se conocen otras alternativas"
+            },
+            "cat": "plant",
+            "tags": [
+              "t-sorting"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 898,
+            "y": 2125
+          },
+          {
+            "id": "nmw2bnet3vbim",
+            "text": "Other alternatives are perceived as complex",
+            "textTr": {
+              "es": "Se perciben otras alternativas como complejas"
+            },
+            "cat": "plant",
+            "tags": [
+              "t-sorting"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 820,
+            "y": 2195
+          },
+          {
+            "id": "nmw2bom93eo3f",
+            "text": "Other alternatives are not trusted",
+            "textTr": {
+              "es": "No se confía en otras alternativas"
+            },
+            "cat": "plant",
+            "tags": [
+              "t-sorting"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 735,
+            "y": 2273
+          },
+          {
+            "id": "nmw2bt6p56akc",
+            "text": "The farmer is disconnected from the final outcome at the other end of the chain",
+            "textTr": {
+              "es": "El agricultor está desconectado del resultado final al otro lado de la cadena"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-comms"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2260,
+            "y": 1979
+          },
+          {
+            "id": "nmw2btv6mk5h5",
+            "text": "Some importers' quality reports do not reach the farmer",
+            "textTr": {
+              "es": "Los reportes de calidad de algunas importadoras no llegan al agricultor"
+            },
+            "cat": "cause",
+            "tags": [
+              "t-comms"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2453,
+            "y": 1982
+          },
+          {
+            "id": "nmw2bu8h5m31c",
+            "text": "?",
+            "textTr": {},
+            "cat": "question",
+            "tags": [
+              "t-comms"
+            ],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2584,
+            "y": 1939
+          },
+          {
+            "id": "nmwkvyu6bsuml",
+            "text": "",
+            "textTr": {
+              "es": "Posicionamiento de las estibas es subóptimo para circulación de aire"
+            },
+            "cat": "cause",
+            "tags": [],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1984,
+            "y": 1155,
+            "origin": {
+              "session": "Carlos Suarez - Ocati",
+              "at": "2026-11-17T16:07:41.891Z"
+            }
+          },
+          {
+            "id": "nmwkw1dl8wgzk",
+            "text": "",
+            "textTr": {
+              "es": "Las cajas no permiten una mejor circulación del aire"
+            },
+            "cat": "fact",
+            "tags": [],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2050,
+            "y": 1239,
+            "origin": {
+              "session": "Carlos Suarez - Ocati",
+              "at": "2026-11-17T16:09:40.364Z"
+            }
+          },
+          {
+            "id": "nmwkw4vnxacqn",
+            "text": "",
+            "textTr": {
+              "es": "poca exposición a radiación solar"
+            },
+            "cat": "cause",
+            "tags": [],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1374,
+            "y": 138,
+            "origin": {
+              "session": "Carlos Suarez - Ocati",
+              "at": "2026-11-17T16:12:23.757Z"
+            }
+          },
+          {
+            "id": "nmwkyk74sanqx",
+            "text": "high demand periods might overlap with high rainfall periods",
+            "textTr": {
+              "es": "periodos de alta demanda pueden coincidir con altas lluvias"
+            },
+            "cat": "fact",
+            "tags": [],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 1166,
+            "y": 1682,
+            "origin": {
+              "session": "Carlos Suarez - Ocati",
+              "at": "2026-11-17T17:20:17.692Z"
+            }
+          },
+          {
+            "id": "nmwm9e0sm0zyw",
+            "text": "Lack of knowledge",
+            "textTr": {
+              "es": "Falta de conocimiento"
+            },
+            "cat": "fact",
+            "tags": [],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2160,
+            "y": 1070
+          },
+          {
+            "id": "nmwm9ei5793ul",
+            "text": "Communication problems",
+            "textTr": {
+              "es": "Problemas en la comunicación"
+            },
+            "cat": "fact",
+            "tags": [],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2181,
+            "y": 1120
+          },
+          {
+            "id": "nmwm9fbarz4sa",
+            "text": "Human error when positioning pallets",
+            "textTr": {
+              "es": "Error humano al ubicar estibas"
+            },
+            "cat": "fact",
+            "tags": [],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 2215,
+            "y": 1181
+          },
+          {
+            "id": "nmwmcq6viwgsl",
+            "text": "the pathogen has enough time to develop",
+            "textTr": {
+              "es": "El patógeno tiene suficiente tiempo para desarrollarse"
+            },
+            "cat": "cause",
+            "tags": [],
+            "status": "unassessed",
+            "notes": "",
+            "sources": [],
+            "x": 792,
+            "y": 1456
+          }
+        ],
+        "edges": [
+          {
+            "id": "ea0",
+            "source": "n0",
+            "target": "n1"
+          },
+          {
+            "id": "ea1",
+            "source": "n1",
+            "target": "n2"
+          },
+          {
+            "id": "ea2",
+            "source": "n1",
+            "target": "n3"
+          },
+          {
+            "id": "ea3",
+            "source": "n1",
+            "target": "n4"
+          },
+          {
+            "id": "ea4",
+            "source": "n2",
+            "target": "n7"
+          },
+          {
+            "id": "ea5",
+            "source": "n2",
+            "target": "n8"
+          },
+          {
+            "id": "ea6",
+            "source": "n2",
+            "target": "n9"
+          },
+          {
+            "id": "ea7",
+            "source": "n2",
+            "target": "n10"
+          },
+          {
+            "id": "ea9",
+            "source": "n3",
+            "target": "n12"
+          },
+          {
+            "id": "ea10",
+            "source": "n3",
+            "target": "n13"
+          },
+          {
+            "id": "ea11",
+            "source": "n4",
+            "target": "n5"
+          },
+          {
+            "id": "ea12",
+            "source": "n4",
+            "target": "n6"
+          },
+          {
+            "id": "ea13",
+            "source": "n7",
+            "target": "n14"
+          },
+          {
+            "id": "ea14",
+            "source": "n14",
+            "target": "n15"
+          },
+          {
+            "id": "ea15",
+            "source": "n14",
+            "target": "n16"
+          },
+          {
+            "id": "ea16",
+            "source": "n14",
+            "target": "n17"
+          },
+          {
+            "id": "ea17",
+            "source": "n15",
+            "target": "n18"
+          },
+          {
+            "id": "ea18",
+            "source": "n16",
+            "target": "n18"
+          },
+          {
+            "id": "ea19",
+            "source": "n17",
+            "target": "n18"
+          },
+          {
+            "id": "ea20",
+            "source": "n18",
+            "target": "n19"
+          },
+          {
+            "id": "ea21",
+            "source": "n18",
+            "target": "n20"
+          },
+          {
+            "id": "ea22",
+            "source": "n8",
+            "target": "n21"
+          },
+          {
+            "id": "ea23",
+            "source": "n21",
+            "target": "n22"
+          },
+          {
+            "id": "ea24",
+            "source": "n9",
+            "target": "n23"
+          },
+          {
+            "id": "ea25",
+            "source": "n9",
+            "target": "n24"
+          },
+          {
+            "id": "ea26",
+            "source": "n24",
+            "target": "n25"
+          },
+          {
+            "id": "ea27",
+            "source": "n10",
+            "target": "n26"
+          },
+          {
+            "id": "ea28",
+            "source": "n10",
+            "target": "n27"
+          },
+          {
+            "id": "ea29",
+            "source": "n12",
+            "target": "n28"
+          },
+          {
+            "id": "ea31",
+            "source": "n28",
+            "target": "n33"
+          },
+          {
+            "id": "ea32",
+            "source": "n28",
+            "target": "n34"
+          },
+          {
+            "id": "ea33",
+            "source": "n33",
+            "target": "n38"
+          },
+          {
+            "id": "ea34",
+            "source": "n33",
+            "target": "n39"
+          },
+          {
+            "id": "ea35",
+            "source": "n33",
+            "target": "n40"
+          },
+          {
+            "id": "ea36",
+            "source": "n33",
+            "target": "n41"
+          },
+          {
+            "id": "ea37",
+            "source": "n41",
+            "target": "n47"
+          },
+          {
+            "id": "ea38",
+            "source": "n41",
+            "target": "n48"
+          },
+          {
+            "id": "ea39",
+            "source": "n47",
+            "target": "n54"
+          },
+          {
+            "id": "ea40",
+            "source": "n47",
+            "target": "n55"
+          },
+          {
+            "id": "ea41",
+            "source": "n48",
+            "target": "n56"
+          },
+          {
+            "id": "ea42",
+            "source": "n34",
+            "target": "n42"
+          },
+          {
+            "id": "ea44",
+            "source": "n42",
+            "target": "n49"
+          },
+          {
+            "id": "ea45",
+            "source": "n42",
+            "target": "n50"
+          },
+          {
+            "id": "ea46",
+            "source": "n35",
+            "target": "n44"
+          },
+          {
+            "id": "ea47",
+            "source": "n36",
+            "target": "n45"
+          },
+          {
+            "id": "ea48",
+            "source": "n36",
+            "target": "n46"
+          },
+          {
+            "id": "ea49",
+            "source": "n45",
+            "target": "n51"
+          },
+          {
+            "id": "ea50",
+            "source": "n45",
+            "target": "n52"
+          },
+          {
+            "id": "ea51",
+            "source": "n45",
+            "target": "n53"
+          },
+          {
+            "id": "ea52",
+            "source": "n13",
+            "target": "n32"
+          },
+          {
+            "id": "ea53",
+            "source": "n13",
+            "target": "n31"
+          },
+          {
+            "id": "ea54",
+            "source": "n13",
+            "target": "n30"
+          },
+          {
+            "id": "ea55",
+            "source": "n32",
+            "target": "n37"
+          },
+          {
+            "id": "ea56",
+            "source": "n3",
+            "target": "n57"
+          },
+          {
+            "id": "ea57",
+            "source": "n57",
+            "target": "n30"
+          },
+          {
+            "id": "ea58",
+            "source": "n57",
+            "target": "n36"
+          },
+          {
+            "id": "ea59",
+            "source": "n12",
+            "target": "n58"
+          },
+          {
+            "id": "ea62",
+            "source": "n29",
+            "target": "n60"
+          },
+          {
+            "id": "ea63",
+            "source": "n60",
+            "target": "n30"
+          },
+          {
+            "id": "ea64",
+            "source": "n60",
+            "target": "n36"
+          },
+          {
+            "id": "ea65",
+            "source": "n29",
+            "target": "n35"
+          },
+          {
+            "id": "ea66",
+            "source": "n58",
+            "target": "n33"
+          },
+          {
+            "id": "emuldvgfelxc8",
+            "source": "n58",
+            "target": "n29"
+          },
+          {
+            "id": "emumx5a9t2vgl",
+            "source": "n20",
+            "target": "nmumx4510rw1c"
+          },
+          {
+            "id": "emumx699i2fou",
+            "source": "n34",
+            "target": "nmumx5xard0i9"
+          },
+          {
+            "id": "emumxa6xlak93",
+            "source": "n54",
+            "target": "nmumx9w0dr7f8"
+          },
+          {
+            "id": "emumxbjmtxn13",
+            "source": "n55",
+            "target": "nmumxb0zs7mjr"
+          },
+          {
+            "id": "emumxbw57ruh3",
+            "source": "n55",
+            "target": "nmumxbw56jlok"
+          },
+          {
+            "id": "emumxd265zl25",
+            "source": "nmumx5xard0i9",
+            "target": "nmumxd265hz9h"
+          },
+          {
+            "id": "emumxdtt681rj",
+            "source": "nmumx5xard0i9",
+            "target": "nmumxdtt6tiaz"
+          },
+          {
+            "id": "emumxexqx4rdh",
+            "source": "nmumxdtt6tiaz",
+            "target": "nmumxexqxjhjo"
+          },
+          {
+            "id": "emumxf8zay3e5",
+            "source": "nmumxdtt6tiaz",
+            "target": "nmumxf8zahqpv"
+          },
+          {
+            "id": "emumxg865k7vj",
+            "source": "nmumxdtt6tiaz",
+            "target": "nmumxg8651bo7"
+          },
+          {
+            "id": "emumxh500i268",
+            "source": "n39",
+            "target": "nmumxh500b1pg"
+          },
+          {
+            "id": "emumxhvmdlqgl",
+            "source": "n39",
+            "target": "nmumxhvmdilbk"
+          },
+          {
+            "id": "emumxkhbii01h",
+            "source": "n40",
+            "target": "nmumxkhbiavz3"
+          },
+          {
+            "id": "emumxlcuihyux",
+            "source": "n40",
+            "target": "nmumxlcuhklxc"
+          },
+          {
+            "id": "emumxp6ntc9zm",
+            "source": "n36",
+            "target": "nmumxp6nszrom"
+          },
+          {
+            "id": "emumxqcadlpnu",
+            "source": "nmumxp6nszrom",
+            "target": "nmumxqcadxnbs"
+          },
+          {
+            "id": "emumxr9tgi7sc",
+            "source": "nmumxp6nszrom",
+            "target": "nmumxr9tgljfa"
+          },
+          {
+            "id": "emumxsbrqaq3e",
+            "source": "nmumxr9tgljfa",
+            "target": "nmumxsbrq9fat"
+          },
+          {
+            "id": "emvp55q0hphgh",
+            "source": "nmvp54yxg58u7",
+            "target": "nmvp55q0gt14o"
+          },
+          {
+            "id": "emvp583l6fryn",
+            "source": "nmvp54yxg58u7",
+            "target": "nmumxr9tgljfa"
+          },
+          {
+            "id": "emvp5jdw50p9u",
+            "source": "n3",
+            "target": "nmvp5jdw4e951"
+          },
+          {
+            "id": "emvp5k7bq544y",
+            "source": "nmvp5jdw4e951",
+            "target": "nmvp5k7bp5hhu"
+          },
+          {
+            "id": "emvp5otdhrczy",
+            "source": "n3",
+            "target": "nmvp5otdguyn5"
+          },
+          {
+            "id": "emvp5rl6ax4fx",
+            "source": "nmvp5otdguyn5",
+            "target": "nmvp5rl69dl0i"
+          },
+          {
+            "id": "emvp5uc0ekcb2",
+            "source": "nmvp5otdguyn5",
+            "target": "nmvp5uc0d2qq5"
+          },
+          {
+            "id": "emvp5w6oaglnb",
+            "source": "nmvp5otdguyn5",
+            "target": "nmvp5w6oanvlz"
+          },
+          {
+            "id": "emvp5xnjrj0q5",
+            "source": "nmvp5w6oanvlz",
+            "target": "nmvp5xnjrd2ue"
+          },
+          {
+            "id": "emvp5yos0f7rz",
+            "source": "nmvp5xnjrd2ue",
+            "target": "nmvp5yos0azq9"
+          },
+          {
+            "id": "emvp6161t3bdm",
+            "source": "nmvp5xnjrd2ue",
+            "target": "nmvp5rl69dl0i"
+          },
+          {
+            "id": "emvp61quyl2n9",
+            "source": "nmvp5yos0azq9",
+            "target": "nmvp61quyqvpy"
+          },
+          {
+            "id": "emvp633535w8q",
+            "source": "nmvp5yos0azq9",
+            "target": "nmvp63352rhwi"
+          },
+          {
+            "id": "emvp64dock7y2",
+            "source": "nmvp5w6oanvlz",
+            "target": "nmvp64doceioa"
+          },
+          {
+            "id": "emvp65fwe47oy",
+            "source": "nmvp5xnjrd2ue",
+            "target": "nmvp65fwe074n"
+          },
+          {
+            "id": "emvp65yqi3ux6",
+            "source": "nmvp65fwe074n",
+            "target": "nmvp65yqiyhnk"
+          },
+          {
+            "id": "emvp66n5xek7j",
+            "source": "nmvp65fwe074n",
+            "target": "nmvp66n5x2chz"
+          },
+          {
+            "id": "emvp67n8hogn8",
+            "source": "nmvp64doceioa",
+            "target": "nmvp65yqiyhnk"
+          },
+          {
+            "id": "emvp69q1t7rj1",
+            "source": "nmvp5yos0azq9",
+            "target": "nmvp69q1t7ymu"
+          },
+          {
+            "id": "emvp6b6zzvqji",
+            "source": "nmvp69q1t7ymu",
+            "target": "nmvp6b6zzbea1"
+          },
+          {
+            "id": "emvp6cbm86oj6",
+            "source": "nmvp6b6zzbea1",
+            "target": "nmvp6cbm8aie8"
+          },
+          {
+            "id": "emvp6d15dlcob",
+            "source": "nmvp69q1t7ymu",
+            "target": "nmvp6d15dodfp"
+          },
+          {
+            "id": "emvp6eyoq1ecb",
+            "source": "nmvp6d15dodfp",
+            "target": "nmvp6eyoq3hj0"
+          },
+          {
+            "id": "emvp6gku3v5ls",
+            "source": "nmvp6eyoq3hj0",
+            "target": "nmvp6gku3w5b4"
+          },
+          {
+            "id": "emvp6i059v0sc",
+            "source": "nmvp6b6zzbea1",
+            "target": "nmumxsbrq9fat"
+          },
+          {
+            "id": "emvp6npjbuphz",
+            "source": "nmvp6d15dodfp",
+            "target": "nmvp6b6zzbea1"
+          },
+          {
+            "id": "emw27yihc8kq6",
+            "source": "n34",
+            "target": "n29"
+          },
+          {
+            "id": "emw2aps33arml",
+            "source": "n21",
+            "target": "nmw2aps32iurk"
+          },
+          {
+            "id": "emw2aqj9gkv8f",
+            "source": "n21",
+            "target": "nmw2aqj9gdkwa"
+          },
+          {
+            "id": "emw2ar8xlzz2d",
+            "source": "nmw2aqj9gdkwa",
+            "target": "nmw2ar8xlmnno"
+          },
+          {
+            "id": "emw2as249yows",
+            "source": "nmw2aqj9gdkwa",
+            "target": "nmw2as249wnrb"
+          },
+          {
+            "id": "emw2av0oycz1m",
+            "source": "nmw2as249wnrb",
+            "target": "nmw2av0ox2clv"
+          },
+          {
+            "id": "emw2avikxtrvb",
+            "source": "nmw2as249wnrb",
+            "target": "nmw2avikx2b9w"
+          },
+          {
+            "id": "emw2axgsudy90",
+            "source": "nmw2aqj9gdkwa",
+            "target": "nmw2axgstrtl5"
+          },
+          {
+            "id": "emw2ay58utc4j",
+            "source": "nmw2aps32iurk",
+            "target": "nmw2ay58t6d7w"
+          },
+          {
+            "id": "emw2b258wajk6",
+            "source": "n38",
+            "target": "nmumxhvmdilbk"
+          },
+          {
+            "id": "emw2b2birzzmr",
+            "source": "n38",
+            "target": "nmumxh500b1pg"
+          },
+          {
+            "id": "emw2b9q2fpgjc",
+            "source": "nmumx5xard0i9",
+            "target": "nmw2b9q2fzl2e"
+          },
+          {
+            "id": "emw2bc6bbvmbs",
+            "source": "nmvp5jdw4e951",
+            "target": "nmw2bc6bah7lv"
+          },
+          {
+            "id": "emw2bctr3ys5r",
+            "source": "nmw2bc6bah7lv",
+            "target": "nmw2bctr2peil"
+          },
+          {
+            "id": "emw2bjvijnu1r",
+            "source": "n4",
+            "target": "nmw2bjvijnu0h"
+          },
+          {
+            "id": "emw2bkprrdwys",
+            "source": "nmw2bjvijnu0h",
+            "target": "nmw2bkprqnl8u"
+          },
+          {
+            "id": "emw2bmt1s3hrj",
+            "source": "nmw2bjvijnu0h",
+            "target": "nmw2bmt1sfxi0"
+          },
+          {
+            "id": "emw2bnet44l3o",
+            "source": "nmw2bjvijnu0h",
+            "target": "nmw2bnet3vbim"
+          },
+          {
+            "id": "emw2bom93cfph",
+            "source": "nmw2bjvijnu0h",
+            "target": "nmw2bom93eo3f"
+          },
+          {
+            "id": "emw2bt6p5uznu",
+            "source": "nmvp6d15dodfp",
+            "target": "nmw2bt6p56akc"
+          },
+          {
+            "id": "emw2btv6muttf",
+            "source": "nmw2bt6p56akc",
+            "target": "nmw2btv6mk5h5"
+          },
+          {
+            "id": "emw2bu8h525x9",
+            "source": "nmw2btv6mk5h5",
+            "target": "nmw2bu8h5m31c"
+          },
+          {
+            "id": "emwkvyu6dedpg",
+            "source": "n30",
+            "target": "nmwkvyu6bsuml"
+          },
+          {
+            "id": "emwkw1dl8jnfs",
+            "source": "n30",
+            "target": "nmwkw1dl8wgzk"
+          },
+          {
+            "id": "emwkw4vny8ld7",
+            "source": "n21",
+            "target": "nmwkw4vnxacqn"
+          },
+          {
+            "id": "emwm9boqequeg",
+            "source": "nmvp5jdw4e951",
+            "target": "nmwkyk74sanqx"
+          },
+          {
+            "id": "emwm9e0sn5dap",
+            "source": "nmwkvyu6bsuml",
+            "target": "nmwm9e0sm0zyw"
+          },
+          {
+            "id": "emwm9ei57w3dq",
+            "source": "nmwkvyu6bsuml",
+            "target": "nmwm9ei5793ul"
+          },
+          {
+            "id": "emwm9fbarjorx",
+            "source": "nmwkvyu6bsuml",
+            "target": "nmwm9fbarz4sa"
+          },
+          {
+            "id": "emwmcqy2p5p7r",
+            "source": "n3",
+            "target": "nmwmcq6viwgsl"
+          },
+          {
+            "id": "emwmcr1bkc7t3",
+            "source": "nmwmcq6viwgsl",
+            "target": "n11"
+          },
+          {
+            "id": "emwmcrwzdwfqd",
+            "source": "nmwmcq6viwgsl",
+            "target": "nmvp54yxg58u7"
+          }
+        ]
+      }
+    }
+  ],
+  "sessions": [],
+  "activeSession": null,
+  "meta": {
+    "created": "2026-11-17T16:03:25.181Z",
+    "modified": "2026-11-18T21:00:00.000Z",
+    "published": "2026-11-04T17:21:38.041Z"
+  },
+  "viewDefaults": {
+    "lang": "es",
+    "mode": "manual"
+  }
+}
